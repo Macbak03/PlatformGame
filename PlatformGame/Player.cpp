@@ -123,10 +123,25 @@ void Player::updateBounceCollision(const sf::RenderTarget* target, std::vector<P
 	for (auto& element : platforms)
 	{
 		//player bottom with platform top
-		if (playerSprite.getGlobalBounds().intersects(element.getShape().getGlobalBounds()) && playerBottom + 10.f == element.getShape().getGlobalBounds().top)
+		if (playerSprite.getGlobalBounds().intersects(element.getShape().getGlobalBounds()) && playerBottom >= element.getShape().getGlobalBounds().top -13.f && playerBottom <= element.getShape().getGlobalBounds().top + 13.f)
 		{
 			onGround = true;
 			velocity = sf::Vector2f(this->playerSpeed,0.f);
+		}
+		//player top with platform bottom
+		if (playerSprite.getGlobalBounds().intersects(element.getShape().getGlobalBounds()) && playerTop == element.getShape().getGlobalBounds().top + element.getShape().getGlobalBounds().height)
+		{
+			velocity = sf::Vector2f(this->playerSpeed, 0.f);
+		}
+		//player left with platform right
+		if (playerSprite.getGlobalBounds().intersects(element.getShape().getGlobalBounds()) && playerLeft == element.getShape().getGlobalBounds().left + element.getShape().getGlobalBounds().width)
+		{
+			velocity = sf::Vector2f(this->playerSpeed, 0.f);
+		}
+		//player right with platform left
+		if (playerSprite.getGlobalBounds().intersects(element.getShape().getGlobalBounds()) && playerRight == element.getShape().getGlobalBounds().left)
+		{
+			velocity = sf::Vector2f(this->playerSpeed, 0.f);
 		}
 
 	}
@@ -134,7 +149,8 @@ void Player::updateBounceCollision(const sf::RenderTarget* target, std::vector<P
 
 
 void Player::updatePlayer(const sf::RenderTarget* target, float deltaTime, std::vector<Platform> platforms)
-{
+{	
+	std::cout << playerSprite.getGlobalBounds().top + this->playerSprite.getGlobalBounds().height << "        "<< platforms[1].getShape().getGlobalBounds().top<<std::endl;
 	this->updateBounceCollision(target, platforms);
 	this->updatePhysics(deltaTime);
 	this->movePlayer();
