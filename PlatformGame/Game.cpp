@@ -34,9 +34,11 @@ void Game::initBackground()
 
 void Game::initLevel()
 {
-	level.addPlatform(sf::Vector2f(400, 550));
-	level.addPlatform(sf::Vector2f(600, 500));
-	level.addPlatform(sf::Vector2f(200, 450));
+	//spawn platforms
+	level.addPlatform(sf::Vector2f(400.f, 550.f));
+	level.addPlatform(sf::Vector2f(600.f, 500.f));
+	level.addPlatform(sf::Vector2f(200.f, 450.f));
+	level.addPlatform(sf::Vector2f(1000.f, 525.f));
 }
 
 Game::Game()
