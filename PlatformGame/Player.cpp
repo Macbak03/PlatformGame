@@ -8,17 +8,18 @@ Player::Player()
 	this->initShape();
 	this->spawnPlayer();
 	this->initPhysics();
+	this->initWeapon();
 }
 
 void Player::loadTextures()
 {
-	playerTextureRight = new sf::Texture;
-	playerTextureLeft = new sf::Texture;
-	if (!playerTextureRight->loadFromFile("Textures/player_right3.png"))
+	this->playerTextureRight = new sf::Texture;
+	this->playerTextureLeft = new sf::Texture;
+	if (!playerTextureRight->loadFromFile("Textures/player_right.png"))
 	{
 		std::cerr << "Could not load player_right texture" << std::endl;
 	}
-	else if (!playerTextureLeft->loadFromFile("Textures/player_left3.png"))
+	else if (!playerTextureLeft->loadFromFile("Textures/player_left.png"))
 	{
 		std::cerr << "Could not load player_left texture" << std::endl;
 	}
@@ -49,6 +50,11 @@ void Player::updatePhysics(float deltaTime)
 	}
 }
 
+void Player::initWeapon()
+{
+	this->weapon = new Pistol;
+}
+
 void Player::spawnPlayer()
 {
 	this->playerSprite.setPosition(sf::Vector2f(600.f, 0.f));
@@ -74,8 +80,8 @@ void Player::movePlayer()
 	//jump
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && onGround)
 	{
-		onGround = false;
-		velocity.y = -jumpSpeed;
+		this->onGround = false;
+		this->velocity.y = -jumpSpeed;
 	}
 	//gravity
 	if (!onGround)
@@ -86,12 +92,12 @@ void Player::movePlayer()
 
 sf::Sprite Player::getShape()
 {
-	return playerSprite;
+	return this->playerSprite;
 }
 
 sf::Vector2f Player::getPosition()
 {
-	return playerSprite.getPosition();
+	return this->playerSprite.getPosition();
 }
 
 void Player::updateBounceCollision(const sf::RenderTarget* target, std::vector<Platform> platforms)
@@ -122,51 +128,31 @@ void Player::updateBounceCollision(const sf::RenderTarget* target, std::vector<P
 		onGround = false;
 	}
 	//collision with platforms
-	bool playerBottomCollision = false;
-	bool playerTopCollision = false;
-	bool playerLeftCollision = false;
-	bool playerRightCollision = false;
 	for (auto& element : platforms)
-	{
-		//player bottom with platform top
-		/*if (playerSprite.getGlobalBounds().intersects(element.getShape().getGlobalBounds()) 
-			&& playerBottom >= element.getShape().getGlobalBounds().top - 17.f 
-			&& playerBottom <= element.getShape().getGlobalBounds().top + 17.f)
-		{
-			this->playerSprite.setPosition(this->playerSprite.getGlobalBounds().left, element.getShape().getGlobalBounds().top -this->playerSprite.getGlobalBounds().height);
-			onGround = true;
-			velocity.y = 0.f;
-		}*/
-		
+	{	
 		
 		//player left with platform right
 		if (playerSprite.getGlobalBounds().intersects(element.getShape().getGlobalBounds()) 
 			&& playerLeft <= element.getShape().getGlobalBounds().left + element.getShape().getGlobalBounds().width + 10.f 
 			&& playerLeft >= element.getShape().getGlobalBounds().left + element.getShape().getGlobalBounds().width - 10.f)
 		{
-			playerLeftCollision = true;
 			this->playerSprite.setPosition(element.getShape().getGlobalBounds().left + element.getShape().getGlobalBounds().width, playerTop);
-			velocity.x = 0.f;
 		}
-		//player right with platform left
 		if (playerSprite.getGlobalBounds().intersects(element.getShape().getGlobalBounds()) 
 			&& playerRight >= element.getShape().getGlobalBounds().left - 10.f 
 			&& playerRight <= element.getShape().getGlobalBounds().left + 10.f)
 		{
-			playerRightCollision;
 			this->playerSprite.setPosition(element.getShape().getGlobalBounds().left - element.getShape().getGlobalBounds().width, playerTop);
-			velocity.x = 0.f;
 		}
 		//player top with platform bottom
 		if (playerSprite.getGlobalBounds().intersects(element.getShape().getGlobalBounds())
 			&& playerTop <= element.getShape().getGlobalBounds().top + element.getShape().getGlobalBounds().height + 30.f
 			&& playerTop >= element.getShape().getGlobalBounds().top + element.getShape().getGlobalBounds().height - 30.f)
 		{
-			playerTopCollision = true;
 			velocity.y = 0.f;
 		}
-		if (playerSprite.getGlobalBounds().intersects(element.getShape().getGlobalBounds()) && velocity.y > 0 
-			&& !playerTopCollision && !playerLeftCollision && !playerRightCollision)
+		//player bottom with platform top
+		if (playerSprite.getGlobalBounds().intersects(element.getShape().getGlobalBounds()) && velocity.y > 0)
 		{
 			this->playerSprite.setPosition(this->playerSprite.getGlobalBounds().left, element.getShape().getGlobalBounds().top - this->playerSprite.getGlobalBounds().height + 5.f);
 			onGround = true;
@@ -179,15 +165,15 @@ void Player::updateBounceCollision(const sf::RenderTarget* target, std::vector<P
 
 void Player::updatePlayer(const sf::RenderTarget* target, float deltaTime, std::vector<Platform> platforms)
 {	
-	//std::cout << playerSprite.getGlobalBounds().top + this->playerSprite.getGlobalBounds().height << "        "<< platforms[1].getShape().getGlobalBounds().top<<std::endl;
-	//std::cout << playerSprite.getGlobalBounds().top << "        " << platforms[2].getShape().getGlobalBounds().top + platforms[2].getShape().getGlobalBounds().height << std::endl;
 	this->movePlayer();
 	this->updateBounceCollision(target, platforms);
 	this->updatePhysics(deltaTime);
+	this->weapon->updateWeapon(target, this->getPosition());
 	
 }
 
 void Player::renderPlayer(sf::RenderTarget* target)
 {
 	target->draw(this->playerSprite);
+	this->weapon->renderWeapon(target);
 }

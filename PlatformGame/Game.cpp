@@ -88,6 +88,7 @@ void Game::update()
 {
 	this->pollEvents();
 	this->player.updatePlayer(this->window, deltaTime, level.getPlatforms());
+	
 	//std::cout << player.getShape().getGlobalBounds().top << std::endl;
 	
 }
@@ -113,7 +114,7 @@ void Game::render()
 	this->player.renderPlayer(this->window);
 	//Draw level
 	this->level.renderLevel(this->window);
-	//this->platform.renderPlatform(this->window);
+	//Draw Weapons
 
 	this->window->display();
 }

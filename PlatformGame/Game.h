@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Platform.h"
 #include "Level.h"
+#include "Pistol.h"
 
 
 class Game
@@ -25,8 +26,8 @@ private:
 
 
 	Player player;
-	//Platform platform;
 	Level level;
+	
 
 	void initVariables();
 	void initWindow();

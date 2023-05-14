@@ -5,6 +5,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
 #include "Level.h"
+#include "Pistol.h"
 class Player
 {
 private:
@@ -14,6 +15,8 @@ private:
 
 	bool spaceHold;
 
+	Weapon* weapon;
+
 	//Physics
 	float playerSpeed;
 	sf::Vector2f velocity;
@@ -22,6 +25,7 @@ private:
 	float jumpSpeed;
 	void initPhysics();
 	void updatePhysics(float deltaTime);
+	void initWeapon();
 
 	void initShape();
 	void loadTextures();
