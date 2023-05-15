@@ -6,16 +6,22 @@
 #include <SFML/Network.hpp>
 #include "Level.h"
 #include "Pistol.h"
+#include "Rifle.h"
+#include "SniperRifle.h"
+#include "Shotgun.h"
 class Player
 {
 private:
+	//Textures
 	sf::Texture* playerTextureRight;
 	sf::Texture* playerTextureLeft;
 	sf::Sprite playerSprite;
+	void initShape();
+	void loadTextures();
 
 	bool spaceHold;
-
-	Weapon* weapon;
+	bool onGround;
+	bool facingRight, facingLeft;
 
 	//Physics
 	float playerSpeed;
@@ -25,17 +31,18 @@ private:
 	float jumpSpeed;
 	void initPhysics();
 	void updatePhysics(float deltaTime);
-	void initWeapon();
 
-	void initShape();
-	void loadTextures();
+	//Weapon
+	Weapon* weapon;
+	void initWeapon();
+	
 public:
-	bool onGround;
 	Player();
 	void spawnPlayer();
 	void movePlayer();
 	sf::Sprite getShape();
 	sf::Vector2f getPosition();
+	void changeWeapon();
 	void updateBounceCollision(const sf::RenderTarget* target, std::vector<Platform> platforms);
 	void updatePlayer(const sf::RenderTarget* target, float deltaTime, std::vector<Platform> platforms);
 	void renderPlayer(sf::RenderTarget* target);

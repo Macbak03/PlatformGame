@@ -27,7 +27,7 @@ void Pistol::initTexture()
 {
 	this->loadTexture();
 	weaponSprite.setTexture(*weaponTextureRight);
-	weaponSprite.setScale(sf::Vector2f(0.4f, 0.6f));
+	weaponSprite.setScale(sf::Vector2f(0.5f, 0.55f));
 }
 
 

@@ -36,6 +36,15 @@
     <ClCompile Include="Pistol.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Rifle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SniperRifle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Shotgun.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -54,6 +63,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Pistol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Rifle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SniperRifle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shotgun.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

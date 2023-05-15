@@ -3,6 +3,8 @@
 
 Player::Player()
 {
+	this->facingRight = true;
+	this->facingLeft = false;
 	this->playerSpeed = 7.f;
 	this->onGround = false;
 	this->initShape();
@@ -11,6 +13,8 @@ Player::Player()
 	this->initWeapon();
 }
 
+
+//SHAPE
 void Player::loadTextures()
 {
 	this->playerTextureRight = new sf::Texture;
@@ -29,10 +33,18 @@ void Player::loadTextures()
 void Player::initShape()
 {
 	this-> loadTextures();
+	//playerSprite.setOrigin((sf::Vector2f)playerTextureRight->getSize() / 2.f);
 	this->playerSprite.setTexture(*playerTextureRight);
 	this->playerSprite.setScale(sf::Vector2f(0.045f, 0.045f));
 }
 
+sf::Sprite Player::getShape()
+{
+	return this->playerSprite;
+}
+//SHAPE
+
+//PHYSICS
 void Player::initPhysics()
 {
 	this->terminalVelocity = 20.f;
@@ -49,12 +61,42 @@ void Player::updatePhysics(float deltaTime)
 		velocity.y = terminalVelocity;
 	}
 }
+//PHYSICS
 
+//WEAPON STUFF
 void Player::initWeapon()
 {
 	this->weapon = new Pistol;
+	
 }
 
+void Player::changeWeapon()
+{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
+	{
+		delete weapon;
+		this->weapon = new Rifle;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
+	{
+		delete weapon;
+		this->weapon = new SniperRifle;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
+	{
+		delete weapon;
+		this->weapon = new Shotgun;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
+	{
+		delete weapon;
+		this->weapon = new Pistol;
+	}
+}
+//WEAPON STUFF
+
+
+//PLAYER POSITIONING
 void Player::spawnPlayer()
 {
 	this->playerSprite.setPosition(sf::Vector2f(600.f, 0.f));
@@ -66,16 +108,20 @@ void Player::movePlayer()
 	//move left
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
+		facingRight = false;
 		this->playerSprite.setTexture(*playerTextureLeft);
 		this->velocity.x = -7.f;
 		this->playerSprite.move(this->velocity.x, 0.f);
+		facingLeft = true;
 	}
 	//move right
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
+		facingLeft = false;
 		this->playerSprite.setTexture(*playerTextureRight);
 		this->velocity.x = 7.f;
 		this->playerSprite.move(this->velocity.x, 0.f);
+		facingRight = true;
 	}
 	//jump
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && onGround)
@@ -90,16 +136,15 @@ void Player::movePlayer()
 	}
 }
 
-sf::Sprite Player::getShape()
-{
-	return this->playerSprite;
-}
-
 sf::Vector2f Player::getPosition()
 {
 	return this->playerSprite.getPosition();
 }
+//PLAYER POSITIONING
 
+
+
+//PLAYER COLLISION
 void Player::updateBounceCollision(const sf::RenderTarget* target, std::vector<Platform> platforms)
 {
 	float playerTop = this->playerSprite.getGlobalBounds().top;
@@ -161,15 +206,17 @@ void Player::updateBounceCollision(const sf::RenderTarget* target, std::vector<P
 		
 	}
 }
+//PLAYER COLLISION
 
 
+//UPDATE AND RENDER
 void Player::updatePlayer(const sf::RenderTarget* target, float deltaTime, std::vector<Platform> platforms)
 {	
 	this->movePlayer();
 	this->updateBounceCollision(target, platforms);
 	this->updatePhysics(deltaTime);
-	this->weapon->updateWeapon(target, this->getPosition());
-	
+	this->changeWeapon();
+	this->weapon->updateWeapon(target, this->getPosition(), facingRight, facingLeft);
 }
 
 void Player::renderPlayer(sf::RenderTarget* target)
@@ -177,3 +224,4 @@ void Player::renderPlayer(sf::RenderTarget* target)
 	target->draw(this->playerSprite);
 	this->weapon->renderWeapon(target);
 }
+//UPDATE AND RENDER	

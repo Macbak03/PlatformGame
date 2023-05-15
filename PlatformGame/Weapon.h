@@ -19,17 +19,16 @@ protected:
 	sf::Texture* weaponTextureLeft;
 	sf::Sprite weaponSprite;
 	
-	bool right = false;
-	bool left = false;
 
 	virtual void loadTexture() = 0;
 	virtual void initTexture() = 0;
 
 public:
 	Weapon();
-	void initWeaponPosition(sf::Vector2f playerPosition);
-	void rotateWeapon();
-	void updateWeapon(const sf::RenderTarget* target, sf::Vector2f playerPosition);
+	void initWeaponPosition(sf::Vector2f playerPosition, bool playerFacingRight, bool playerFacingLeft);
+	void rotateWeapon(bool playerFacingRight, bool playerFacingLeft);
+	void shoot();
+	void updateWeapon(const sf::RenderTarget* target, sf::Vector2f playerPosition, bool playerFacingRight, bool playerFacingLeft);
 	void renderWeapon(sf::RenderTarget* target);
 };
 

@@ -139,6 +139,9 @@
     <ClCompile Include="Pistol.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Rifle.cpp" />
+    <ClCompile Include="Shotgun.cpp" />
+    <ClCompile Include="SniperRifle.cpp" />
     <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -147,6 +150,9 @@
     <ClInclude Include="Pistol.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Rifle.h" />
+    <ClInclude Include="Shotgun.h" />
+    <ClInclude Include="SniperRifle.h" />
     <ClInclude Include="Weapon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

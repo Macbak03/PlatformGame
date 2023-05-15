@@ -10,44 +10,44 @@ Weapon::Weapon()
 }
 
 
-void Weapon::initWeaponPosition(sf::Vector2f playerPosition)
+void Weapon::initWeaponPosition(sf::Vector2f playerPosition, bool playerFacingRight, bool playerFacingLeft)
 {
-	weaponPositionRight = sf::Vector2f(playerPosition.x + 45.f, playerPosition.y + 37.f);
-	weaponSprite.setPosition(weaponPositionRight);
+	weaponPositionRight = sf::Vector2f(playerPosition.x + 40.f, playerPosition.y + 37.f);
+	if(playerFacingRight)
+	{
+		weaponSprite.setPosition(weaponPositionRight);
+	}
 	weaponPositionLeft = sf::Vector2f(playerPosition.x - 15.f, playerPosition.y + 37.f);
+	if (playerFacingLeft)
+	{
+		weaponSprite.setPosition(weaponPositionLeft);
+		weaponSprite.setTexture(*weaponTextureLeft);
+	}
+}
+
+void Weapon::shoot()
+{
 }
 
 
-void Weapon::rotateWeapon()
+void Weapon::rotateWeapon(bool playerFacingRight, bool playerFacingLeft)
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	if(playerFacingLeft)
 	{
-		right = false;
 		this->weaponSprite.setTexture(*weaponTextureLeft);
 		weaponSprite.setPosition(weaponPositionLeft);
-		left = true;
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	else if (playerFacingRight)
 	{
-		left = false;
 		this->weaponSprite.setTexture(*weaponTextureRight);
-		weaponSprite.setPosition(weaponPositionRight);
-		right = true;
-	}
-	if(left)
-	{
-		weaponSprite.setPosition(weaponPositionLeft);
-	}
-	if (right)
-	{
 		weaponSprite.setPosition(weaponPositionRight);
 	}
 }
 
-void Weapon::updateWeapon(const sf::RenderTarget* target, sf::Vector2f playerPosition)
+void Weapon::updateWeapon(const sf::RenderTarget* target, sf::Vector2f playerPosition, bool playerFacingRight, bool playerFacingLeft)
 {
-	initWeaponPosition(playerPosition);
-	rotateWeapon();
+	initWeaponPosition(playerPosition, playerFacingRight, playerFacingLeft);
+	rotateWeapon(playerFacingRight, playerFacingLeft);
 }
 
 void Weapon::renderWeapon(sf::RenderTarget* target)
