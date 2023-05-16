@@ -25,8 +25,12 @@ void Weapon::initWeaponPosition(sf::Vector2f playerPosition, bool playerFacingRi
 	}
 }
 
-void Weapon::shoot()
+void Weapon::shoot(bool playerFacingRight, bool playerFacingLeft)
 {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+	{
+		bullets.spawnBullet(playerFacingRight, playerFacingLeft, weaponPositionRight);
+	}
 }
 
 
@@ -34,12 +38,12 @@ void Weapon::rotateWeapon(bool playerFacingRight, bool playerFacingLeft)
 {
 	if(playerFacingLeft)
 	{
-		this->weaponSprite.setTexture(*weaponTextureLeft);
+		weaponSprite.setTexture(*weaponTextureLeft);
 		weaponSprite.setPosition(weaponPositionLeft);
 	}
 	else if (playerFacingRight)
 	{
-		this->weaponSprite.setTexture(*weaponTextureRight);
+		weaponSprite.setTexture(*weaponTextureRight);
 		weaponSprite.setPosition(weaponPositionRight);
 	}
 }
@@ -48,6 +52,8 @@ void Weapon::updateWeapon(const sf::RenderTarget* target, sf::Vector2f playerPos
 {
 	initWeaponPosition(playerPosition, playerFacingRight, playerFacingLeft);
 	rotateWeapon(playerFacingRight, playerFacingLeft);
+	shoot(playerFacingRight, playerFacingLeft);
+	bullets.updateBullets(target, playerFacingRight, playerFacingLeft, weaponPositionRight);
 }
 
 void Weapon::renderWeapon(sf::RenderTarget* target)

@@ -3,22 +3,22 @@
 
 Player::Player()
 {
-	this->facingRight = true;
-	this->facingLeft = false;
-	this->playerSpeed = 7.f;
-	this->onGround = false;
-	this->initShape();
-	this->spawnPlayer();
-	this->initPhysics();
-	this->initWeapon();
+	facingRight = true;
+	facingLeft = false;
+	playerSpeed = 7.f;
+	onGround = false;
+	initShape();
+	spawnPlayer();
+	initPhysics();
+	initWeapon();
 }
 
 
 //SHAPE
 void Player::loadTextures()
 {
-	this->playerTextureRight = new sf::Texture;
-	this->playerTextureLeft = new sf::Texture;
+	playerTextureRight = new sf::Texture;
+	playerTextureLeft = new sf::Texture;
 	if (!playerTextureRight->loadFromFile("Textures/player_right.png"))
 	{
 		std::cerr << "Could not load player_right texture" << std::endl;
@@ -32,31 +32,30 @@ void Player::loadTextures()
 
 void Player::initShape()
 {
-	this-> loadTextures();
-	//playerSprite.setOrigin((sf::Vector2f)playerTextureRight->getSize() / 2.f);
-	this->playerSprite.setTexture(*playerTextureRight);
-	this->playerSprite.setScale(sf::Vector2f(0.045f, 0.045f));
+	loadTextures();
+	playerSprite.setTexture(*playerTextureRight);
+	playerSprite.setScale(sf::Vector2f(0.045f, 0.045f));
 }
 
-sf::Sprite Player::getShape()
+const sf::Sprite& Player::getShape() const
 {
-	return this->playerSprite;
+	return playerSprite;
 }
 //SHAPE
 
 //PHYSICS
 void Player::initPhysics()
 {
-	this->terminalVelocity = 20.f;
-	this->gravity = 50.f;
-	this->velocity = sf::Vector2f(this->playerSpeed, 0.f);
-	this->jumpSpeed = 15.f;
+	terminalVelocity = 20.f;
+	gravity = 50.f;
+	velocity = sf::Vector2f(playerSpeed, 0.f);
+	jumpSpeed = 15.f;
 }
 
 void Player::updatePhysics(float deltaTime)
 {
-	this->velocity.y += this->gravity* deltaTime;
-	if (this->velocity.y >= terminalVelocity)
+	velocity.y += gravity* deltaTime;
+	if (velocity.y >= terminalVelocity)
 	{
 		velocity.y = terminalVelocity;
 	}
@@ -66,7 +65,7 @@ void Player::updatePhysics(float deltaTime)
 //WEAPON STUFF
 void Player::initWeapon()
 {
-	this->weapon = new Pistol;
+	weapon = new Pistol;
 	
 }
 
@@ -75,22 +74,22 @@ void Player::changeWeapon()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
 	{
 		delete weapon;
-		this->weapon = new Rifle;
+		weapon = new Rifle;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
 	{
 		delete weapon;
-		this->weapon = new SniperRifle;
+		weapon = new SniperRifle;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
 	{
 		delete weapon;
-		this->weapon = new Shotgun;
+		weapon = new Shotgun;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
 	{
 		delete weapon;
-		this->weapon = new Pistol;
+		weapon = new Pistol;
 	}
 }
 //WEAPON STUFF
@@ -99,7 +98,7 @@ void Player::changeWeapon()
 //PLAYER POSITIONING
 void Player::spawnPlayer()
 {
-	this->playerSprite.setPosition(sf::Vector2f(600.f, 0.f));
+	playerSprite.setPosition(sf::Vector2f(600.f, 0.f));
 }
 
 void Player::movePlayer()
@@ -109,36 +108,36 @@ void Player::movePlayer()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
 		facingRight = false;
-		this->playerSprite.setTexture(*playerTextureLeft);
-		this->velocity.x = -7.f;
-		this->playerSprite.move(this->velocity.x, 0.f);
+		playerSprite.setTexture(*playerTextureLeft);
+		velocity.x = -7.f;
+		playerSprite.move(velocity.x, 0.f);
 		facingLeft = true;
 	}
 	//move right
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
 		facingLeft = false;
-		this->playerSprite.setTexture(*playerTextureRight);
-		this->velocity.x = 7.f;
-		this->playerSprite.move(this->velocity.x, 0.f);
+		playerSprite.setTexture(*playerTextureRight);
+		velocity.x = 7.f;
+		playerSprite.move(velocity.x, 0.f);
 		facingRight = true;
 	}
 	//jump
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && onGround)
 	{
-		this->onGround = false;
-		this->velocity.y = -jumpSpeed;
+		onGround = false;
+		velocity.y = -jumpSpeed;
 	}
 	//gravity
 	if (!onGround)
 	{
-		this->playerSprite.move(0.f, velocity.y);
+		playerSprite.move(0.f, velocity.y);
 	}
 }
 
-sf::Vector2f Player::getPosition()
+const sf::Vector2f& Player::getPosition() const
 {
-	return this->playerSprite.getPosition();
+	return playerSprite.getPosition();
 }
 //PLAYER POSITIONING
 
@@ -147,25 +146,25 @@ sf::Vector2f Player::getPosition()
 //PLAYER COLLISION
 void Player::updateBounceCollision(const sf::RenderTarget* target, std::vector<Platform> platforms)
 {
-	float playerTop = this->playerSprite.getGlobalBounds().top;
-	float playerBottom = playerTop + this->playerSprite.getGlobalBounds().height;
-	float playerLeft = this->playerSprite.getGlobalBounds().left;
-	float playerRight = playerLeft + this->playerSprite.getGlobalBounds().width;
+	float playerTop = playerSprite.getGlobalBounds().top;
+	float playerBottom = playerTop + playerSprite.getGlobalBounds().height;
+	float playerLeft = playerSprite.getGlobalBounds().left;
+	float playerRight = playerLeft + playerSprite.getGlobalBounds().width;
 	//left
 	if (playerLeft <= 0.f)
 	{
-		this->playerSprite.setPosition(0.f, playerTop);
+		playerSprite.setPosition(0.f, playerTop);
 	}
 	//right
 	if (playerRight >= target->getSize().x)
 	{
-		this->playerSprite.setPosition(target->getSize().x - this->playerSprite.getGlobalBounds().width, playerTop);
+		playerSprite.setPosition(target->getSize().x - playerSprite.getGlobalBounds().width, playerTop);
 	}
 	//bottom
 	float floorHeight = 90.f;
 	if (playerBottom + floorHeight >= target->getSize().y)
 	{
-		this->playerSprite.setPosition(this->playerSprite.getGlobalBounds().left, target->getSize().y - this->playerSprite.getGlobalBounds().height -floorHeight);
+		playerSprite.setPosition(playerSprite.getGlobalBounds().left, target->getSize().y - playerSprite.getGlobalBounds().height -floorHeight);
 		onGround = true;
 	}
 	else 
@@ -181,13 +180,13 @@ void Player::updateBounceCollision(const sf::RenderTarget* target, std::vector<P
 			&& playerLeft <= element.getShape().getGlobalBounds().left + element.getShape().getGlobalBounds().width + 10.f 
 			&& playerLeft >= element.getShape().getGlobalBounds().left + element.getShape().getGlobalBounds().width - 10.f)
 		{
-			this->playerSprite.setPosition(element.getShape().getGlobalBounds().left + element.getShape().getGlobalBounds().width, playerTop);
+			playerSprite.setPosition(element.getShape().getGlobalBounds().left + element.getShape().getGlobalBounds().width, playerTop);
 		}
 		if (playerSprite.getGlobalBounds().intersects(element.getShape().getGlobalBounds()) 
 			&& playerRight >= element.getShape().getGlobalBounds().left - 10.f 
 			&& playerRight <= element.getShape().getGlobalBounds().left + 10.f)
 		{
-			this->playerSprite.setPosition(element.getShape().getGlobalBounds().left - element.getShape().getGlobalBounds().width, playerTop);
+			playerSprite.setPosition(element.getShape().getGlobalBounds().left - element.getShape().getGlobalBounds().width, playerTop);
 		}
 		//player top with platform bottom
 		if (playerSprite.getGlobalBounds().intersects(element.getShape().getGlobalBounds())
@@ -199,7 +198,7 @@ void Player::updateBounceCollision(const sf::RenderTarget* target, std::vector<P
 		//player bottom with platform top
 		if (playerSprite.getGlobalBounds().intersects(element.getShape().getGlobalBounds()) && velocity.y > 0)
 		{
-			this->playerSprite.setPosition(this->playerSprite.getGlobalBounds().left, element.getShape().getGlobalBounds().top - this->playerSprite.getGlobalBounds().height + 5.f);
+			playerSprite.setPosition(playerSprite.getGlobalBounds().left, element.getShape().getGlobalBounds().top - playerSprite.getGlobalBounds().height + 5.f);
 			onGround = true;
 			velocity.y = 0.f;
 		}
@@ -212,16 +211,16 @@ void Player::updateBounceCollision(const sf::RenderTarget* target, std::vector<P
 //UPDATE AND RENDER
 void Player::updatePlayer(const sf::RenderTarget* target, float deltaTime, std::vector<Platform> platforms)
 {	
-	this->movePlayer();
-	this->updateBounceCollision(target, platforms);
-	this->updatePhysics(deltaTime);
-	this->changeWeapon();
-	this->weapon->updateWeapon(target, this->getPosition(), facingRight, facingLeft);
+	movePlayer();
+	updateBounceCollision(target, platforms);
+	updatePhysics(deltaTime);
+	changeWeapon();
+	weapon->updateWeapon(target, getPosition(), facingRight, facingLeft);
 }
 
 void Player::renderPlayer(sf::RenderTarget* target)
 {
-	target->draw(this->playerSprite);
-	this->weapon->renderWeapon(target);
+	target->draw(playerSprite);
+	weapon->renderWeapon(target);
 }
 //UPDATE AND RENDER	

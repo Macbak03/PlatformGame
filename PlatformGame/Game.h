@@ -9,7 +9,6 @@
 #include "Level.h"
 #include "Pistol.h"
 
-
 class Game
 {
 private:
@@ -27,8 +26,7 @@ private:
 
 	Player player;
 	Level level;
-	
-
+	Bullets bullets;
 	void initVariables();
 	void initWindow();
 

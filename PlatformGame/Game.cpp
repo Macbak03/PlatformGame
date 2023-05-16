@@ -3,22 +3,22 @@
 
 void Game::initVariables()
 {
-	this->window = nullptr;
-	this->endGame = false;
-	this->deltaTime = 0.f;
+	window = nullptr;
+	endGame = false;
+	deltaTime = 0.f;
 }
 
 void Game::initWindow()
 {
-	this->videoMode.width = 1280;
-	this->videoMode.height = 720;
-	this->window = new sf::RenderWindow(this->videoMode, "The Game", sf::Style::Titlebar | sf::Style::Close);
-	this->window->setFramerateLimit(60);
+	videoMode.width = 1280;
+	videoMode.height = 720;
+	window = new sf::RenderWindow(videoMode, "The Game", sf::Style::Titlebar | sf::Style::Close);
+	window->setFramerateLimit(60);
 }
 
 void Game::loadTexture()
 {
-	if (!this->backgroundTexture.loadFromFile("Textures/desert_BG.png"))
+	if (!backgroundTexture.loadFromFile("Textures/desert_BG.png"))
 	{
 		std::cerr << "Could not load texture" << std::endl;
 	}
@@ -26,10 +26,10 @@ void Game::loadTexture()
 
 void Game::initBackground()
 {
-	this->backgroundSprite.setTexture(backgroundTexture);
-	float scaleX = static_cast<float>(this->videoMode.width) / backgroundTexture.getSize().x;
-	float scaleY = static_cast<float>(this->videoMode.height) / backgroundTexture.getSize().y;
-	this->backgroundSprite.setScale(sf::Vector2f(scaleX, scaleY));
+	backgroundSprite.setTexture(backgroundTexture);
+	float scaleX = static_cast<float>(videoMode.width) / backgroundTexture.getSize().x;
+	float scaleY = static_cast<float>(videoMode.height) / backgroundTexture.getSize().y;
+	backgroundSprite.setScale(sf::Vector2f(scaleX, scaleY));
 }
 
 void Game::initLevel()
@@ -43,22 +43,22 @@ void Game::initLevel()
 
 Game::Game()
 {
-	this->initLevel();
-	this->initVariables();
-	this->initWindow();
-	this->loadTexture();
-	this->initBackground();
+	initLevel();
+	initVariables();
+	initWindow();
+	loadTexture();
+	initBackground();
 }
 
 Game::~Game()
 {
-	delete this->window;
+	delete window;
 }
 
 //Accessors
 const bool Game::getWindowIsOpen()
 {
-	return this->window->isOpen();
+	return window->isOpen();
 }
 
 
@@ -66,17 +66,17 @@ void Game::pollEvents()
 {
 	deltaTime = clock.restart().asSeconds();
 	//Event polling
-	while (this->window->pollEvent(this->ev))
+	while (window->pollEvent(ev))
 	{
-		switch (this->ev.type)
+		switch (ev.type)
 		{
 		case sf::Event::Closed:
-			this->window->close();
+			window->close();
 			break;
 		case sf::Event::KeyPressed:
-			if (this->ev.key.code == sf::Keyboard::Escape)
+			if (ev.key.code == sf::Keyboard::Escape)
 			{
-				this->window->close();
+				window->close();
 				break;
 			}
 		}
@@ -86,16 +86,13 @@ void Game::pollEvents()
 
 void Game::update()
 {
-	this->pollEvents();
-	this->player.updatePlayer(this->window, deltaTime, level.getPlatforms());
-	
-	//std::cout << player.getShape().getGlobalBounds().top << std::endl;
-	
+	pollEvents();
+	player.updatePlayer(window, deltaTime, level.getPlatforms());
 }
 
 void Game::renderBackground(sf::RenderTarget* target)
 {
-	target->draw(this->backgroundSprite);
+	target->draw(backgroundSprite);
 }
 
 void Game::render()
@@ -107,14 +104,14 @@ void Game::render()
 
 		Renders the game objects
 	*/
-	this->window->clear();
+	window->clear();
 	//Draw background
-	this->renderBackground(this->window);
+	renderBackground(window);
 	//Draw player
-	this->player.renderPlayer(this->window);
+	player.renderPlayer(window);
 	//Draw level
-	this->level.renderLevel(this->window);
-	//Draw Weapons
-
-	this->window->display();
+	level.renderLevel(window);
+	//Draw bullets
+	bullets.renderBullets(window);
+	window->display();
 }

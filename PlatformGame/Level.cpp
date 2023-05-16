@@ -13,7 +13,7 @@ void Level::addPlatform(sf::Vector2f position)
 
 std::vector<Platform> Level::getPlatforms()
 {
-	return this->platforms;
+	return platforms;
 }
 
 

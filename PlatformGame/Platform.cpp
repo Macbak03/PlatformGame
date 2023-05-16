@@ -3,15 +3,15 @@
 
 Platform::Platform(sf::Vector2f position)
 {
-	this->initTexture();
-	this->setPosition(position);
+	initTexture();
+	setPosition(position);
 }
 
 
 void Platform::loadTexture()
 {
 	platformTexture = new sf::Texture;
-	if (!this->platformTexture->loadFromFile("Textures/grass-2.png"))
+	if (!platformTexture->loadFromFile("Textures/grass-2.png"))
 	{
 		std::cerr << "Could not load texture" << std::endl;
 	}
@@ -19,15 +19,15 @@ void Platform::loadTexture()
 
 void Platform::initTexture()
 {
-	this->loadTexture();
-	this->platformSprite.setTexture(*platformTexture);
-	this->platformSprite.setScale(sf::Vector2f(0.1f, 0.1f));
+	loadTexture();
+	platformSprite.setTexture(*platformTexture);
+	platformSprite.setScale(sf::Vector2f(0.1f, 0.1f));
 }
 
 
 void Platform::setPosition(sf::Vector2f position)
 {
-	this->platformSprite.setPosition(position);
+	platformSprite.setPosition(position);
 }
 
 sf::Sprite Platform::getShape()

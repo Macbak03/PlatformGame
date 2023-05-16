@@ -4,7 +4,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
-//#include "Player.h"
+#include "Bullets.h"
 class Weapon
 {
 protected:
@@ -19,6 +19,7 @@ protected:
 	sf::Texture* weaponTextureLeft;
 	sf::Sprite weaponSprite;
 	
+	Bullets bullets;
 
 	virtual void loadTexture() = 0;
 	virtual void initTexture() = 0;
@@ -27,7 +28,7 @@ public:
 	Weapon();
 	void initWeaponPosition(sf::Vector2f playerPosition, bool playerFacingRight, bool playerFacingLeft);
 	void rotateWeapon(bool playerFacingRight, bool playerFacingLeft);
-	void shoot();
+	void shoot(bool playerFacingRight, bool playerFacingLeft);
 	void updateWeapon(const sf::RenderTarget* target, sf::Vector2f playerPosition, bool playerFacingRight, bool playerFacingLeft);
 	void renderWeapon(sf::RenderTarget* target);
 };
