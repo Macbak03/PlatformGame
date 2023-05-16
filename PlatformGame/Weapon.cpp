@@ -1,12 +1,14 @@
 #include "Weapon.h"
+#include <iostream>
 
-Weapon::Weapon()
+Weapon::Weapon() : maxBullets(1000)
 {
 	weaponTextureRight = nullptr;
 	weaponTextureLeft = nullptr;
 	rateOfFire = 0.f;
 	damage = 0.f;
 	ammoSize = 0.f;
+	bulletSpawnTimer = 0.f;
 }
 
 
@@ -30,6 +32,23 @@ void Weapon::shoot(bool playerFacingRight, bool playerFacingLeft)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
 	{
 		bullets.spawnBullet(playerFacingRight, playerFacingLeft, weaponPositionRight);
+		bulletSpawnTimer = 0.f;
+	}
+}
+
+void Weapon::updateShooting(bool playerFacingRight, bool playerFacingLeft)
+{
+	if (bullets.getBullets().size() < maxBullets)
+	{
+		if (bulletSpawnTimer >= rateOfFire)
+		{
+			shoot(playerFacingRight, playerFacingLeft);
+
+		}
+		else
+		{
+			bulletSpawnTimer += 1.f;
+		}
 	}
 }
 
@@ -52,12 +71,14 @@ void Weapon::updateWeapon(const sf::RenderTarget* target, sf::Vector2f playerPos
 {
 	initWeaponPosition(playerPosition, playerFacingRight, playerFacingLeft);
 	rotateWeapon(playerFacingRight, playerFacingLeft);
-	shoot(playerFacingRight, playerFacingLeft);
-	bullets.updateBullets(target, playerFacingRight, playerFacingLeft, weaponPositionRight);
+	std::cout << bulletSpawnTimer << std::endl;
+	updateShooting(playerFacingRight, playerFacingLeft);
+	bullets.updateBullets(target);
 }
 
 void Weapon::renderWeapon(sf::RenderTarget* target)
 {
+	bullets.renderBullets(target);
 	target->draw(weaponSprite);
 }
 

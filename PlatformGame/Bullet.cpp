@@ -25,20 +25,25 @@ void Bullet::loadTexture()
 void Bullet::initTexture(bool playerFacingRight, bool playerFacingLeft)
 {
 	loadTexture();
-	if (playerFacingLeft)
-	{
-		bulletSprite.setTexture(*bulletTextureLeft);
-	}
 	if (playerFacingRight)
 	{
+		bulletFacingLeft = false;
 		bulletSprite.setTexture(*bulletTextureRight);
+		bulletFacingRight = true;
 	}
+	if (playerFacingLeft)
+	{
+		bulletFacingRight = false;
+		bulletSprite.setTexture(*bulletTextureLeft);
+		bulletFacingLeft = true;
+	}
+	bulletSprite.setScale(sf::Vector2f(0.1f, 0.1f));
 }
 
 void Bullet::initPosition(sf::Vector2f weaponPosition)
 {
 	float x = weaponPosition.x;
-	float y = weaponPosition.y;
+	float y = weaponPosition.y + 10.f;
 	bulletSprite.setPosition(sf::Vector2f(x, y));
 }
 
@@ -47,15 +52,15 @@ const sf::Sprite& Bullet::getShape() const
 	return bulletSprite;
 }
 
-void Bullet::moveBullet(bool playerFacingRight, bool playerFacingLeft)
+void Bullet::moveBullet()
 {
-	if (playerFacingLeft)
-	{
-		bulletSprite.move(-velocity);
-	}
-	else if (playerFacingRight)
+	if (bulletFacingRight)
 	{
 		bulletSprite.move(velocity);
+	}
+	else if (bulletFacingLeft)
+	{
+		bulletSprite.move(-velocity);
 	}
 }
 

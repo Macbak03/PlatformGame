@@ -4,8 +4,9 @@
 Rifle::Rifle()
 {
 	damage = 5.f;
-	rateOfFire = 10.f;
+	rateOfFire = 15.f;
 	ammoSize = 30.f;
+	bulletSpawnTimer = rateOfFire;
 	initTexture();
 }
 

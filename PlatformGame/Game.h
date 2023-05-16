@@ -26,7 +26,6 @@ private:
 
 	Player player;
 	Level level;
-	Bullets bullets;
 	void initVariables();
 	void initWindow();
 

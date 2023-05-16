@@ -107,11 +107,9 @@ void Game::render()
 	window->clear();
 	//Draw background
 	renderBackground(window);
-	//Draw player
-	player.renderPlayer(window);
 	//Draw level
 	level.renderLevel(window);
-	//Draw bullets
-	bullets.renderBullets(window);
+	//Draw player
+	player.renderPlayer(window);
 	window->display();
 }

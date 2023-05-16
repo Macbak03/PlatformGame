@@ -1,6 +1,7 @@
 #include "Bullets.h"
 
-Bullets::Bullets() : bulletMaxAmmount(1000)
+
+Bullets::Bullets() 
 {
 }
 
@@ -11,11 +12,11 @@ void Bullets::spawnBullet(bool playerFacingRight, bool playerFacingLeft, sf::Vec
 	bullets.push_back(bullet);
 }
 
-void Bullets::moveBullets(bool playerFacingRight, bool playerFacingLeft)
+void Bullets::moveBullets()
 {
 	for (auto& element : bullets)
 	{
-		element.moveBullet(playerFacingRight, playerFacingLeft);
+		element.moveBullet();
 	}
 }
 
@@ -24,22 +25,23 @@ void Bullets::updateWindowCollsion(const sf::RenderTarget* target)
 	bullets.erase(std::remove_if(
 		bullets.begin(),
 		bullets.end(),
-		[](Bullet const& bullet) {
-			bool window_collision = bullet.getShape().getGlobalBounds().left <= 0 || bullet.getShape().getGlobalBounds().left + bullet.getShape().getGlobalBounds().width;
+		[target](Bullet const& bullet) {
+			bool window_collision = bullet.getShape().getGlobalBounds().left <= 0 || bullet.getShape().getGlobalBounds().left + bullet.getShape().getGlobalBounds().width >= target->getSize().x;
 	return window_collision;
 		}),
 		bullets.end()
 			);
 }
 
-void Bullets::updateBullets(const sf::RenderTarget* target, bool playerFacingRight, bool playerFacingLeft, sf::Vector2f& weaponPosition)
+void Bullets::updateBullets(const sf::RenderTarget* target)
 {
-	if (bullets.size() < bulletMaxAmmount)
-	{
-		spawnBullet(playerFacingRight, playerFacingLeft, weaponPosition);
-	}
-	moveBullets(playerFacingRight, playerFacingLeft);
+	moveBullets();
 	updateWindowCollsion(target);
+}
+
+const std::vector<Bullet>& Bullets::getBullets() const
+{
+	return bullets;
 }
 
 void Bullets::renderBullets(sf::RenderTarget* target)

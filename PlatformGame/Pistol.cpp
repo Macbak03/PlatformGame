@@ -4,8 +4,9 @@
 Pistol::Pistol()
 {
 	damage = 10.f;
-	rateOfFire = 2.f;
+	rateOfFire = 50.f;
 	ammoSize = 6.f;
+	bulletSpawnTimer = rateOfFire;
 	initTexture();
 }
 
@@ -27,7 +28,7 @@ void Pistol::initTexture()
 {
 	loadTexture();
 	weaponSprite.setTexture(*weaponTextureRight);
-	weaponSprite.setScale(sf::Vector2f(0.5f, 0.55f));
+	weaponSprite.setScale(sf::Vector2f(0.5f, 0.45f));
 }
 
 

@@ -4,8 +4,9 @@
 SniperRifle::SniperRifle()
 {
 	damage = 50.f;
-	rateOfFire = 1.f;
+	rateOfFire = 100.f;
 	ammoSize = 10.f;
+	bulletSpawnTimer = rateOfFire;
 	initTexture();
 }
 
