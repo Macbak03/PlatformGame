@@ -35,19 +35,28 @@ void Game::initBackground()
 void Game::initLevel()
 {
 	//spawn platforms
-	level.addPlatform(sf::Vector2f(400.f, 550.f));
+	level.addPlatform(sf::Vector2f(450, 550.f));
 	level.addPlatform(sf::Vector2f(600.f, 500.f));
 	level.addPlatform(sf::Vector2f(200.f, 450.f));
 	level.addPlatform(sf::Vector2f(1000.f, 525.f));
 }
 
+void Game::initEnemies()
+{
+	enemy = new Bandit;
+	enemyScale = enemy->getEnemyScale();
+	enemy->spawnEnemy(sf::Vector2f(450.f, 480.f));
+}
+
+
 Game::Game()
 {
-	initLevel();
 	initVariables();
 	initWindow();
 	loadTexture();
 	initBackground();
+	initLevel();
+	initEnemies();
 }
 
 Game::~Game()
@@ -66,15 +75,15 @@ void Game::pollEvents()
 {
 	deltaTime = clock.restart().asSeconds();
 	//Event polling
-	while (window->pollEvent(ev))
+	while (window->pollEvent(event))
 	{
-		switch (ev.type)
+		switch (event.type)
 		{
 		case sf::Event::Closed:
 			window->close();
 			break;
 		case sf::Event::KeyPressed:
-			if (ev.key.code == sf::Keyboard::Escape)
+			if (event.key.code == sf::Keyboard::Escape)
 			{
 				window->close();
 				break;
@@ -88,6 +97,8 @@ void Game::update()
 {
 	pollEvents();
 	player.updatePlayer(window, deltaTime, level.getPlatforms());
+	enemy->updateEnemy(window, deltaTime, level.getPlatforms(), enemyScale);
+	enemy->updateEnemyAnimation(deltaTime);
 }
 
 void Game::renderBackground(sf::RenderTarget* target)
@@ -111,5 +122,6 @@ void Game::render()
 	level.renderLevel(window);
 	//Draw player
 	player.renderPlayer(window);
+	enemy->renderEnemy(window);
 	window->display();
 }

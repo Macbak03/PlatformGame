@@ -5,8 +5,10 @@ Pistol::Pistol()
 {
 	damage = 10.f;
 	rateOfFire = 50.f;
-	ammoSize = 6.f;
+	magazineSize = 6.f;
+	ammo = magazineSize;
 	bulletSpawnTimer = rateOfFire;
+	reloadSpeed = 4.f;
 	initTexture();
 }
 
@@ -29,6 +31,7 @@ void Pistol::initTexture()
 	loadTexture();
 	weaponSprite.setTexture(*weaponTextureRight);
 	weaponSprite.setScale(sf::Vector2f(0.5f, 0.45f));
+	weaponSprite.setOrigin(sf::Vector2f(0.f, weaponSprite.getGlobalBounds().top - 15.f));
 }
 
 

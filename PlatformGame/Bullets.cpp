@@ -5,7 +5,7 @@ Bullets::Bullets()
 {
 }
 
-void Bullets::spawnBullet(bool playerFacingRight, bool playerFacingLeft, sf::Vector2f& weaponPosition)
+void Bullets::spawnBullet(bool playerFacingRight, bool playerFacingLeft, sf::Vector2f weaponPosition)
 {
 	Bullet bullet(playerFacingRight, playerFacingLeft);
 	bullet.initPosition(weaponPosition);

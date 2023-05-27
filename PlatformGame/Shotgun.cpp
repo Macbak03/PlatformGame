@@ -5,7 +5,8 @@ Shotgun::Shotgun()
 {
 	damage = 30.f;
 	rateOfFire = 50.f;
-	ammoSize = 7.f;
+	magazineSize = 7.f;
+	ammo = magazineSize;
 	bulletSpawnTimer = rateOfFire;
 	initTexture();
 }

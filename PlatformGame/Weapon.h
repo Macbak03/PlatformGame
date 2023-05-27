@@ -1,18 +1,23 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/Network.hpp>
 #include "Bullets.h"
+#include "FireBlast.h"
 class Weapon
 {
+private:
+	float reloadTimer;
+	
 protected:
 	float rateOfFire;
 	float damage;
-	float ammoSize;
-	float bulletSpawnTimer;
+	float magazineSize;
+	float reloadSpeed;
 	const int maxBullets;
+	float bulletSpawnTimer;
+	float ammo;
+
+	bool startReloadTimer;
+	bool keyHold;
 
 	sf::Vector2f weaponPositionRight;
 	sf::Vector2f weaponPositionLeft;
@@ -32,8 +37,9 @@ public:
 	void initWeaponPosition(sf::Vector2f playerPosition, bool playerFacingRight, bool playerFacingLeft);
 	void rotateWeapon(bool playerFacingRight, bool playerFacingLeft);
 	void shoot(bool playerFacingRight, bool playerFacingLeft);
-	void updateShooting(bool playerFacingRight, bool playerFacingLeft);
-	void updateWeapon(const sf::RenderTarget* target, sf::Vector2f playerPosition, bool playerFacingRight, bool playerFacingLeft);
+	void reload(float deltaTime);
+	void updateShooting(bool playerFacingRight, bool playerFacingLeft, float deltaTime);
+	void updateWeapon(const sf::RenderTarget* target, sf::Vector2f playerPosition, bool playerFacingRight, bool playerFacingLeft, float deltaTime);
 	void renderWeapon(sf::RenderTarget* target);
 };
 

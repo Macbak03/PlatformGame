@@ -66,7 +66,6 @@ void Player::updatePhysics(float deltaTime)
 void Player::initWeapon()
 {
 	weapon = new Pistol;
-	
 }
 
 void Player::changeWeapon()
@@ -182,6 +181,7 @@ void Player::updateBounceCollision(const sf::RenderTarget* target, std::vector<P
 		{
 			playerSprite.setPosition(element.getShape().getGlobalBounds().left + element.getShape().getGlobalBounds().width, playerTop);
 		}
+		//player right with platform left
 		if (playerSprite.getGlobalBounds().intersects(element.getShape().getGlobalBounds()) 
 			&& playerRight >= element.getShape().getGlobalBounds().left - 10.f 
 			&& playerRight <= element.getShape().getGlobalBounds().left + 10.f)
@@ -215,7 +215,7 @@ void Player::updatePlayer(const sf::RenderTarget* target, float deltaTime, std::
 	updateBounceCollision(target, platforms);
 	updatePhysics(deltaTime);
 	changeWeapon();
-	weapon->updateWeapon(target, getPosition(), facingRight, facingLeft);
+	weapon->updateWeapon(target, getPosition(), facingRight, facingLeft, deltaTime);
 }
 
 void Player::renderPlayer(sf::RenderTarget* target)

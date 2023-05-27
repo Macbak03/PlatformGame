@@ -133,8 +133,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="Bandit.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Bullets.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="FireBlast.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
@@ -147,8 +151,12 @@
     <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
+    <ClInclude Include="Bandit.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Bullets.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="FireBlast.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Pistol.h" />
