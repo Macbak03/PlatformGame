@@ -21,7 +21,7 @@ void Platform::initTexture()
 {
 	loadTexture();
 	platformSprite.setTexture(*platformTexture);
-	platformSprite.setScale(sf::Vector2f(0.1f, 0.1f));
+	platformSprite.setScale(sf::Vector2f(0.15f, 0.1f));
 }
 
 

@@ -12,7 +12,7 @@ private:
 	void initAnimation() override;
 
 public:
-	Bandit();
+	Bandit(Platform* platform);
 	void updateEnemyAnimation(float& deltaTime) override;
 	sf::Vector2f getEnemyScale() override;
 	

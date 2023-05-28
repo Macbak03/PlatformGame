@@ -27,7 +27,6 @@ private:
 	Player player;
 	Level level;
 	Enemy* enemy;
-	sf::Vector2f enemyScale;
 	void initVariables();
 	void initWindow();
 

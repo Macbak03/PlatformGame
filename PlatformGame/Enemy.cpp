@@ -1,6 +1,8 @@
 #include "Enemy.h"
+#include <iostream>
 
-Enemy::Enemy()
+
+Enemy::Enemy(Platform* platform) : platform(platform)
 {
 	enemyTextrue = nullptr;
 	enemySpeed = 0.f;
@@ -22,35 +24,39 @@ void Enemy::moveEnemy()
 {
 	enemySprite.move(sf::Vector2f(enemySpeed, 0));
 }
-
-void Enemy::updateBounceCollision(const sf::RenderTarget* target, std::vector<Platform> platforms, sf::Vector2f enemyScale)
+void Enemy::flip()
 {
-	enemySprite.setOrigin(sf::Vector2f(enemySprite.getLocalBounds().width / 2.f, 0));
-	for (auto& element : platforms) 
-	{
-		if (enemySprite.getGlobalBounds().left <= element.getShape().getGlobalBounds().left)
-		{
-			enemySpeed = -enemySpeed;
-		}
-		if (enemySprite.getGlobalBounds().left + enemySprite.getGlobalBounds().width >= element.getShape().getGlobalBounds().left + element.getShape().getGlobalBounds().width)
-		{
-			enemySpeed = -enemySpeed;
-		}
-	}
-	if (enemySpeed < 0)
-	{
-		enemySprite.setScale(sf::Vector2f(-enemyScale.x, enemyScale.y));
-	}
-	else
-	{
-		enemySprite.setScale(sf::Vector2f(enemyScale.x, enemyScale.y));
-	}
+	sf::Vector2f enemyScale = getEnemyScale();
+	enemySpeed = -enemySpeed;
+	enemySprite.setScale(sf::Vector2f(-enemyScale.x, enemyScale.y));
 }
 
-void Enemy::updateEnemy(const sf::RenderTarget* target, float deltaTime, std::vector<Platform> platforms, sf::Vector2f enemyScale)
+void Enemy::updateBounceCollision()
+{
+	
+	enemySprite.setOrigin(sf::Vector2f(enemySprite.getLocalBounds().width / 2.f, 0));
+	//collision with platform edges
+	//left edge
+	if (enemySprite.getGlobalBounds().left <= platform->getShape().getGlobalBounds().left - enemySprite.getOrigin().x)
+	{
+		flip();
+	}
+	//right edge
+	else if (enemySprite.getGlobalBounds().left + enemySprite.getGlobalBounds().width  >= platform->getShape().getGlobalBounds().left 
+		+ platform->getShape().getGlobalBounds().width + enemySprite.getOrigin().x)
+	{
+		flip();
+	}
+	/*if (enemySprite.getGlobalBounds().intersects(element.getShape().getGlobalBounds()))
+	{
+		enemySprite.setPosition(enemySprite.getGlobalBounds().left, element.getShape().getGlobalBounds().top - enemySprite.getGlobalBounds().height + 5.f);
+	}*/
+}
+
+void Enemy::updateEnemy(const sf::RenderTarget* target, float deltaTime)
 {
 	moveEnemy();
-	updateBounceCollision(target, platforms, enemyScale);
+	updateBounceCollision();
 }
 
 void Enemy::renderEnemy(sf::RenderTarget* target)

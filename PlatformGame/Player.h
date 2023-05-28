@@ -39,8 +39,8 @@ public:
 	const sf::Sprite& getShape() const;
 	const sf::Vector2f& getPosition() const;
 	void changeWeapon();
-	void updateBounceCollision(const sf::RenderTarget* target, std::vector<Platform> platforms);
-	void updatePlayer(const sf::RenderTarget* target, float deltaTime, std::vector<Platform> platforms);
+	void updateBounceCollision(const sf::RenderTarget* target, std::vector<Platform*> platforms);
+	void updatePlayer(const sf::RenderTarget* target, float deltaTime, std::vector<Platform*> platforms);
 	void renderPlayer(sf::RenderTarget* target);
 
 };

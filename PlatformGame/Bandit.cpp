@@ -1,9 +1,9 @@
 #include "Bandit.h"
 #include <iostream>
 
-Bandit::Bandit()
+Bandit::Bandit(Platform* platform) : Enemy(platform)
 {
-	enemySpeed = 2.f;
+	enemySpeed = 1.f;
 	enemyDamage = 5.f;
 	enemyRateOfFire = 5.f;
 	enemyHealth = 100.f;
@@ -31,7 +31,7 @@ void Bandit::initTexture()
 
 void Bandit::initAnimation()
 {
-	animation = new Animation(enemyTextrue, sf::Vector2u(8, 2), 0.2f);
+	animation = new Animation(enemyTextrue, sf::Vector2u(8, 2), 0.3f);
 }
 
 sf::Vector2f Bandit::getEnemyScale()
