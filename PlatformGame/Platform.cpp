@@ -1,10 +1,12 @@
 #include "Platform.h"
 #include <iostream>
 
-Platform::Platform(sf::Vector2f position)
+Platform::Platform(sf::Vector2f position, Node* parentNode) : Node(parentNode)
 {
+	platformSize = sf::Vector2f(125.f, 25.f);
 	initTexture();
-	setPosition(position);
+	initColider();
+	setLocalPosition(position);
 }
 
 
@@ -21,14 +23,15 @@ void Platform::initTexture()
 {
 	loadTexture();
 	platformSprite.setTexture(*platformTexture);
-	platformSprite.setScale(sf::Vector2f(0.15f, 0.1f));
+	platformSprite.setScale(sf::Vector2f(platformSize.x/platformTexture->getSize().x, platformSize.y / platformTexture->getSize().y));
 }
 
-
-void Platform::setPosition(sf::Vector2f position)
+void Platform::initColider()
 {
-	platformSprite.setPosition(position);
+	collider.size = platformSize;
 }
+
+
 
 sf::Sprite Platform::getShape()
 {
@@ -36,8 +39,12 @@ sf::Sprite Platform::getShape()
 }
 
 
-void Platform::renderPlatform(sf::RenderTarget* target)
+void Platform::onDraw(sf::RenderTarget& target, const sf::Transform& transform) const
 {
-	target->draw(platformSprite);
+	target.draw(platformSprite, transform);
 }
 
+Collider& Platform::getCollider()
+{
+	return this->collider;
+}

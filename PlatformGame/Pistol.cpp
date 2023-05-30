@@ -1,7 +1,7 @@
 #include "Pistol.h"
 #include <iostream>
 
-Pistol::Pistol()
+Pistol::Pistol(Node* parentNode) : Weapon(parentNode)
 {
 	damage = 10.f;
 	rateOfFire = 50.f;

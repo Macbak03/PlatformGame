@@ -1,13 +1,13 @@
 #include "Bullets.h"
 
 
-Bullets::Bullets() 
+Bullets::Bullets()
 {
 }
 
-void Bullets::spawnBullet(bool playerFacingRight, bool playerFacingLeft, sf::Vector2f weaponPosition)
+void Bullets::spawnBullet(bool playerFacingRight, bool playerFacingLeft, sf::Vector2f weaponPosition, Node* parentNode)
 {
-	Bullet bullet(playerFacingRight, playerFacingLeft);
+	Bullet bullet(playerFacingRight, playerFacingLeft, parentNode);
 	bullet.initPosition(weaponPosition);
 	bullets.push_back(bullet);
 }
@@ -36,7 +36,7 @@ void Bullets::updateWindowCollsion(const sf::RenderTarget* target)
 void Bullets::updateBullets(const sf::RenderTarget* target)
 {
 	moveBullets();
-	updateWindowCollsion(target);
+	//updateWindowCollsion(target);
 }
 
 const std::vector<Bullet>& Bullets::getBullets() const
@@ -44,11 +44,10 @@ const std::vector<Bullet>& Bullets::getBullets() const
 	return bullets;
 }
 
-void Bullets::renderBullets(sf::RenderTarget* target)
+void Bullets::renderBullets(sf::RenderTarget& target, sf::Transform transform)
 {
 	for (auto& element : bullets)
 	{
-		element.renderBullet(target);
+		element.onDraw(target, transform);
 	}
 }
-

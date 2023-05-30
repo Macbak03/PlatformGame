@@ -40,6 +40,7 @@ void Enemy::updateBounceCollision()
 	if (enemySprite.getGlobalBounds().left <= platform->getShape().getGlobalBounds().left - enemySprite.getOrigin().x)
 	{
 		flip();
+
 	}
 	//right edge
 	else if (enemySprite.getGlobalBounds().left + enemySprite.getGlobalBounds().width  >= platform->getShape().getGlobalBounds().left 

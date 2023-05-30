@@ -2,7 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include "Bullets.h"
 #include "FireBlast.h"
-class Weapon
+#include "Node.h"
+class Weapon : public Node
 {
 private:
 	float reloadTimer;
@@ -33,13 +34,13 @@ protected:
 	virtual void initTexture() = 0;
 
 public:
-	Weapon();
-	void initWeaponPosition(sf::Vector2f playerPosition, bool playerFacingRight, bool playerFacingLeft);
-	void rotateWeapon(bool playerFacingRight, bool playerFacingLeft);
-	void shoot(bool playerFacingRight, bool playerFacingLeft);
+	Weapon(Node* parentNode);
+	void initWeaponPosition(sf::Vector2f playerPosition);
+	void shoot(bool playerFacingRight, bool playerFacingLeft, Node* parentNode);
 	void reload(float deltaTime);
-	void updateShooting(bool playerFacingRight, bool playerFacingLeft, float deltaTime);
-	void updateWeapon(const sf::RenderTarget* target, sf::Vector2f playerPosition, bool playerFacingRight, bool playerFacingLeft, float deltaTime);
+	void updateShooting(bool playerFacingRight, bool playerFacingLeft, float deltaTime,  Node* parentNode);
+	void updateWeapon(const sf::RenderTarget* target, sf::Vector2f playerPosition, bool playerFacingRight, bool playerFacingLeft, float deltaTime, Node* parentNode);
 	void renderWeapon(sf::RenderTarget* target);
+	virtual void onDraw(sf::RenderTarget& target, const sf::Transform& transform) const override;
 };
 

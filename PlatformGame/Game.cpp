@@ -35,10 +35,10 @@ void Game::initBackground()
 void Game::initLevel()
 {
 	//spawn platforms
-	Platform* platfromGrass1 = level.addPlatform(sf::Vector2f(450, 550.f));
-	Platform* platfromGrass2 = level.addPlatform(sf::Vector2f(600.f, 500.f));
-	Platform* platfromGrass3 = level.addPlatform(sf::Vector2f(200.f, 450.f));
-	Platform* platfromGrass4 = level.addPlatform(sf::Vector2f(1000.f, 525.f));
+	Platform* platfromGrass1 = level.addPlatform(sf::Vector2f(450, 550.f), &level);
+	Platform* platfromGrass2 = level.addPlatform(sf::Vector2f(600.f, 500.f), &level);
+	Platform* platfromGrass3 = level.addPlatform(sf::Vector2f(200.f, 450.f), &level);
+	Platform* platfromGrass4 = level.addPlatform(sf::Vector2f(1000.f, 525.f), &level);
 	enemy = new Bandit(platfromGrass1);
 	enemy->spawnEnemy(sf::Vector2f(480.f, 480.f));
 }
@@ -49,7 +49,7 @@ void Game::initEnemies()
 }
 
 
-Game::Game()
+Game::Game() : player(&level)
 {
 	initVariables();
 	initWindow();
@@ -96,7 +96,7 @@ void Game::pollEvents()
 void Game::update()
 {
 	pollEvents();
-	player.updatePlayer(window, deltaTime, level.getPlatforms());
+	player.updatePlayer(window, deltaTime, level.getPlatforms(), &level);
 	enemy->updateEnemy(window, deltaTime);
 	enemy->updateEnemyAnimation(deltaTime);
 }
@@ -119,9 +119,8 @@ void Game::render()
 	//Draw background
 	renderBackground(window);
 	//Draw level
-	level.renderLevel(window);
+	level.renderLevel(*window);
 	//Draw player
-	player.renderPlayer(window);
 	enemy->renderEnemy(window);
 	window->display();
 }

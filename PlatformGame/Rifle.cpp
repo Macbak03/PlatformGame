@@ -1,7 +1,7 @@
 #include "Rifle.h"
 #include <iostream>
 
-Rifle::Rifle()
+Rifle::Rifle(Node* parentNode) : Weapon(parentNode)
 {
 	damage = 5.f;
 	rateOfFire = 15.f;

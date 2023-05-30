@@ -137,6 +137,7 @@
     <ClCompile Include="Bandit.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Bullets.cpp" />
+    <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="FireBlast.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -148,6 +149,8 @@
     <ClCompile Include="Rifle.cpp" />
     <ClCompile Include="Shotgun.cpp" />
     <ClCompile Include="SniperRifle.cpp" />
+    <ClCompile Include="Node.cpp" />
+    <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +158,7 @@
     <ClInclude Include="Bandit.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Bullets.h" />
+    <ClInclude Include="Collider.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="FireBlast.h" />
     <ClInclude Include="Game.h" />
@@ -165,6 +169,8 @@
     <ClInclude Include="Rifle.h" />
     <ClInclude Include="Shotgun.h" />
     <ClInclude Include="SniperRifle.h" />
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="Utils.h" />
     <ClInclude Include="Weapon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

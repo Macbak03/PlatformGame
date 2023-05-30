@@ -6,6 +6,6 @@ private:
 	void loadTexture() override;
 	void initTexture() override;
 public:
-	Pistol();
+	Pistol(Node* parentNode);
 };
 

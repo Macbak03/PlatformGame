@@ -23,9 +23,8 @@ private:
 	sf::Texture backgroundTexture;
 	sf::Sprite backgroundSprite;
 
-
-	Player player;
 	Level level;
+	Player player;
 	Enemy* enemy;
 	void initVariables();
 	void initWindow();

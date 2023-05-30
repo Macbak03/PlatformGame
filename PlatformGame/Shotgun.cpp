@@ -1,7 +1,7 @@
 #include "Shotgun.h"
 #include <iostream>
 
-Shotgun::Shotgun()
+Shotgun::Shotgun(Node* parentNode) : Weapon(parentNode)
 {
 	damage = 30.f;
 	rateOfFire = 50.f;

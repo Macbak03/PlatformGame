@@ -1,12 +1,15 @@
 #include "Player.h"
 #include <iostream>
 
-Player::Player()
+Player::Player(Node* parentNode) : Node(parentNode)
 {
+	playerSize = sf::Vector2f(85.f, 85.f);
 	facingRight = true;
 	facingLeft = false;
 	playerSpeed = 7.f;
 	onGround = false;
+	startJumpTimer = false;
+	jumpTimer = 0.5f;
 	initShape();
 	spawnPlayer();
 	initPhysics();
@@ -23,10 +26,6 @@ void Player::loadTextures()
 	{
 		std::cerr << "Could not load player_right texture" << std::endl;
 	}
-	else if (!playerTextureLeft->loadFromFile("Textures/player_left.png"))
-	{
-		std::cerr << "Could not load player_left texture" << std::endl;
-	}
 }
 
 
@@ -34,14 +33,14 @@ void Player::initShape()
 {
 	loadTextures();
 	playerSprite.setTexture(*playerTextureRight);
-	playerSprite.setScale(sf::Vector2f(0.1f, 0.1f));
+	playerSprite.setScale(sf::Vector2f(playerSize.x/playerTextureRight->getSize().x, playerSize.y/playerTextureRight->getSize().y));
 }
-
+ 
 const sf::Sprite& Player::getShape() const
 {
 	return playerSprite;
 }
-//SHAPE
+//END SHAPE
 
 //PHYSICS
 void Player::initPhysics()
@@ -50,6 +49,9 @@ void Player::initPhysics()
 	gravity = 50.f;
 	velocity = sf::Vector2f(playerSpeed, 0.f);
 	jumpSpeed = 15.f;
+	//colider
+	collider.size = playerSize;
+	collider.offset.x = - collider.size.x / 2;
 }
 
 void Player::updatePhysics(float deltaTime)
@@ -60,12 +62,12 @@ void Player::updatePhysics(float deltaTime)
 		velocity.y = terminalVelocity;
 	}
 }
-//PHYSICS
+//END PHYSICS
 
 //WEAPON STUFF
 void Player::initWeapon()
 {
-	weapon = new Pistol;
+	weapon = new Pistol(this);
 }
 
 void Player::changeWeapon()
@@ -73,64 +75,81 @@ void Player::changeWeapon()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
 	{
 		delete weapon;
-		weapon = new Rifle;
+		weapon = new Rifle(this);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
 	{
 		delete weapon;
-		weapon = new SniperRifle;
+		weapon = new SniperRifle(this);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
 	{
 		delete weapon;
-		weapon = new Shotgun;
+		weapon = new Shotgun(this);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
 	{
 		delete weapon;
-		weapon = new Pistol;
+		weapon = new Pistol(this);
 	}
 }
-//WEAPON STUFF
+//END WEAPON STUFF
 
 
 //PLAYER POSITIONING
 void Player::spawnPlayer()
 {
-	playerSprite.setPosition(sf::Vector2f(600.f, 0.f));
+	sf::Vector2f playerSpawn = sf::Vector2f(600.f, 0.f);
+	setLocalPosition(playerSpawn);
 }
 
-void Player::movePlayer()
+void Player::movePlayer(float deltaTime)
 {
 	
 	//move left
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
-		facingRight = false;
-		playerSprite.setTexture(*playerTextureLeft);
-		velocity.x = -7.f;
-		playerSprite.move(velocity.x, 0.f);
-		facingLeft = true;
+		velocity.x = -playerSpeed;
+		auto horizontalVelocity = sf::Vector2f(velocity.x, 0.f);
+		move(horizontalVelocity);
+		if (facingRight)
+		{
+			facingRight = false;
+			flipX();
+			facingLeft = true;
+		}
 	}
 	//move right
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
-		facingLeft = false;
-		playerSprite.setTexture(*playerTextureRight);
-		velocity.x = 7.f;
-		playerSprite.move(velocity.x, 0.f);
-		facingRight = true;
+		velocity.x = playerSpeed;
+		auto horizontalVelocity = sf::Vector2f(velocity.x, 0.f);
+		move(horizontalVelocity);
+		if (facingLeft)
+		{
+			facingRight = true;
+			flipX();
+			facingLeft = false;
+		}
 	}
 	//jump
+	float jumpDeload = 0.5f;
+	jumpTimer += deltaTime;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && onGround)
 	{
-		onGround = false;
-		velocity.y = -jumpSpeed;
+		if (jumpTimer >= jumpDeload)
+		{
+			onGround = false;
+			velocity.y = -jumpSpeed;
+			jumpTimer = 0.f;
+			startJumpTimer = false;
+		}
 	}
 	//gravity
 	if (!onGround)
 	{
-		playerSprite.move(0.f, velocity.y);
+		auto verticalVelocity = sf::Vector2f(0.f, velocity.y);
+		move(verticalVelocity);
 	}
 }
 
@@ -138,32 +157,36 @@ const sf::Vector2f& Player::getPosition() const
 {
 	return playerSprite.getPosition();
 }
-//PLAYER POSITIONING
+//END PLAYER POSITIONING
 
 
 
 //PLAYER COLLISION
-void Player::updateBounceCollision(const sf::RenderTarget* target, std::vector<Platform*> platforms)
+void Player::updateBounceCollision(sf::RenderTarget* target, std::vector<Platform*> platforms)
 {
-	float playerTop = playerSprite.getGlobalBounds().top;
-	float playerBottom = playerTop + playerSprite.getGlobalBounds().height;
-	float playerLeft = playerSprite.getGlobalBounds().left;
-	float playerRight = playerLeft + playerSprite.getGlobalBounds().width;
+	sf::Vector2f playerGlobalPosition = getGlobalPosition();
+	this->setOrigin(collider.size.x / 2.f, 0.f);
+	float playerTop = playerGlobalPosition.y + collider.offset.y;
+	float playerBottom = playerTop + collider.size.y;
+	float playerLeft = playerGlobalPosition.x + collider.offset.x;
+	float playerRight = playerLeft + collider.size.x;
+	float floorHeight = 90.f;
+	
 	//left
 	if (playerLeft <= 0.f)
 	{
-		playerSprite.setPosition(0.f, playerTop);
+		playerGlobalPosition.x = - collider.offset.x;
 	}
 	//right
 	if (playerRight >= target->getSize().x)
 	{
-		playerSprite.setPosition(target->getSize().x - playerSprite.getGlobalBounds().width, playerTop);
+		playerGlobalPosition.x = target->getSize().x + collider.offset.x;
 	}
 	//bottom
-	float floorHeight = 90.f;
+	
 	if (playerBottom + floorHeight >= target->getSize().y)
 	{
-		playerSprite.setPosition(playerSprite.getGlobalBounds().left, target->getSize().y - playerSprite.getGlobalBounds().height -floorHeight);
+		playerGlobalPosition.y = target->getSize().y - collider.size.y -floorHeight;
 		onGround = true;
 	}
 	else 
@@ -173,54 +196,42 @@ void Player::updateBounceCollision(const sf::RenderTarget* target, std::vector<P
 	//collision with platforms
 	for (auto& element : platforms)
 	{	
-		
-		//player left with platform right
-		if (playerSprite.getGlobalBounds().intersects(element->getShape().getGlobalBounds()) 
-			&& playerLeft <= element->getShape().getGlobalBounds().left + element->getShape().getGlobalBounds().width + 10.f
-			&& playerLeft >= element->getShape().getGlobalBounds().left + element->getShape().getGlobalBounds().width - 10.f)
+		sf::Vector2f platformGlobalPosition = element->getGlobalPosition();
+		Collider platformCollider = element->getCollider();
+		while (collider.xCausesCollision(playerGlobalPosition, platformGlobalPosition, platformCollider, velocity.x))
 		{
-			playerSprite.setPosition(element->getShape().getGlobalBounds().left + element->getShape().getGlobalBounds().width, playerTop);
+			playerGlobalPosition.x -= Utils::sgn(velocity.x);
 		}
-		//player right with platform left
-		if (playerSprite.getGlobalBounds().intersects(element->getShape().getGlobalBounds())
-			&& playerRight >= element->getShape().getGlobalBounds().left - 10.f
-			&& playerRight <= element->getShape().getGlobalBounds().left + 10.f)
+		while (collider.yCausesCollision(playerGlobalPosition, platformGlobalPosition, platformCollider, velocity.y))
 		{
-			playerSprite.setPosition(element->getShape().getGlobalBounds().left - playerSprite.getGlobalBounds().width, playerTop);
-		}
-		//player top with platform bottom
-		if (playerSprite.getGlobalBounds().intersects(element->getShape().getGlobalBounds())
-			&& playerTop <= element->getShape().getGlobalBounds().top + element->getShape().getGlobalBounds().height + 30.f
-			&& playerTop >= element->getShape().getGlobalBounds().top + element->getShape().getGlobalBounds().height - 30.f)
-		{
-			velocity.y = 0.f;
-		}
-		//player bottom with platform top
-		if (playerSprite.getGlobalBounds().intersects(element->getShape().getGlobalBounds()) && velocity.y > 0)
-		{
-			playerSprite.setPosition(playerSprite.getGlobalBounds().left, element->getShape().getGlobalBounds().top - playerSprite.getGlobalBounds().height + 5.f);
+			playerGlobalPosition.y -= Utils::sgn(velocity.y);
 			onGround = true;
-			velocity.y = 0.f;
 		}
-		
 	}
+	if (onGround)
+	{
+		velocity.y = 0.f;
+	}
+	setLocalPosition(playerGlobalPosition);
 }
-//PLAYER COLLISION
+//END PLAYER COLLISION
 
 
 //UPDATE AND RENDER
-void Player::updatePlayer(const sf::RenderTarget* target, float deltaTime, std::vector<Platform*> platforms)
+void Player::updatePlayer(sf::RenderTarget* target, float deltaTime, std::vector<Platform*> platforms, Node* parentNode)
 {	
-	movePlayer();
+	movePlayer(deltaTime);
 	updateBounceCollision(target, platforms);
 	updatePhysics(deltaTime);
 	changeWeapon();
-	weapon->updateWeapon(target, getPosition(), facingRight, facingLeft, deltaTime);
+	weapon->updateWeapon(target, getPosition(), facingRight, facingLeft, deltaTime, parentNode);
+	//std::cout << getLocalPosition().x << "        " << getLocalPosition().y << std::endl;
 }
 
-void Player::renderPlayer(sf::RenderTarget* target)
+
+void Player::onDraw(sf::RenderTarget& target, const sf::Transform& transform) const
 {
-	target->draw(playerSprite);
-	weapon->renderWeapon(target);
+	target.draw(playerSprite, transform);
+
 }
-//UPDATE AND RENDER	
+//END UPDATE AND RENDER	

@@ -4,20 +4,22 @@
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
-class Platform
+#include "Node.h"
+#include "Collider.h"
+class Platform : public Node
 {
 private:
 	sf::Texture* platformTexture;
 	sf::Sprite platformSprite;
-
+	Collider collider;
+	sf::Vector2f platformSize;
 	void loadTexture();
 	void initTexture();
+	void initColider();
 public:
-	Platform(sf::Vector2f position);
-	void setPosition(sf::Vector2f position);
+	Platform(sf::Vector2f position, Node* parentNode);
 	sf::Sprite getShape();
-	//void updatePlatformCollision(Player* player);
-	//void updatePlatform();
-	void renderPlatform(sf::RenderTarget* target);
+	virtual void onDraw(sf::RenderTarget& target, const sf::Transform& transform) const override;
+	Collider& getCollider();
 };
 

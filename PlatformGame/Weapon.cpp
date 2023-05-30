@@ -1,7 +1,7 @@
 #include "Weapon.h"
 #include <iostream>
 
-Weapon::Weapon() : maxBullets(1000)
+Weapon::Weapon(Node* parentNode) : maxBullets(1000), Node(parentNode)
 {
 	weaponTextureRight = nullptr;
 	weaponTextureLeft = nullptr;
@@ -17,35 +17,26 @@ Weapon::Weapon() : maxBullets(1000)
 }
 
 
-void Weapon::initWeaponPosition(sf::Vector2f playerPosition, bool playerFacingRight, bool playerFacingLeft)
+void Weapon::initWeaponPosition(sf::Vector2f playerPosition)
 {
 	weaponPositionRight = sf::Vector2f(playerPosition.x + 40.f, playerPosition.y + 37.f);
-	if(playerFacingRight)
-	{
-		weaponSprite.setPosition(weaponPositionRight);
-	}
-	weaponPositionLeft = sf::Vector2f(playerPosition.x - 15.f, playerPosition.y + 37.f);
-	if (playerFacingLeft)
-	{
-		weaponSprite.setPosition(weaponPositionLeft);
-	    weaponSprite.setTexture(*weaponTextureLeft);
-	}
+	this->setLocalPosition(weaponPositionRight);
 }
 
-void Weapon::shoot(bool playerFacingRight, bool playerFacingLeft)
+void Weapon::shoot(bool playerFacingRight, bool playerFacingLeft, Node* parentNode)
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
 	{
 		if (ammo > 0) {
 			if (playerFacingRight)
 			{
-				bullets.spawnBullet(playerFacingRight, playerFacingLeft, sf::Vector2f(weaponPositionRight.x + 40.f, weaponPositionRight.y));
+				bullets.spawnBullet(playerFacingRight, playerFacingLeft, sf::Vector2f(weaponPositionRight.x + 40.f, weaponPositionRight.y), parentNode);
 				ammo -= 1.f;
 				bulletSpawnTimer = 0.f;
 			}
 			else if (playerFacingLeft)
 			{
-				bullets.spawnBullet(playerFacingRight, playerFacingLeft, weaponPositionLeft);
+				bullets.spawnBullet(playerFacingRight, playerFacingLeft, weaponPositionLeft, parentNode);
 				ammo -= 1.f;
 				bulletSpawnTimer = 0.f;
 			}
@@ -53,13 +44,13 @@ void Weapon::shoot(bool playerFacingRight, bool playerFacingLeft)
 	}
 }
 
-void Weapon::updateShooting(bool playerFacingRight, bool playerFacingLeft, float deltaTime)
+void Weapon::updateShooting(bool playerFacingRight, bool playerFacingLeft, float deltaTime, Node* parentNode)
 {
 	if (bullets.getBullets().size() < maxBullets)
 	{
 		if (bulletSpawnTimer >= rateOfFire)
 		{
-			shoot(playerFacingRight, playerFacingLeft);
+			shoot(playerFacingRight, playerFacingLeft, parentNode);
 
 		}
 		else
@@ -89,32 +80,20 @@ void Weapon::reload(float deltaTime)
 }
 
 
-void Weapon::rotateWeapon(bool playerFacingRight, bool playerFacingLeft)
+void Weapon::updateWeapon(const sf::RenderTarget* target, sf::Vector2f playerPosition, bool playerFacingRight, bool playerFacingLeft, float deltaTime, Node* parentNode)
 {
-	if(playerFacingLeft)
-	{
-		weaponSprite.setTexture(*weaponTextureLeft);
-		weaponSprite.setPosition(weaponPositionLeft);
-	}
-	else if (playerFacingRight)
-	{
-		weaponSprite.setTexture(*weaponTextureRight);
-		weaponSprite.setPosition(weaponPositionRight);
-	}
-}
-
-void Weapon::updateWeapon(const sf::RenderTarget* target, sf::Vector2f playerPosition, bool playerFacingRight, bool playerFacingLeft, float deltaTime)
-{
-	initWeaponPosition(playerPosition, playerFacingRight, playerFacingLeft);
-	rotateWeapon(playerFacingRight, playerFacingLeft);
-	std::cout << magazineSize << "      " << ammo << "      "<<reloadTimer<<std::endl;
-	updateShooting(playerFacingRight, playerFacingLeft, deltaTime);
+	initWeaponPosition(playerPosition);
+	//std::cout << magazineSize << "      " << ammo << "      "<<reloadTimer<<std::endl;
+	updateShooting(playerFacingRight, playerFacingLeft, deltaTime, parentNode);
 	bullets.updateBullets(target);
 }
 
 void Weapon::renderWeapon(sf::RenderTarget* target)
 {
-	bullets.renderBullets(target);
-	target->draw(weaponSprite);
+	//bullets.renderBullets(target);
 }
 
+void Weapon::onDraw(sf::RenderTarget& target, const sf::Transform& transform) const
+{
+	target.draw(weaponSprite, transform);
+}

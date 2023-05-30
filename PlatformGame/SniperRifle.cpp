@@ -1,7 +1,7 @@
 #include "SniperRifle.h"
 #include <iostream>
 
-SniperRifle::SniperRifle()
+SniperRifle::SniperRifle(Node* parentNode) : Weapon(parentNode)
 {
 	damage = 50.f;
 	rateOfFire = 100.f;
@@ -16,11 +16,6 @@ void SniperRifle::loadTexture()
 {
 	weaponTextureRight = new sf::Texture;
 	if (!weaponTextureRight->loadFromFile("Textures/sniper_rifle_right.png"))
-	{
-		std::cerr << "Could not load texture" << std::endl;
-	}
-	weaponTextureLeft = new sf::Texture;
-	if (!weaponTextureLeft->loadFromFile("Textures/sniper_rifle_left.png"))
 	{
 		std::cerr << "Could not load texture" << std::endl;
 	}
