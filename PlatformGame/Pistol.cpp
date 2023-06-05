@@ -1,7 +1,7 @@
 #include "Pistol.h"
 #include <iostream>
 
-Pistol::Pistol(Node* parentNode) : Weapon(parentNode)
+Pistol::Pistol(Node* parentNode, Bullets& bullets) : Weapon(parentNode, bullets)
 {
 	damage = 10.f;
 	rateOfFire = 50.f;
@@ -14,13 +14,8 @@ Pistol::Pistol(Node* parentNode) : Weapon(parentNode)
 
 void Pistol::loadTexture()
 {
-	weaponTextureRight = new sf::Texture;
-	if (!weaponTextureRight->loadFromFile("Textures/revolver_right.png"))
-	{
-		std::cerr << "Could not load texture" << std::endl;
-	}
-	weaponTextureLeft = new sf::Texture;
-	if (!weaponTextureLeft->loadFromFile("Textures/revolver_left.png"))
+	weaponTexture = new sf::Texture;
+	if (!weaponTexture->loadFromFile("Textures/revolver_right.png"))
 	{
 		std::cerr << "Could not load texture" << std::endl;
 	}
@@ -29,7 +24,7 @@ void Pistol::loadTexture()
 void Pistol::initTexture()
 {
 	loadTexture();
-	weaponSprite.setTexture(*weaponTextureRight);
+	weaponSprite.setTexture(*weaponTexture);
 	weaponSprite.setScale(sf::Vector2f(0.5f, 0.45f));
 	weaponSprite.setOrigin(sf::Vector2f(0.f, weaponSprite.getGlobalBounds().top - 15.f));
 }

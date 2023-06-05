@@ -1,22 +1,6 @@
 #include "Collider.h"
 
 
-bool Collider::xCausesCollision(sf::Vector2f thisGlobalPosition, sf::Vector2f otherGlobalPosition, Collider& otherCollider, float speedX)
-{
-    bool hasCollision = this->intersects(thisGlobalPosition, otherGlobalPosition, otherCollider);
-    thisGlobalPosition.x -= speedX;
-    bool hadCollision = this->intersects(thisGlobalPosition, otherGlobalPosition, otherCollider);
-    return hasCollision && !hadCollision;
-}
-
-bool Collider::yCausesCollision(sf::Vector2f thisGlobalPosition, sf::Vector2f otherGlobalPosition, Collider& otherCollider, float speedY)
-{
-    bool hasCollision = this->intersects(thisGlobalPosition, otherGlobalPosition, otherCollider);
-    thisGlobalPosition.y -= speedY;
-    bool hadCollision = this->intersects(thisGlobalPosition, otherGlobalPosition, otherCollider);
-    return hasCollision && !hadCollision;
-}
-
 bool Collider::intersects(sf::Vector2f thisGlobalPosition, sf::Vector2f otherGlobalPosition, Collider& otherCollider)
 {
     float thisColliderTop = thisGlobalPosition.y + this->offset.y;
@@ -46,4 +30,20 @@ bool Collider::intersects(sf::Vector2f thisGlobalPosition, sf::Vector2f otherGlo
         return false;
     }
     return true;
+}
+
+bool Collider::xCausesCollision(sf::Vector2f thisGlobalPosition, sf::Vector2f otherGlobalPosition, Collider& otherCollider, float speedX)
+{
+    bool hasCollision = this->intersects(thisGlobalPosition, otherGlobalPosition, otherCollider);
+    thisGlobalPosition.x -= speedX;
+    bool hadCollision = this->intersects(thisGlobalPosition, otherGlobalPosition, otherCollider);
+    return hasCollision && !hadCollision;
+}
+
+bool Collider::yCausesCollision(sf::Vector2f thisGlobalPosition, sf::Vector2f otherGlobalPosition, Collider& otherCollider, float speedY)
+{
+    bool hasCollision = this->intersects(thisGlobalPosition, otherGlobalPosition, otherCollider);
+    thisGlobalPosition.y -= speedY;
+    bool hadCollision = this->intersects(thisGlobalPosition, otherGlobalPosition, otherCollider);
+    return hasCollision && !hadCollision;
 }

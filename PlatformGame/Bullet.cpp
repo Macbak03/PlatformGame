@@ -2,10 +2,12 @@
 #include <iostream>
 
 
-Bullet::Bullet(bool playerFacingRight, bool playerFacingLeft, Node* parentNode) : Node(parentNode)
+Bullet::Bullet(bool playerFacingLeft, Node* parentNode) : Node(parentNode)
 {
+	bulletSize = sf::Vector2f(15.f, 5.f);
 	velocity = sf::Vector2f(15.f, 0.f);
-	initTexture(playerFacingRight, playerFacingLeft);
+	initCollider(playerFacingLeft);
+	initTexture(playerFacingLeft);
 }
 
 void Bullet::loadTexture()
@@ -15,31 +17,28 @@ void Bullet::loadTexture()
 	{
 		std::cerr << "Could not load texture" << std::endl;
 	}
-	/*bulletTextureLeft = new sf::Texture;
-	if (!bulletTextureLeft->loadFromFile("Textures/bullet_left.png"))
-	{
-		std::cerr << "Could not load texture" << std::endl;
-	}*/
 }
 
-void Bullet::initTexture(bool playerFacingRight, bool playerFacingLeft)
+void Bullet::initTexture(bool playerFacingLeft)
 {
 	loadTexture();
 	bulletSprite.setTexture(*bulletTextureRight);
-    if (playerFacingRight)
-	{
-		bulletFacingLeft = false;
-		//bulletSprite.setTexture(*bulletTextureRight);
-		bulletFacingRight = true;
-	}
 	if (playerFacingLeft)
-	//{
-		bulletFacingRight = false;
-	    //bulletSprite.setTexture(*bulletTextureLeft);
-		bulletFacingLeft = true;
-	//}
-	bulletSprite.setScale(sf::Vector2f(0.1f, 0.1f));
+	{
+		flipX();
+		velocity.x = -velocity.x;
+	}
+	bulletSprite.setScale(sf::Vector2f(bulletSize.x / bulletTextureRight->getSize().x, bulletSize.y / bulletTextureRight->getSize().y));
 }
+
+void Bullet::initCollider(bool playerFacingLeft)
+{
+	collider.size = bulletSize;
+	if (playerFacingLeft) {
+		collider.offset.x -= bulletSize.x;
+	}
+}
+	
 
 void Bullet::initPosition(sf::Vector2f weaponPosition)
 {
@@ -53,22 +52,22 @@ const sf::Sprite& Bullet::getShape() const
 	return bulletSprite;
 }
 
-void Bullet::moveBullet()
+Collider& Bullet::getCollider()
 {
-	if (bulletFacingRight)
-	{
-		move(velocity.x, velocity.y);
-	}
-	else if (bulletFacingLeft)
-	{
-		move(-velocity.x, velocity.y);
-	}
+	return collider;
 }
 
-
-void Bullet::renderBullet(sf::RenderTarget* target)
+void Bullet::moveBullet()
 {
-	target->draw(bulletSprite);
+	move(velocity.x, velocity.y);
+}
+
+void Bullet::drawCollider(sf::RenderTarget* target)
+{
+	sf::RectangleShape colliderShape;
+	colliderShape.setSize(collider.size);
+	colliderShape.setPosition(getGlobalPosition() + collider.offset);
+	target->draw(colliderShape);
 }
 
 void Bullet::onDraw(sf::RenderTarget& target, const sf::Transform& transform) const

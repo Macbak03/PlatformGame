@@ -34,18 +34,23 @@ void Game::initBackground()
 
 void Game::initLevel()
 {
+	
 	//spawn platforms
 	Platform* platfromGrass1 = level.addPlatform(sf::Vector2f(450, 550.f), &level);
 	Platform* platfromGrass2 = level.addPlatform(sf::Vector2f(600.f, 500.f), &level);
 	Platform* platfromGrass3 = level.addPlatform(sf::Vector2f(200.f, 450.f), &level);
 	Platform* platfromGrass4 = level.addPlatform(sf::Vector2f(1000.f, 525.f), &level);
-	enemy = new Bandit(platfromGrass1);
-	enemy->spawnEnemy(sf::Vector2f(480.f, 480.f));
+	Enemy* enemy1 = new Bandit(platfromGrass1, &level);
+	enemy1->spawnEnemy();
+	enemies.addEnemy(enemy1);
+	Enemy* enemy2 = new Bandit(platfromGrass2, &level);
+	enemy2->spawnEnemy();
+	enemies.addEnemy(enemy2);
 }
 
 void Game::initEnemies()
 {
-	
+
 }
 
 
@@ -97,8 +102,11 @@ void Game::update()
 {
 	pollEvents();
 	player.updatePlayer(window, deltaTime, level.getPlatforms(), &level);
-	enemy->updateEnemy(window, deltaTime);
-	enemy->updateEnemyAnimation(deltaTime);
+	for (auto& element : enemies.getEnemies())
+	{
+		element->updateEnemy(window, deltaTime);
+	}
+	enemies.updateCollisions(player.getWeapon()->getBullets(), player.getWeapon());
 }
 
 void Game::renderBackground(sf::RenderTarget* target)
@@ -119,8 +127,12 @@ void Game::render()
 	//Draw background
 	renderBackground(window);
 	//Draw level
+	for (auto& element : enemies.getEnemies())
+	{
+		element->drawCollider(window);
+	}
+	player.getWeapon()->getBullets().renderCollider(window);
 	level.renderLevel(*window);
 	//Draw player
-	enemy->renderEnemy(window);
 	window->display();
 }

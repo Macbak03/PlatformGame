@@ -12,7 +12,7 @@ class Player : public Node
 {
 private:
 	//Textures
-	sf::Texture* playerTextureRight;
+	sf::Texture* playerTexture;
 	sf::Texture* playerTextureLeft;
 	sf::Sprite playerSprite;
 	void initShape();
@@ -37,6 +37,7 @@ private:
 	void updatePhysics(float deltaTime);
 
 	//Weapon
+	Bullets bullets;
 	Weapon* weapon;
 	void initWeapon();
 	
@@ -44,8 +45,8 @@ public:
 	Player(Node* parentNode);
 	void spawnPlayer();
 	void movePlayer(float deltaTime);
-	const sf::Sprite& getShape() const;
 	const sf::Vector2f& getPosition() const;
+	Weapon* getWeapon();
 	void changeWeapon();
 	void updateBounceCollision(sf::RenderTarget* target, std::vector<Platform*> platforms);
 	void updatePlayer(sf::RenderTarget* target, float deltaTime, std::vector<Platform*> platforms, Node* parentNode);

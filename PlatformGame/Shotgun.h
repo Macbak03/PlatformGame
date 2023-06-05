@@ -6,6 +6,6 @@ private:
 	void loadTexture() override;
 	void initTexture() override;
 public:
-	Shotgun(Node* parentNode);
+	Shotgun(Node* parentNode, Bullets& bullets);
 };
 

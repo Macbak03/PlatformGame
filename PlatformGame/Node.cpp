@@ -4,18 +4,22 @@ Node::Node(Node* parentNode)
 {
     if (parentNode != nullptr)
     {
-        parentNode->children.push_back(this);
+        (parentNode->children).push_back(this);
     }
     this->parentNode = parentNode;
 }
 
 Node::~Node()
 {
-    auto iterator = std::find(children.begin(), children.end(), this);
-    if (parentNode != nullptr && iterator != children.end())
+    if (parentNode != nullptr) 
     {
-        children.erase(iterator);
+        auto iterator = std::find(parentNode->children.begin(), parentNode->children.end(), this);
+        if (iterator != parentNode->children.end())
+        {
+            parentNode->children.erase(iterator);
+        }
     }
+    
 }
 
 

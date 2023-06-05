@@ -3,11 +3,9 @@
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 #include "Player.h"
-#include "Platform.h"
 #include "Level.h"
-#include "Pistol.h"
-#include "Enemy.h"
 #include "Bandit.h"
+#include "Enemies.h"
 
 class Game
 {
@@ -25,7 +23,8 @@ private:
 
 	Level level;
 	Player player;
-	Enemy* enemy;
+
+	Enemies enemies;
 	void initVariables();
 	void initWindow();
 

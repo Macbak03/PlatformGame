@@ -1,25 +1,21 @@
 #include "Rifle.h"
 #include <iostream>
 
-Rifle::Rifle(Node* parentNode) : Weapon(parentNode)
+Rifle::Rifle(Node* parentNode, Bullets& bullets) : Weapon(parentNode, bullets)
 {
-	damage = 5.f;
+	damage = 10.f;
 	rateOfFire = 15.f;
 	magazineSize = 30.f;
 	ammo = magazineSize;
 	bulletSpawnTimer = rateOfFire;
+	reloadSpeed = 3.f;
 	initTexture();
 }
 
 void Rifle::loadTexture()
 {
-	weaponTextureRight = new sf::Texture;
-	if (!weaponTextureRight->loadFromFile("Textures/AK-47_right.png"))
-	{
-		std::cerr << "Could not load texture" << std::endl;
-	}
-	weaponTextureLeft = new sf::Texture;
-	if (!weaponTextureLeft->loadFromFile("Textures/AK-47_left.png"))
+	weaponTexture = new sf::Texture;
+	if (!weaponTexture->loadFromFile("Textures/AK-47_right.png"))
 	{
 		std::cerr << "Could not load texture" << std::endl;
 	}
@@ -28,7 +24,7 @@ void Rifle::loadTexture()
 void Rifle::initTexture()
 {
 	loadTexture();
-	weaponSprite.setTexture(*weaponTextureRight);
+	weaponSprite.setTexture(*weaponTexture);
 	weaponSprite.setScale(sf::Vector2f(0.6f, 0.65f));
 }
 

@@ -1,14 +1,15 @@
 #include "Bullets.h"
+#include <iostream>
 
 
 Bullets::Bullets()
 {
 }
 
-void Bullets::spawnBullet(bool playerFacingRight, bool playerFacingLeft, sf::Vector2f weaponPosition, Node* parentNode)
+void Bullets::spawnBullet(bool playerFacingLeft, sf::Vector2f weaponPosition, Node* parentNode)
 {
-	Bullet bullet(playerFacingRight, playerFacingLeft, parentNode);
-	bullet.initPosition(weaponPosition);
+	Bullet* bullet = new Bullet(playerFacingLeft, parentNode);
+	bullet->initPosition(weaponPosition);
 	bullets.push_back(bullet);
 }
 
@@ -16,38 +17,48 @@ void Bullets::moveBullets()
 {
 	for (auto& element : bullets)
 	{
-		element.moveBullet();
+		element->moveBullet();
 	}
 }
 
 void Bullets::updateWindowCollsion(const sf::RenderTarget* target)
 {
+	std::vector<Bullet*> deletedBullets;
 	bullets.erase(std::remove_if(
 		bullets.begin(),
 		bullets.end(),
-		[target](Bullet const& bullet) {
-			bool window_collision = bullet.getShape().getGlobalBounds().left <= 0 || bullet.getShape().getGlobalBounds().left + bullet.getShape().getGlobalBounds().width >= target->getSize().x;
-	return window_collision;
+		[target, &deletedBullets](Bullet* bullet) {
+			bool windowCollision = bullet->getGlobalPosition().x <= 0 || bullet->getGlobalPosition().x + bullet->getCollider().size.x >= target->getSize().x;
+			if (windowCollision)
+			{
+				deletedBullets.push_back(bullet);
+			}
+			return windowCollision;
 		}),
 		bullets.end()
 			);
+	for (auto& element : deletedBullets)
+	{
+		delete(element);
+	}
 }
 
 void Bullets::updateBullets(const sf::RenderTarget* target)
 {
 	moveBullets();
-	//updateWindowCollsion(target);
+	updateWindowCollsion(target);
+	//std::cout << bullets.size() << std::endl;
+
 }
 
-const std::vector<Bullet>& Bullets::getBullets() const
-{
-	return bullets;
-}
-
-void Bullets::renderBullets(sf::RenderTarget& target, sf::Transform transform)
-{
+void Bullets::renderCollider(sf::RenderTarget* target) {
 	for (auto& element : bullets)
 	{
-		element.onDraw(target, transform);
+		element->drawCollider(target);
 	}
+}
+
+const std::vector<Bullet*>& Bullets::getBullets() const
+{
+	return bullets;
 }

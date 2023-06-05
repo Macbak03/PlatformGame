@@ -33,5 +33,4 @@ void Animation::updateAnimation(int row, float deltaTime)
 	}
 	uvRec.left = currentImage.x * uvRec.width;
 	uvRec.top = currentImage.y * uvRec.height;
-	//std::cout << currentImage.x << "      " <<switchTime<< "      "<<totalTime<< std::endl;
 }

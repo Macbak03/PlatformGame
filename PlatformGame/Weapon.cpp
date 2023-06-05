@@ -1,10 +1,9 @@
 #include "Weapon.h"
 #include <iostream>
 
-Weapon::Weapon(Node* parentNode) : maxBullets(1000), Node(parentNode)
+Weapon::Weapon(Node* parentNode, Bullets& bullets) : maxBullets(1000), Node(parentNode), bullets(bullets)
 {
-	weaponTextureRight = nullptr;
-	weaponTextureLeft = nullptr;
+	weaponTexture = nullptr;
 	rateOfFire = 0.f;
 	damage = 0.f;
 	magazineSize = 0.f;
@@ -19,8 +18,8 @@ Weapon::Weapon(Node* parentNode) : maxBullets(1000), Node(parentNode)
 
 void Weapon::initWeaponPosition(sf::Vector2f playerPosition)
 {
-	weaponPositionRight = sf::Vector2f(playerPosition.x + 40.f, playerPosition.y + 37.f);
-	this->setLocalPosition(weaponPositionRight);
+	weaponPosition = sf::Vector2f(playerPosition.x + 40.f, playerPosition.y + 37.f);
+	this->setLocalPosition(weaponPosition);
 }
 
 void Weapon::shoot(bool playerFacingRight, bool playerFacingLeft, Node* parentNode)
@@ -30,18 +29,23 @@ void Weapon::shoot(bool playerFacingRight, bool playerFacingLeft, Node* parentNo
 		if (ammo > 0) {
 			if (playerFacingRight)
 			{
-				bullets.spawnBullet(playerFacingRight, playerFacingLeft, sf::Vector2f(weaponPositionRight.x + 40.f, weaponPositionRight.y), parentNode);
+				bullets.spawnBullet(playerFacingLeft, sf::Vector2f(getGlobalPosition().x + 40.f, getGlobalPosition().y), parentNode);
 				ammo -= 1.f;
 				bulletSpawnTimer = 0.f;
 			}
 			else if (playerFacingLeft)
 			{
-				bullets.spawnBullet(playerFacingRight, playerFacingLeft, weaponPositionLeft, parentNode);
+				bullets.spawnBullet(playerFacingLeft, sf::Vector2f(getGlobalPosition().x - 40.f, getGlobalPosition().y), parentNode);
 				ammo -= 1.f;
 				bulletSpawnTimer = 0.f;
 			}
 		}
 	}
+}
+
+Bullets& Weapon::getBullets()
+{
+	return bullets;
 }
 
 void Weapon::updateShooting(bool playerFacingRight, bool playerFacingLeft, float deltaTime, Node* parentNode)
@@ -85,13 +89,11 @@ void Weapon::updateWeapon(const sf::RenderTarget* target, sf::Vector2f playerPos
 	initWeaponPosition(playerPosition);
 	//std::cout << magazineSize << "      " << ammo << "      "<<reloadTimer<<std::endl;
 	updateShooting(playerFacingRight, playerFacingLeft, deltaTime, parentNode);
+
 	bullets.updateBullets(target);
 }
 
-void Weapon::renderWeapon(sf::RenderTarget* target)
-{
-	//bullets.renderBullets(target);
-}
+
 
 void Weapon::onDraw(sf::RenderTarget& target, const sf::Transform& transform) const
 {

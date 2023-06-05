@@ -20,6 +20,6 @@ public:
 	Platform(sf::Vector2f position, Node* parentNode);
 	sf::Sprite getShape();
 	virtual void onDraw(sf::RenderTarget& target, const sf::Transform& transform) const override;
-	Collider& getCollider();
+	const Collider& getCollider() const;
 };
 

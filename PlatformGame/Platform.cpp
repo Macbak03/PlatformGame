@@ -44,7 +44,7 @@ void Platform::onDraw(sf::RenderTarget& target, const sf::Transform& transform) 
 	target.draw(platformSprite, transform);
 }
 
-Collider& Platform::getCollider()
+const Collider& Platform::getCollider() const
 {
 	return this->collider;
 }

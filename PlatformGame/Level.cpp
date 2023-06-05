@@ -1,6 +1,5 @@
 #include "Level.h"
 
-
 Level::Level() : Node(nullptr)
 {
 }
@@ -11,6 +10,7 @@ Platform* Level::addPlatform(sf::Vector2f position, Node* parentNode)
 	platforms.push_back(platform);
 	return platform;
 }
+
 
 std::vector<Platform*> Level::getPlatforms()
 {

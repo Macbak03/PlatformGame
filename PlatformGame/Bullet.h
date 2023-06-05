@@ -1,27 +1,33 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Node.h"
+#include "Collider.h"
 
 class Bullet : public Node
 {
 private:
-	sf::Texture* bulletTextureLeft;
 	sf::Texture* bulletTextureRight;
 	sf::Sprite bulletSprite;
 
 	sf::Vector2f velocity;
 
+	Collider collider;
+	sf::Vector2f bulletSize;
+	
+
 	bool bulletFacingLeft;
 	bool bulletFacingRight;
 
 	void loadTexture();
-	void initTexture(bool playerFacingRight, bool playerFacingLeft);
+	void initTexture(bool playerFacingLeft);
+	void initCollider(bool playerFacingLeft);
 public:
-	Bullet(bool playerFacingRight, bool playerFacingLeft, Node* parentNode);
+	Bullet(bool playerFacingLeft, Node* parentNode);
 	void initPosition(sf::Vector2f weaponPosition);
 	const sf::Sprite& getShape() const;
+    Collider& getCollider();
 	void moveBullet();
-	void renderBullet(sf::RenderTarget* target);
+	void drawCollider(sf::RenderTarget* target);
 	virtual void onDraw(sf::RenderTarget& target, const sf::Transform& transform) const override;
 };
 

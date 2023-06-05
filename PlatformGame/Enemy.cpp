@@ -2,65 +2,75 @@
 #include <iostream>
 
 
-Enemy::Enemy(Platform* platform) : platform(platform)
+Enemy::Enemy(Platform* platform, Node* parentNode) : platform(platform), Node(parentNode)
 {
 	enemyTextrue = nullptr;
 	enemySpeed = 0.f;
 	enemyDamage = 0.f;
 	enemyRateOfFire = 0.f;
 	enemyHealth = 0.f;
+	enemySize = sf::Vector2f(0.f, 0.f);
 }
 
 Enemy::~Enemy()
 {
 }
 
-void Enemy::spawnEnemy(sf::Vector2f platformPosition)
+
+void Enemy::spawnEnemy()
 {
-	enemySprite.setPosition(platformPosition);
+	sf::Vector2f spawnPosition = sf::Vector2f(platform->getLocalPosition().x, platform->getLocalPosition().y - collider.size.y);
+	setLocalPosition(spawnPosition);
 }
 
 void Enemy::moveEnemy()
 {
-	enemySprite.move(sf::Vector2f(enemySpeed, 0));
+	move(enemySpeed, 0);
 }
 void Enemy::flip()
 {
-	sf::Vector2f enemyScale = getEnemyScale();
+	flipX();
 	enemySpeed = -enemySpeed;
-	enemySprite.setScale(sf::Vector2f(-enemyScale.x, enemyScale.y));
 }
 
 void Enemy::updateBounceCollision()
 {
-	
-	enemySprite.setOrigin(sf::Vector2f(enemySprite.getLocalBounds().width / 2.f, 0));
+	sf::Vector2f enemyGlobalPosition = getGlobalPosition();
+	sf::Vector2f platformGlobalPosition = platform->getGlobalPosition();
+	Collider platformCollider = platform->getCollider();
+	float enemyLeft = enemyGlobalPosition.x + collider.offset.x;
+	float enemyRight = enemyLeft + collider.size.x;
 	//collision with platform edges
 	//left edge
-	if (enemySprite.getGlobalBounds().left <= platform->getShape().getGlobalBounds().left - enemySprite.getOrigin().x)
+	if (enemyLeft <=platformGlobalPosition.x + collider.offset.x)
 	{
 		flip();
-
 	}
 	//right edge
-	else if (enemySprite.getGlobalBounds().left + enemySprite.getGlobalBounds().width  >= platform->getShape().getGlobalBounds().left 
-		+ platform->getShape().getGlobalBounds().width + enemySprite.getOrigin().x)
+	else if (enemyRight >= platformGlobalPosition.x + platformCollider.size.x - collider.offset.x)
 	{
 		flip();
 	}
-	/*if (enemySprite.getGlobalBounds().intersects(element.getShape().getGlobalBounds()))
-	{
-		enemySprite.setPosition(enemySprite.getGlobalBounds().left, element.getShape().getGlobalBounds().top - enemySprite.getGlobalBounds().height + 5.f);
-	}*/
+	//std::cout << enemyLeft << std::endl;
 }
 
 void Enemy::updateEnemy(const sf::RenderTarget* target, float deltaTime)
 {
 	moveEnemy();
 	updateBounceCollision();
+	updateEnemyAnimation(deltaTime);
 }
 
-void Enemy::renderEnemy(sf::RenderTarget* target)
+void Enemy::drawCollider(sf::RenderTarget* target)
 {
-	target->draw(enemySprite);
+	sf::RectangleShape colliderShape;
+	colliderShape.setSize(collider.size);
+	colliderShape.setPosition(getGlobalPosition()+collider.offset);
+	target->draw(colliderShape);
+}
+
+
+void Enemy::onDraw(sf::RenderTarget& target, const sf::Transform& transform) const
+{
+	target.draw(enemySprite, transform);
 }

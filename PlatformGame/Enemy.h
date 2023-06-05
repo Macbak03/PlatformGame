@@ -2,7 +2,7 @@
 #include<SFML/Graphics.hpp>
 #include "Level.h"
 #include "Animation.h"
-class Enemy
+class Enemy : public Node
 {
 private:
 	void flip();
@@ -10,25 +10,29 @@ protected:
 	sf::Texture* enemyTextrue;
 	sf::Sprite enemySprite;
 	Platform* platform;
+	Collider collider;
 
 	float enemySpeed;
 	float enemyDamage;
 	float enemyRateOfFire;
-	float enemyHealth;
+
+	sf::Vector2f enemySize;
 
 	virtual void loadTexture() = 0;
-	virtual void initTexture() = 0;
+	virtual void initTexture(sf::Vector2u imageCount) = 0;
 	virtual void initAnimation() = 0;
+	virtual void initCollider() = 0;
 
 public:
-	Enemy(Platform* platform);
+	float enemyHealth;
+	Enemy(Platform* platform, Node* parentNode);
 	~Enemy();
 	virtual void updateEnemyAnimation(float& deltaTime) = 0;
-	virtual sf::Vector2f getEnemyScale() = 0;
-	void spawnEnemy(sf::Vector2f platformPosition);
+	void spawnEnemy();
 	void moveEnemy();
 	void updateBounceCollision();
 	void updateEnemy(const sf::RenderTarget* target, float deltaTime);
-	void renderEnemy(sf::RenderTarget* target);
+	void drawCollider(sf::RenderTarget* target);
+	virtual void onDraw(sf::RenderTarget& target, const sf::Transform& transform) const override;
 };
 

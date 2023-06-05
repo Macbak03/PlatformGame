@@ -10,7 +10,7 @@ private:
 	
 protected:
 	float rateOfFire;
-	float damage;
+	
 	float magazineSize;
 	float reloadSpeed;
 	const int maxBullets;
@@ -20,27 +20,25 @@ protected:
 	bool startReloadTimer;
 	bool keyHold;
 
-	sf::Vector2f weaponPositionRight;
-	sf::Vector2f weaponPositionLeft;
+	sf::Vector2f weaponPosition;
 	
-	sf::Texture* weaponTextureRight;
-	sf::Texture* weaponTextureLeft;
+	sf::Texture* weaponTexture;
 	sf::Sprite weaponSprite;
 	
 
-	Bullets bullets;
-
+	Bullets& bullets;
 	virtual void loadTexture() = 0;
 	virtual void initTexture() = 0;
 
 public:
-	Weapon(Node* parentNode);
+	float damage;
+	Weapon(Node* parentNode, Bullets& bullets);
 	void initWeaponPosition(sf::Vector2f playerPosition);
 	void shoot(bool playerFacingRight, bool playerFacingLeft, Node* parentNode);
 	void reload(float deltaTime);
+	Bullets& getBullets();
 	void updateShooting(bool playerFacingRight, bool playerFacingLeft, float deltaTime,  Node* parentNode);
 	void updateWeapon(const sf::RenderTarget* target, sf::Vector2f playerPosition, bool playerFacingRight, bool playerFacingLeft, float deltaTime, Node* parentNode);
-	void renderWeapon(sf::RenderTarget* target);
 	virtual void onDraw(sf::RenderTarget& target, const sf::Transform& transform) const override;
 };
 

@@ -1,14 +1,16 @@
 #include "Bandit.h"
 #include <iostream>
 
-Bandit::Bandit(Platform* platform) : Enemy(platform)
+Bandit::Bandit(Platform* platform, Node* parentNode) : Enemy(platform, parentNode)
 {
+	enemySize = sf::Vector2f(85.f, 85.f);
 	enemySpeed = 1.f;
 	enemyDamage = 5.f;
 	enemyRateOfFire = 5.f;
 	enemyHealth = 100.f;
-	initTexture();
+	initTexture(sf::Vector2u(8, 2));
 	initAnimation();
+	initCollider();
 }
 
 void Bandit::loadTexture()
@@ -21,27 +23,30 @@ void Bandit::loadTexture()
 }
 
 
-void Bandit::initTexture()
+void Bandit::initTexture(sf::Vector2u imageCount)
 {
 	loadTexture();
 	enemySprite.setTexture(*enemyTextrue);
-	enemySprite.setScale(sf::Vector2f(1.8f, 1.8f));
+	enemySprite.setScale(sf::Vector2f((enemySize.x *  imageCount.x) / enemyTextrue->getSize().x , (enemySize.y * imageCount.y) / enemyTextrue->getSize().y));
 }
 
+void Bandit::initCollider()
+{
+	collider.size.x = enemySize.x - 10.f;
+	collider.size.y = enemySize.y - 10.f;
+	collider.offset.x = -collider.size.x / 2;
+}
 
 void Bandit::initAnimation()
 {
 	animation = new Animation(enemyTextrue, sf::Vector2u(8, 2), 0.3f);
 }
 
-sf::Vector2f Bandit::getEnemyScale()
-{
-	return enemySprite.getScale();
-}
 
 
 void Bandit::updateEnemyAnimation(float& deltaTime)
 {
+	enemySprite.setOrigin(enemySize.x /4.f , 0.f);
 	enemySprite.setTextureRect(animation->uvRec);
 	animation->updateAnimation(1, deltaTime);
 }

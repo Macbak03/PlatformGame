@@ -20,9 +20,8 @@ Player::Player(Node* parentNode) : Node(parentNode)
 //SHAPE
 void Player::loadTextures()
 {
-	playerTextureRight = new sf::Texture;
-	playerTextureLeft = new sf::Texture;
-	if (!playerTextureRight->loadFromFile("Textures/player_right.png"))
+	playerTexture = new sf::Texture;
+	if (!playerTexture->loadFromFile("Textures/player_right.png"))
 	{
 		std::cerr << "Could not load player_right texture" << std::endl;
 	}
@@ -32,14 +31,10 @@ void Player::loadTextures()
 void Player::initShape()
 {
 	loadTextures();
-	playerSprite.setTexture(*playerTextureRight);
-	playerSprite.setScale(sf::Vector2f(playerSize.x/playerTextureRight->getSize().x, playerSize.y/playerTextureRight->getSize().y));
+	playerSprite.setTexture(*playerTexture);
+	playerSprite.setScale(sf::Vector2f(playerSize.x/playerTexture->getSize().x, playerSize.y/playerTexture->getSize().y));
 }
  
-const sf::Sprite& Player::getShape() const
-{
-	return playerSprite;
-}
 //END SHAPE
 
 //PHYSICS
@@ -67,7 +62,7 @@ void Player::updatePhysics(float deltaTime)
 //WEAPON STUFF
 void Player::initWeapon()
 {
-	weapon = new Pistol(this);
+	weapon = new Pistol(this, bullets);
 }
 
 void Player::changeWeapon()
@@ -75,22 +70,22 @@ void Player::changeWeapon()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
 	{
 		delete weapon;
-		weapon = new Rifle(this);
+		weapon = new Rifle(this, bullets);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
 	{
 		delete weapon;
-		weapon = new SniperRifle(this);
+		weapon = new SniperRifle(this, bullets);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
 	{
 		delete weapon;
-		weapon = new Shotgun(this);
+		weapon = new Shotgun(this, bullets);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
 	{
 		delete weapon;
-		weapon = new Pistol(this);
+		weapon = new Pistol(this, bullets);
 	}
 }
 //END WEAPON STUFF
@@ -156,6 +151,10 @@ void Player::movePlayer(float deltaTime)
 const sf::Vector2f& Player::getPosition() const
 {
 	return playerSprite.getPosition();
+}
+Weapon* Player::getWeapon()
+{
+	return weapon;
 }
 //END PLAYER POSITIONING
 
@@ -225,13 +224,13 @@ void Player::updatePlayer(sf::RenderTarget* target, float deltaTime, std::vector
 	updatePhysics(deltaTime);
 	changeWeapon();
 	weapon->updateWeapon(target, getPosition(), facingRight, facingLeft, deltaTime, parentNode);
-	//std::cout << getLocalPosition().x << "        " << getLocalPosition().y << std::endl;
+	//std::cout << getLocalPosition().x << "        " << getLocalPosition().y << std::endl
 }
+
 
 
 void Player::onDraw(sf::RenderTarget& target, const sf::Transform& transform) const
 {
 	target.draw(playerSprite, transform);
-
 }
 //END UPDATE AND RENDER	
