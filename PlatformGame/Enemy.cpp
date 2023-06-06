@@ -69,6 +69,11 @@ void Enemy::drawCollider(sf::RenderTarget* target)
 	target->draw(colliderShape);
 }
 
+Collider& Enemy::getCollider()
+{
+	return collider;
+}
+
 
 void Enemy::onDraw(sf::RenderTarget& target, const sf::Transform& transform) const
 {

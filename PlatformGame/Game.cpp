@@ -127,11 +127,11 @@ void Game::render()
 	//Draw background
 	renderBackground(window);
 	//Draw level
-	for (auto& element : enemies.getEnemies())
+	/*for (auto& element : enemies.getEnemies())
 	{
 		element->drawCollider(window);
 	}
-	player.getWeapon()->getBullets().renderCollider(window);
+	player.getWeapon()->getBullets().renderCollider(window);*/
 	level.renderLevel(*window);
 	//Draw player
 	window->display();

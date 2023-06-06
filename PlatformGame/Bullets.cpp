@@ -58,7 +58,7 @@ void Bullets::renderCollider(sf::RenderTarget* target) {
 	}
 }
 
-const std::vector<Bullet*>& Bullets::getBullets() const
+std::vector<Bullet*>& Bullets::getBullets() 
 {
 	return bullets;
 }

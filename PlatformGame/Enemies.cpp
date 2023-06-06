@@ -17,32 +17,52 @@ std::vector<Enemy*> Enemies::getEnemies()
 
 void Enemies::updateCollisions(Bullets& bullets, Weapon* weapon)
 {
+	std::vector<Bullet*> deletedBullets;
 	std::vector<Enemy*> deletedEnemies;
 	enemies.erase(std::remove_if(
 		enemies.begin(),
 		enemies.end(),
-		[bullets, weapon, &deletedEnemies](Enemy* enemy) {
-			bool bulletCollison = false;
+		[&bullets, weapon, &deletedEnemies, &deletedBullets](Enemy* enemy) {
+			//erasing enemy while hit
+			bool enemyCollison = false;
 			bool enemyDead = false;
 			for (auto& element : bullets.getBullets()) {
-				bulletCollison = element->getCollider().intersects(enemy->getGlobalPosition(), element->getGlobalPosition(), element->getCollider());
+				enemyCollison |= element->getCollider().intersects(element->getGlobalPosition(), enemy->getGlobalPosition(), enemy->getCollider());
 			}
-			if (bulletCollison)
+			//erasing bullets while hit
+			auto& bulletsVector = bullets.getBullets();
+			bulletsVector.erase(std::remove_if(bulletsVector.begin(), bulletsVector.end(), [enemy, &deletedBullets](Bullet* bullet) {
+				bool bulletCollision = bullet->getCollider().intersects(bullet->getGlobalPosition(), enemy->getGlobalPosition(), enemy->getCollider());
+			if (bulletCollision)
+			{
+				deletedBullets.push_back(bullet);
+			}
+			return bulletCollision;
+				}),
+				bulletsVector.end()
+			);
+
+			if (enemyCollison)
 			{
 				enemy->enemyHealth -= weapon->damage;
 			}
 			if (enemy->enemyHealth <= 0.f)
 			{
-				enemyDead = true;
 				deletedEnemies.push_back(enemy);
+
+				enemyDead = true;
 			}
 			return enemyDead;
 		}),
 	enemies.end());
-	for (auto& element : deletedEnemies)
+	for (auto& element : deletedBullets)
 	{
 		delete(element);
 	}
+	//for (auto& element : deletedEnemies)
+	//{
+	//	delete(element);
+	//}
 	std::cout << enemies[0]->enemyHealth << "         " <<enemies[1]->enemyHealth << std::endl;
 }
 

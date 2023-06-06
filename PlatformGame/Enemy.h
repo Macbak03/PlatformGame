@@ -33,6 +33,7 @@ public:
 	void updateBounceCollision();
 	void updateEnemy(const sf::RenderTarget* target, float deltaTime);
 	void drawCollider(sf::RenderTarget* target);
+	Collider& getCollider();
 	virtual void onDraw(sf::RenderTarget& target, const sf::Transform& transform) const override;
 };
 

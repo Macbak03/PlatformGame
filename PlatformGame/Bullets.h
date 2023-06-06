@@ -10,7 +10,7 @@ public:
 	Bullets();
 	void spawnBullet(bool playerFacingLeft, sf::Vector2f weaponPosition, Node* parentNode);
 	void updateBullets(const sf::RenderTarget* target);
-	const std::vector<Bullet*>& getBullets() const;
+	std::vector<Bullet*>& getBullets();
 	void updateWindowCollsion(const sf::RenderTarget* target);
 	void renderCollider(sf::RenderTarget* target);
 	void moveBullets();
