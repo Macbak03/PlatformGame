@@ -3,12 +3,13 @@
 
 Pistol::Pistol(Node* parentNode, Bullets& bullets) : Weapon(parentNode, bullets)
 {
+	weaponSize = sf::Vector2f(50.f, 25.f);
 	damage = 10.f;
-	rateOfFire = 50.f;
-	magazineSize = 6.f;
+	rateOfFire = 1.f;
+	magazineSize = 6;
 	ammo = magazineSize;
 	bulletSpawnTimer = rateOfFire;
-	reloadSpeed = 4.f;
+	reloadTime = 4.f;
 	initTexture();
 }
 
@@ -25,7 +26,7 @@ void Pistol::initTexture()
 {
 	loadTexture();
 	weaponSprite.setTexture(*weaponTexture);
-	weaponSprite.setScale(sf::Vector2f(0.5f, 0.45f));
+	scale();
 	weaponSprite.setOrigin(sf::Vector2f(0.f, weaponSprite.getGlobalBounds().top - 15.f));
 }
 

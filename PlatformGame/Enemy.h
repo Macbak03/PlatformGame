@@ -6,6 +6,8 @@ class Enemy : public Node
 {
 private:
 	void flip();
+	float hitColorTimer;
+	sf::Color enemyColor;
 protected:
 	sf::Texture* enemyTextrue;
 	sf::Sprite enemySprite;
@@ -33,7 +35,11 @@ public:
 	void updateBounceCollision();
 	void updateEnemy(const sf::RenderTarget* target, float deltaTime);
 	void drawCollider(sf::RenderTarget* target);
+	void changeColor();
+	void setColorTimer(float value);
+	void updateColorTimer(float deltaTime);
 	Collider& getCollider();
+	sf::Sprite& getSprite();
 	virtual void onDraw(sf::RenderTarget& target, const sf::Transform& transform) const override;
 };
 

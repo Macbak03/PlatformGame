@@ -50,6 +50,7 @@ public:
 	void changeWeapon();
 	void updateBounceCollision(sf::RenderTarget* target, std::vector<Platform*> platforms);
 	void updatePlayer(sf::RenderTarget* target, float deltaTime, std::vector<Platform*> platforms, Node* parentNode);
+	void drawCollider(sf::RenderTarget* target);
 	virtual void onDraw(sf::RenderTarget& target, const sf::Transform& transform) const override;
 
 };

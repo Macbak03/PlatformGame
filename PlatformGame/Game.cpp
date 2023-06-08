@@ -43,9 +43,12 @@ void Game::initLevel()
 	Enemy* enemy1 = new Bandit(platfromGrass1, &level);
 	enemy1->spawnEnemy();
 	enemies.addEnemy(enemy1);
-	Enemy* enemy2 = new Bandit(platfromGrass2, &level);
+	Enemy* enemy2 = new Bandit(platfromGrass4, &level);
 	enemy2->spawnEnemy();
 	enemies.addEnemy(enemy2);
+	Enemy* enemy3 = new Marauder(platfromGrass3, &level);
+	enemy3->spawnEnemy();
+	enemies.addEnemy(enemy3);
 }
 
 void Game::initEnemies()
@@ -127,11 +130,12 @@ void Game::render()
 	//Draw background
 	renderBackground(window);
 	//Draw level
-	/*for (auto& element : enemies.getEnemies())
-	{
-		element->drawCollider(window);
-	}
-	player.getWeapon()->getBullets().renderCollider(window);*/
+	//for (auto& element : enemies.getEnemies())
+	//{
+	//	element->drawCollider(window);
+	//}
+	//player.getWeapon()->getBullets().renderCollider(window);
+	//player.drawCollider(window);
 	level.renderLevel(*window);
 	//Draw player
 	window->display();

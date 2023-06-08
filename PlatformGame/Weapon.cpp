@@ -1,51 +1,63 @@
 #include "Weapon.h"
 #include <iostream>
 
-Weapon::Weapon(Node* parentNode, Bullets& bullets) : maxBullets(1000), Node(parentNode), bullets(bullets)
+Weapon::Weapon(Node* parentNode, Bullets& bullets) : maxBullets(1000), Node(parentNode), bullets(bullets), fireBlast(this)
 {
 	weaponTexture = nullptr;
 	rateOfFire = 0.f;
 	damage = 0.f;
-	magazineSize = 0.f;
-	reloadSpeed = 0.f;
+	magazineSize = 0;
+	reloadTime = 0.f;
 	reloadTimer = 0.f;
 	bulletSpawnTimer = 0.f;
-	ammo = 0.f;
+	ammo = 0;
 	startReloadTimer = false;
 	keyHold = false;
+	
 }
 
+void Weapon::scale()
+{
+	weaponSprite.setScale(sf::Vector2f(weaponSize.x / weaponTexture->getSize().x, weaponSize.y / weaponTexture->getSize().y));
+}
 
 void Weapon::initWeaponPosition(sf::Vector2f playerPosition)
 {
 	weaponPosition = sf::Vector2f(playerPosition.x + 40.f, playerPosition.y + 37.f);
 	this->setLocalPosition(weaponPosition);
+	fireBlast.initPosition(sf::Vector2f(weaponSize.x, -10.f));
 }
 
 void Weapon::shoot(bool playerFacingRight, bool playerFacingLeft, Node* parentNode)
 {
+	sf::Vector2f spawnPosition = getGlobalPosition();
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
 	{
 		if (ammo > 0) {
 			if (playerFacingRight)
 			{
-				bullets.spawnBullet(playerFacingLeft, sf::Vector2f(getGlobalPosition().x + 40.f, getGlobalPosition().y), parentNode);
-				ammo -= 1.f;
-				bulletSpawnTimer = 0.f;
+				bullets.spawnBullet(playerFacingLeft, sf::Vector2f(spawnPosition.x + weaponSize.x, spawnPosition.y), parentNode);
 			}
 			else if (playerFacingLeft)
 			{
-				bullets.spawnBullet(playerFacingLeft, sf::Vector2f(getGlobalPosition().x - 40.f, getGlobalPosition().y), parentNode);
-				ammo -= 1.f;
-				bulletSpawnTimer = 0.f;
+				bullets.spawnBullet(playerFacingLeft, sf::Vector2f(spawnPosition.x - weaponSize.x, spawnPosition.y), parentNode);
 			}
+			ammo --;
+			bulletSpawnTimer = 0.f;
+			fireBlast.setDrawTimer(0.1f);
 		}
 	}
+	
 }
 
 Bullets& Weapon::getBullets()
 {
 	return bullets;
+}
+
+sf::Vector2f& Weapon::getSize()
+{
+	return weaponSize;
 }
 
 void Weapon::updateShooting(bool playerFacingRight, bool playerFacingLeft, float deltaTime, Node* parentNode)
@@ -59,10 +71,11 @@ void Weapon::updateShooting(bool playerFacingRight, bool playerFacingLeft, float
 		}
 		else
 		{
-			bulletSpawnTimer += 1.f;
+			bulletSpawnTimer += deltaTime;
 		}
 	}
 	reload(deltaTime);
+	fireBlast.updateDrawTimer(deltaTime);
 }
 
 void Weapon::reload(float deltaTime)
@@ -75,7 +88,7 @@ void Weapon::reload(float deltaTime)
 	{
 		reloadTimer += deltaTime;
 	}
-	if (reloadTimer >= reloadSpeed)
+	if (reloadTimer >= reloadTime)
 	{
 		ammo = magazineSize;
 		reloadTimer = 0.f;

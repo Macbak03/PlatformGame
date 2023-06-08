@@ -1,18 +1,25 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "Node.h"
 
-class FireBlast
+class FireBlast : public Node
 {
 private:
 	sf::Texture* fireBlastTexture;
 	sf::Sprite fireBlastSprite;
+	sf::Vector2f fireBlastSize;
+
+	float drawTimer;
 
     void loadTexture();
-	void initTexture(bool playerFacingRight, bool playerFacingLeft);
+	void initTexture();
+	
 public:
-	FireBlast(bool playerFacingRight, bool playerFacingLeft, sf::Vector2f weaponPosition);
+	FireBlast(Node* parentNode);
 	void initPosition(sf::Vector2f weaponPosition);
-	void updateFireBlast(const sf::RenderTarget* target, bool playerFacingRight, bool playerFacingLeft);
-	void rednerFireBlast(sf::RenderTarget* target);
+	void setDrawTimer(float value);
+	void updateDrawTimer(float deltaTime);
+	virtual void onDraw(sf::RenderTarget& target, const sf::Transform& transform) const override;
+
 };
 

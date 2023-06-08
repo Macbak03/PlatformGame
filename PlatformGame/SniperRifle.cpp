@@ -3,12 +3,13 @@
 
 SniperRifle::SniperRifle(Node* parentNode, Bullets& bullets) : Weapon(parentNode, bullets)
 {
+	weaponSize = sf::Vector2f(60.f, 32.5f);
 	damage = 50.f;
-	rateOfFire = 100.f;
-	magazineSize = 10.f;
+	rateOfFire = 2.f;
+	magazineSize = 10;
 	ammo = magazineSize;
 	bulletSpawnTimer = rateOfFire;
-	reloadSpeed = 5.f;
+	reloadTime = 5.f;
 	initTexture();
 }
 
@@ -26,6 +27,6 @@ void SniperRifle::initTexture()
 {
 	loadTexture();
 	weaponSprite.setTexture(*weaponTexture);
-	weaponSprite.setScale(sf::Vector2f(0.6f, 0.65f));
+	scale();
 }
 

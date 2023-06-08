@@ -3,12 +3,13 @@
 
 Rifle::Rifle(Node* parentNode, Bullets& bullets) : Weapon(parentNode, bullets)
 {
+	weaponSize = sf::Vector2f(60.f, 32.5f);
 	damage = 10.f;
-	rateOfFire = 15.f;
-	magazineSize = 30.f;
+	rateOfFire = 0.3f;
+	magazineSize = 30;
 	ammo = magazineSize;
 	bulletSpawnTimer = rateOfFire;
-	reloadSpeed = 3.f;
+	reloadTime = 3.f;
 	initTexture();
 }
 
@@ -25,7 +26,7 @@ void Rifle::initTexture()
 {
 	loadTexture();
 	weaponSprite.setTexture(*weaponTexture);
-	weaponSprite.setScale(sf::Vector2f(0.6f, 0.65f));
+	scale();
 }
 
 

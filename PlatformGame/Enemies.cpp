@@ -3,6 +3,7 @@
 
 Enemies::Enemies()
 {
+	
 }
 
 void Enemies::addEnemy(Enemy* enemy)
@@ -32,7 +33,8 @@ void Enemies::updateCollisions(Bullets& bullets, Weapon* weapon)
 			//erasing bullets while hit
 			auto& bulletsVector = bullets.getBullets();
 			bulletsVector.erase(std::remove_if(bulletsVector.begin(), bulletsVector.end(), [enemy, &deletedBullets](Bullet* bullet) {
-				bool bulletCollision = bullet->getCollider().intersects(bullet->getGlobalPosition(), enemy->getGlobalPosition(), enemy->getCollider());
+			bool bulletCollision = bullet->getCollider().intersects(bullet->getGlobalPosition(), enemy->getGlobalPosition(), enemy->getCollider());
+			
 			if (bulletCollision)
 			{
 				deletedBullets.push_back(bullet);
@@ -41,15 +43,16 @@ void Enemies::updateCollisions(Bullets& bullets, Weapon* weapon)
 				}),
 				bulletsVector.end()
 			);
-
+			
 			if (enemyCollison)
 			{
 				enemy->enemyHealth -= weapon->damage;
+				enemy->setColorTimer(0.15f);
+				enemy->changeColor();
 			}
 			if (enemy->enemyHealth <= 0.f)
 			{
 				deletedEnemies.push_back(enemy);
-
 				enemyDead = true;
 			}
 			return enemyDead;
@@ -59,11 +62,10 @@ void Enemies::updateCollisions(Bullets& bullets, Weapon* weapon)
 	{
 		delete(element);
 	}
-	//for (auto& element : deletedEnemies)
-	//{
-	//	delete(element);
-	//}
-	std::cout << enemies[0]->enemyHealth << "         " <<enemies[1]->enemyHealth << std::endl;
+	for (auto& element : deletedEnemies)
+	{
+		delete(element);
+	}
 }
 
 

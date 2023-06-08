@@ -10,6 +10,8 @@ Enemy::Enemy(Platform* platform, Node* parentNode) : platform(platform), Node(pa
 	enemyRateOfFire = 0.f;
 	enemyHealth = 0.f;
 	enemySize = sf::Vector2f(0.f, 0.f);
+	hitColorTimer = 0.f;
+	enemyColor = enemySprite.getColor();
 }
 
 Enemy::~Enemy()
@@ -19,7 +21,7 @@ Enemy::~Enemy()
 
 void Enemy::spawnEnemy()
 {
-	sf::Vector2f spawnPosition = sf::Vector2f(platform->getLocalPosition().x, platform->getLocalPosition().y - collider.size.y);
+	sf::Vector2f spawnPosition = sf::Vector2f(platform->getLocalPosition().x, platform->getLocalPosition().y - collider.size.y - collider.offset.y);
 	setLocalPosition(spawnPosition);
 }
 
@@ -54,12 +56,6 @@ void Enemy::updateBounceCollision()
 	//std::cout << enemyLeft << std::endl;
 }
 
-void Enemy::updateEnemy(const sf::RenderTarget* target, float deltaTime)
-{
-	moveEnemy();
-	updateBounceCollision();
-	updateEnemyAnimation(deltaTime);
-}
 
 void Enemy::drawCollider(sf::RenderTarget* target)
 {
@@ -74,6 +70,43 @@ Collider& Enemy::getCollider()
 	return collider;
 }
 
+void Enemy::setColorTimer(float value)
+{
+	hitColorTimer = value;
+}
+
+void Enemy::changeColor()
+{
+	if (hitColorTimer > 0)
+	{
+		enemySprite.setColor(sf::Color::Red);
+	}
+}
+
+sf::Sprite& Enemy::getSprite()
+{
+	return enemySprite;
+}
+
+void Enemy::updateColorTimer(float deltaTime)
+{
+	hitColorTimer -= deltaTime;
+	if (hitColorTimer < 0)
+	{
+		enemySprite.setColor(enemyColor);
+	}
+}
+
+
+
+void Enemy::updateEnemy(const sf::RenderTarget* target, float deltaTime)
+{
+	moveEnemy();
+	updateBounceCollision();
+	updateEnemyAnimation(deltaTime);
+	updateColorTimer(deltaTime);
+
+}
 
 void Enemy::onDraw(sf::RenderTarget& target, const sf::Transform& transform) const
 {

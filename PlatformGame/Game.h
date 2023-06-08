@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Level.h"
 #include "Bandit.h"
+#include "Marauder.h"
 #include "Enemies.h"
 
 class Game

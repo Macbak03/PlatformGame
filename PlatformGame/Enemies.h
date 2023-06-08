@@ -7,6 +7,7 @@ class Enemies
 {
 private:
 	std::vector<Enemy*> enemies;
+	float hitColorTimer;
 public:
 	Enemies();
 	void addEnemy(Enemy* enemy);

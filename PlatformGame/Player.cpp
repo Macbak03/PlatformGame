@@ -45,7 +45,7 @@ void Player::initPhysics()
 	velocity = sf::Vector2f(playerSpeed, 0.f);
 	jumpSpeed = 15.f;
 	//colider
-	collider.size = playerSize;
+	collider.size = sf::Vector2f(playerSize.x - 10.f, playerSize.y -5.f);
 	collider.offset.x = - collider.size.x / 2;
 }
 
@@ -164,7 +164,7 @@ Weapon* Player::getWeapon()
 void Player::updateBounceCollision(sf::RenderTarget* target, std::vector<Platform*> platforms)
 {
 	sf::Vector2f playerGlobalPosition = getGlobalPosition();
-	this->setOrigin(collider.size.x / 2.f, 0.f);
+	this->setOrigin(playerSize.x / 2.f, 0.f);
 	float playerTop = playerGlobalPosition.y + collider.offset.y;
 	float playerBottom = playerTop + collider.size.y;
 	float playerLeft = playerGlobalPosition.x + collider.offset.x;
@@ -193,6 +193,10 @@ void Player::updateBounceCollision(sf::RenderTarget* target, std::vector<Platfor
 		onGround = false;
 	}
 	//collision with platforms
+	Collider groundCollider = Collider(collider);
+	groundCollider.offset.y += 2.f;
+	Collider topCollider = Collider(collider);
+	topCollider.offset.y -= 2.f;
 	for (auto& element : platforms)
 	{	
 		sf::Vector2f platformGlobalPosition = element->getGlobalPosition();
@@ -204,7 +208,14 @@ void Player::updateBounceCollision(sf::RenderTarget* target, std::vector<Platfor
 		while (collider.yCausesCollision(playerGlobalPosition, platformGlobalPosition, platformCollider, velocity.y))
 		{
 			playerGlobalPosition.y -= Utils::sgn(velocity.y);
+		}
+		if (groundCollider.yCausesCollision(playerGlobalPosition, platformGlobalPosition, platformCollider, velocity.y +1.f))
+		{
 			onGround = true;
+		}
+		if (topCollider.yCausesCollision(playerGlobalPosition, platformGlobalPosition, platformCollider, velocity.y + 1.f))
+		{
+			velocity.y = 0;
 		}
 	}
 	if (onGround)
@@ -227,7 +238,13 @@ void Player::updatePlayer(sf::RenderTarget* target, float deltaTime, std::vector
 	//std::cout << getLocalPosition().x << "        " << getLocalPosition().y << std::endl
 }
 
-
+void Player::drawCollider(sf::RenderTarget* target)
+{
+	sf::RectangleShape colliderShape;
+	colliderShape.setSize(collider.size);
+	colliderShape.setPosition(getGlobalPosition() + collider.offset);
+	target->draw(colliderShape);
+}
 
 void Player::onDraw(sf::RenderTarget& target, const sf::Transform& transform) const
 {

@@ -32,9 +32,10 @@ void Bandit::initTexture(sf::Vector2u imageCount)
 
 void Bandit::initCollider()
 {
-	collider.size.x = enemySize.x - 10.f;
-	collider.size.y = enemySize.y - 10.f;
+	collider.size.x = enemySize.x - 30.f;
+	collider.size.y = enemySize.y - 20.f;
 	collider.offset.x = -collider.size.x / 2;
+	collider.offset.y = 10.f;
 }
 
 void Bandit::initAnimation()
@@ -46,7 +47,7 @@ void Bandit::initAnimation()
 
 void Bandit::updateEnemyAnimation(float& deltaTime)
 {
-	enemySprite.setOrigin(enemySize.x /4.f , 0.f);
+	setOrigin(enemySize.x /4.f , 0.f);
 	enemySprite.setTextureRect(animation->uvRec);
 	animation->updateAnimation(1, deltaTime);
 }
