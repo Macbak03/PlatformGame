@@ -10,6 +10,7 @@ Player::Player(Node* parentNode) : Node(parentNode)
 	onGround = false;
 	startJumpTimer = false;
 	jumpTimer = 0.5f;
+	healthBar.getSprite().scale(5.f, 3.f);
 	initShape();
 	spawnPlayer();
 	initPhysics();
@@ -235,6 +236,7 @@ void Player::updatePlayer(sf::RenderTarget* target, float deltaTime, std::vector
 	updatePhysics(deltaTime);
 	changeWeapon();
 	weapon->updateWeapon(target, getPosition(), facingRight, facingLeft, deltaTime, parentNode);
+	healthBar.updateHealthBarAnimation(0, false, sf::Vector2f(getGlobalPosition().x, getGlobalPosition().y - 10.f));
 	//std::cout << getLocalPosition().x << "        " << getLocalPosition().y << std::endl
 }
 
@@ -244,6 +246,11 @@ void Player::drawCollider(sf::RenderTarget* target)
 	colliderShape.setSize(collider.size);
 	colliderShape.setPosition(getGlobalPosition() + collider.offset);
 	target->draw(colliderShape);
+}
+
+void Player::renderHealthBar(sf::RenderTarget* target)
+{
+	healthBar.drawHealthBar(target);
 }
 
 void Player::onDraw(sf::RenderTarget& target, const sf::Transform& transform) const

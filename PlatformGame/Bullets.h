@@ -7,6 +7,7 @@ class Bullets
 private:
 	std::vector<Bullet*> bullets;
 public:
+	const int maxBullets;
 	Bullets();
 	void spawnBullet(bool playerFacingLeft, sf::Vector2f weaponPosition, Node* parentNode);
 	void updateBullets(const sf::RenderTarget* target);

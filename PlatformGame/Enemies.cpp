@@ -50,7 +50,7 @@ void Enemies::updateCollisions(Bullets& bullets, Weapon* weapon)
 				enemy->setColorTimer(0.15f);
 				enemy->changeColor();
 			}
-			if (enemy->enemyHealth <= 0.f)
+			if (enemy->enemyHealth <= 0)
 			{
 				deletedEnemies.push_back(enemy);
 				enemyDead = true;

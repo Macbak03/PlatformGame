@@ -13,7 +13,7 @@ protected:
 	
 	unsigned int magazineSize;
 	float reloadTime;
-	const int maxBullets;
+	
 	float bulletSpawnTimer;
 	unsigned int ammo;
 
@@ -33,7 +33,7 @@ protected:
 	virtual void initTexture() = 0;
 
 public:
-	float damage;
+	unsigned int damage;
 	Weapon(Node* parentNode, Bullets& bullets);
 	void initWeaponPosition(sf::Vector2f playerPosition);
 	void shoot(bool playerFacingRight, bool playerFacingLeft, Node* parentNode);

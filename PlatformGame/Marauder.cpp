@@ -6,8 +6,8 @@ Marauder::Marauder(Platform* platform, Node* parentNode) : Enemy(platform, paren
 	enemySize = sf::Vector2f(100.f, 100.f);
 	enemySpeed = 1.5f;
 	enemyDamage = 5.f;
-	enemyRateOfFire = 5.f;
-	enemyHealth = 100.f;
+	enemyRateOfFire = 1.5f;
+	enemyHealth = 100;
 	initTexture(sf::Vector2u(8, 2));
 	initAnimation();
 	initCollider();
@@ -15,8 +15,8 @@ Marauder::Marauder(Platform* platform, Node* parentNode) : Enemy(platform, paren
 
 void Marauder::loadTexture()
 {
-	enemyTextrue = new sf::Texture;
-	if (!enemyTextrue->loadFromFile("Textures/Cowboy5.png"))
+	enemyTexture = new sf::Texture;
+	if (!enemyTexture->loadFromFile("Textures/Cowboy5.png"))
 	{
 		std::cerr << "Could not load texture" << std::endl;
 	}
@@ -26,8 +26,8 @@ void Marauder::loadTexture()
 void Marauder::initTexture(sf::Vector2u imageCount)
 {
 	loadTexture();
-	enemySprite.setTexture(*enemyTextrue);
-	enemySprite.setScale(sf::Vector2f((enemySize.x * imageCount.x) / enemyTextrue->getSize().x, (enemySize.y * imageCount.y) / enemyTextrue->getSize().y));
+	enemySprite.setTexture(*enemyTexture);
+	enemySprite.setScale(sf::Vector2f((enemySize.x * imageCount.x) / enemyTexture->getSize().x, (enemySize.y * imageCount.y) / enemyTexture->getSize().y));
 }
 
 void Marauder::initCollider()
@@ -40,7 +40,7 @@ void Marauder::initCollider()
 
 void Marauder::initAnimation()
 {
-	animation = new Animation(enemyTextrue, sf::Vector2u(8, 2), 0.2f);
+	animation = new Animation(enemyTexture, sf::Vector2u(8, 2), 0.2f);
 }
 
 

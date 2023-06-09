@@ -34,3 +34,23 @@ void Animation::updateAnimation(int row, float deltaTime)
 	uvRec.left = currentImage.x * uvRec.width;
 	uvRec.top = currentImage.y * uvRec.height;
 }
+
+void Animation::updateHealthAnimation(unsigned int weaponDamage, bool hit)
+{
+	currentImage.y = 0;
+	if (hit)
+	{
+		currentImage.x -=  (weaponDamage) / 10;
+		if (currentImage.x <= 0)
+		{
+			currentImage.x = 0;
+		}
+	}
+	uvRec.left = currentImage.x * uvRec.width;
+	uvRec.top = currentImage.y * uvRec.height;
+}
+
+void Animation::setCurrentImageX(unsigned int value)
+{
+	currentImage.x = value;
+}

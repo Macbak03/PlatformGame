@@ -142,6 +142,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="FireBlast.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="HealthBar.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Marauder.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="FireBlast.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="HealthBar.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Marauder.h" />
     <ClInclude Include="Pistol.h" />

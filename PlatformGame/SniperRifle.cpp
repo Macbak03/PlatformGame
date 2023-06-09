@@ -4,7 +4,7 @@
 SniperRifle::SniperRifle(Node* parentNode, Bullets& bullets) : Weapon(parentNode, bullets)
 {
 	weaponSize = sf::Vector2f(60.f, 32.5f);
-	damage = 50.f;
+	damage = 50;
 	rateOfFire = 2.f;
 	magazineSize = 10;
 	ammo = magazineSize;

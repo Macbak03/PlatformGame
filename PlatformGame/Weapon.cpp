@@ -1,11 +1,11 @@
 #include "Weapon.h"
 #include <iostream>
 
-Weapon::Weapon(Node* parentNode, Bullets& bullets) : maxBullets(1000), Node(parentNode), bullets(bullets), fireBlast(this)
+Weapon::Weapon(Node* parentNode, Bullets& bullets) : Node(parentNode), bullets(bullets), fireBlast(this)
 {
 	weaponTexture = nullptr;
 	rateOfFire = 0.f;
-	damage = 0.f;
+	damage = 0;
 	magazineSize = 0;
 	reloadTime = 0.f;
 	reloadTimer = 0.f;
@@ -62,7 +62,7 @@ sf::Vector2f& Weapon::getSize()
 
 void Weapon::updateShooting(bool playerFacingRight, bool playerFacingLeft, float deltaTime, Node* parentNode)
 {
-	if (bullets.getBullets().size() < maxBullets)
+	if (bullets.getBullets().size() < bullets.maxBullets)
 	{
 		if (bulletSpawnTimer >= rateOfFire)
 		{

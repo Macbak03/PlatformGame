@@ -2,7 +2,7 @@
 #include <iostream>
 
 
-Bullets::Bullets()
+Bullets::Bullets() : maxBullets(1000)
 {
 }
 

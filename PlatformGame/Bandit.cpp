@@ -6,8 +6,8 @@ Bandit::Bandit(Platform* platform, Node* parentNode) : Enemy(platform, parentNod
 	enemySize = sf::Vector2f(85.f, 85.f);
 	enemySpeed = 1.f;
 	enemyDamage = 5.f;
-	enemyRateOfFire = 5.f;
-	enemyHealth = 100.f;
+	enemyRateOfFire = 2.25f;
+	enemyHealth = 100;
 	initTexture(sf::Vector2u(8, 2));
 	initAnimation();
 	initCollider();
@@ -15,8 +15,8 @@ Bandit::Bandit(Platform* platform, Node* parentNode) : Enemy(platform, parentNod
 
 void Bandit::loadTexture()
 {
-	enemyTextrue = new sf::Texture;
-	if (!enemyTextrue->loadFromFile("Textures/bandit1.png"))
+	enemyTexture = new sf::Texture;
+	if (!enemyTexture->loadFromFile("Textures/bandit1.png"))
 	{
 		std::cerr << "Could not load texture" << std::endl;
 	}
@@ -26,8 +26,8 @@ void Bandit::loadTexture()
 void Bandit::initTexture(sf::Vector2u imageCount)
 {
 	loadTexture();
-	enemySprite.setTexture(*enemyTextrue);
-	enemySprite.setScale(sf::Vector2f((enemySize.x *  imageCount.x) / enemyTextrue->getSize().x , (enemySize.y * imageCount.y) / enemyTextrue->getSize().y));
+	enemySprite.setTexture(*enemyTexture);
+	enemySprite.setScale(sf::Vector2f((enemySize.x *  imageCount.x) / enemyTexture->getSize().x , (enemySize.y * imageCount.y) / enemyTexture->getSize().y));
 }
 
 void Bandit::initCollider()
@@ -40,7 +40,7 @@ void Bandit::initCollider()
 
 void Bandit::initAnimation()
 {
-	animation = new Animation(enemyTextrue, sf::Vector2u(8, 2), 0.3f);
+	animation = new Animation(enemyTexture, sf::Vector2u(8, 2), 0.3f);
 }
 
 

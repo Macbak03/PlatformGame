@@ -4,7 +4,7 @@
 Pistol::Pistol(Node* parentNode, Bullets& bullets) : Weapon(parentNode, bullets)
 {
 	weaponSize = sf::Vector2f(50.f, 25.f);
-	damage = 10.f;
+	damage = 10;
 	rateOfFire = 1.f;
 	magazineSize = 6;
 	ammo = magazineSize;

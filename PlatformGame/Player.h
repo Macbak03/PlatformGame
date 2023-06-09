@@ -8,6 +8,7 @@
 #include "Node.h"
 #include "Collider.h"
 #include "Utils.h"
+#include "HealthBar.h"
 class Player : public Node
 {
 private:
@@ -40,6 +41,8 @@ private:
 	Bullets bullets;
 	Weapon* weapon;
 	void initWeapon();
+
+	HealthBar healthBar;
 	
 public:
 	Player(Node* parentNode);
@@ -51,6 +54,7 @@ public:
 	void updateBounceCollision(sf::RenderTarget* target, std::vector<Platform*> platforms);
 	void updatePlayer(sf::RenderTarget* target, float deltaTime, std::vector<Platform*> platforms, Node* parentNode);
 	void drawCollider(sf::RenderTarget* target);
+	void renderHealthBar(sf::RenderTarget* target);
 	virtual void onDraw(sf::RenderTarget& target, const sf::Transform& transform) const override;
 
 };

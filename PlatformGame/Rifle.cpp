@@ -4,7 +4,7 @@
 Rifle::Rifle(Node* parentNode, Bullets& bullets) : Weapon(parentNode, bullets)
 {
 	weaponSize = sf::Vector2f(60.f, 32.5f);
-	damage = 10.f;
+	damage = 10;
 	rateOfFire = 0.3f;
 	magazineSize = 30;
 	ammo = magazineSize;

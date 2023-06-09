@@ -4,7 +4,7 @@
 Shotgun::Shotgun(Node* parentNode, Bullets& bullets) : Weapon(parentNode, bullets)
 {
 	weaponSize = sf::Vector2f(60.f, 32.5f);
-	damage = 30.f;
+	damage = 30;
 	rateOfFire = 1.2f;
 	magazineSize = 7;
 	ammo = magazineSize;

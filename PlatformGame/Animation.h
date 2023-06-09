@@ -13,5 +13,7 @@ public:
 	Animation(sf::Texture* texture, sf::Vector2u imageCount, float switchTime);
 	~Animation();
 	void updateAnimation(int row, float deltaTime);
+	void updateHealthAnimation(unsigned int weaponDamage, bool hit);
+	void setCurrentImageX(unsigned int value);
 };
 
