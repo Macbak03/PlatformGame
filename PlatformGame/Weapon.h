@@ -42,7 +42,7 @@ public:
 	sf::Vector2f& getSize();
 	void scale();
 	void updateShooting(bool playerFacingRight, bool playerFacingLeft, float deltaTime,  Node* parentNode);
-	void updateWeapon(const sf::RenderTarget* target, sf::Vector2f playerPosition, bool playerFacingRight, bool playerFacingLeft, float deltaTime, Node* parentNode);
+	void updateWeapon(const sf::RenderTarget* target, sf::Vector2f playerPosition, bool playerFacingRight, bool playerFacingLeft, float deltaTime, Node* parentNode, Node* playerNode, Collider playerCollider);
 	virtual void onDraw(sf::RenderTarget& target, const sf::Transform& transform) const override;
 };
 

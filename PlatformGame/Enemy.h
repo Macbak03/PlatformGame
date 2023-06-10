@@ -43,7 +43,7 @@ public:
 	void spawnEnemy();
 	void moveEnemy();
 	void updateBounceCollision();
-	void updateEnemy(const sf::RenderTarget* target, float deltaTime, unsigned int weaponDamage, Node* parentNode);
+	void updateEnemy(const sf::RenderTarget* target, float deltaTime, unsigned int weaponDamage, Node* parentNode, Node* playerNode, Collider playerCollider);
 	void drawCollider(sf::RenderTarget* target);
 	void changeColor();
 	void setColorTimer(float value);

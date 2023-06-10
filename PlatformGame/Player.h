@@ -48,8 +48,9 @@ public:
 	Player(Node* parentNode);
 	void spawnPlayer();
 	void movePlayer(float deltaTime);
-	const sf::Vector2f& getPosition() const;
 	Weapon* getWeapon();
+	Collider& getCollider();
+	sf::Vector2f getPosition();
 	void changeWeapon();
 	void updateBounceCollision(sf::RenderTarget* target, std::vector<Platform*> platforms);
 	void updatePlayer(sf::RenderTarget* target, float deltaTime, std::vector<Platform*> platforms, Node* parentNode);

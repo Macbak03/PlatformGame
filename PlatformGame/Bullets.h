@@ -10,9 +10,9 @@ public:
 	const int maxBullets;
 	Bullets();
 	void spawnBullet(bool playerFacingLeft, sf::Vector2f weaponPosition, Node* parentNode);
-	void updateBullets(const sf::RenderTarget* target);
+	void updateBullets(const sf::RenderTarget* target, Node* playerNode, Collider playerCollider);
 	std::vector<Bullet*>& getBullets();
-	void updateWindowCollsion(const sf::RenderTarget* target);
+	void updateCollsion(const sf::RenderTarget* target, Node* playerNode, Collider playerCollider);
 	void renderCollider(sf::RenderTarget* target);
 	void moveBullets();
 };

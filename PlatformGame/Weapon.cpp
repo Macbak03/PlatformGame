@@ -97,13 +97,13 @@ void Weapon::reload(float deltaTime)
 }
 
 
-void Weapon::updateWeapon(const sf::RenderTarget* target, sf::Vector2f playerPosition, bool playerFacingRight, bool playerFacingLeft, float deltaTime, Node* parentNode)
+void Weapon::updateWeapon(const sf::RenderTarget* target, sf::Vector2f playerPosition, bool playerFacingRight, bool playerFacingLeft, float deltaTime, Node* parentNode, Node* playerNode, Collider playerCollider)
 {
 	initWeaponPosition(playerPosition);
 	//std::cout << magazineSize << "      " << ammo << "      "<<reloadTimer<<std::endl;
 	updateShooting(playerFacingRight, playerFacingLeft, deltaTime, parentNode);
 
-	bullets.updateBullets(target);
+	bullets.updateBullets(target, playerNode, playerCollider);
 }
 
 

@@ -46,8 +46,9 @@ void Player::initPhysics()
 	velocity = sf::Vector2f(playerSpeed, 0.f);
 	jumpSpeed = 15.f;
 	//colider
-	collider.size = sf::Vector2f(playerSize.x - 10.f, playerSize.y -5.f);
-	collider.offset.x = - collider.size.x / 2;
+	collider.size = sf::Vector2f(playerSize.x - 35.f, playerSize.y -15.f);
+	collider.offset.x = - collider.size.x / 2 ;
+	collider.offset.y = 10.f;
 }
 
 void Player::updatePhysics(float deltaTime)
@@ -57,6 +58,10 @@ void Player::updatePhysics(float deltaTime)
 	{
 		velocity.y = terminalVelocity;
 	}
+}
+Collider& Player::getCollider()
+{
+	return collider;
 }
 //END PHYSICS
 
@@ -88,6 +93,10 @@ void Player::changeWeapon()
 		delete weapon;
 		weapon = new Pistol(this, bullets);
 	}
+}
+Weapon* Player::getWeapon()
+{
+	return weapon;
 }
 //END WEAPON STUFF
 
@@ -149,13 +158,9 @@ void Player::movePlayer(float deltaTime)
 	}
 }
 
-const sf::Vector2f& Player::getPosition() const
+sf::Vector2f Player::getPosition()
 {
 	return playerSprite.getPosition();
-}
-Weapon* Player::getWeapon()
-{
-	return weapon;
 }
 //END PLAYER POSITIONING
 
@@ -235,7 +240,7 @@ void Player::updatePlayer(sf::RenderTarget* target, float deltaTime, std::vector
 	updateBounceCollision(target, platforms);
 	updatePhysics(deltaTime);
 	changeWeapon();
-	weapon->updateWeapon(target, getPosition(), facingRight, facingLeft, deltaTime, parentNode);
+	weapon->updateWeapon(target, getPosition(), facingRight, facingLeft, deltaTime, parentNode, this, collider);
 	healthBar.updateHealthBarAnimation(0, false, sf::Vector2f(getGlobalPosition().x, getGlobalPosition().y - 10.f));
 	//std::cout << getLocalPosition().x << "        " << getLocalPosition().y << std::endl
 }

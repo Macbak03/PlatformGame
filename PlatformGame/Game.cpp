@@ -107,7 +107,7 @@ void Game::update()
 	player.updatePlayer(window, deltaTime, level.getPlatforms(), &level);
 	for (auto& element : enemies.getEnemies())
 	{
-		element->updateEnemy(window, deltaTime, player.getWeapon()->damage, &level);
+		element->updateEnemy(window, deltaTime, player.getWeapon()->damage, &level, &player, player.getCollider());
 	}
 	enemies.updateCollisions(player.getWeapon()->getBullets(), player.getWeapon());
 }
@@ -135,7 +135,7 @@ void Game::render()
 	//	element->drawCollider(window);
 	//}
 	//player.getWeapon()->getBullets().renderCollider(window);
-	//player.drawCollider(window);
+	player.drawCollider(window);
 	for (auto& element : enemies.getEnemies())
 	{
 		element->renderHealthBar(window);

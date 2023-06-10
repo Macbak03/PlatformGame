@@ -136,7 +136,7 @@ void Enemy::updateColorTimer(float deltaTime)
 }
 
 
-void Enemy::updateEnemy(const sf::RenderTarget* target, float deltaTime, unsigned int weaponDamage, Node* parentNode)
+void Enemy::updateEnemy(const sf::RenderTarget* target, float deltaTime, unsigned int weaponDamage, Node* parentNode, Node* playerNode, Collider playerCollider)
 {
 	moveEnemy();
 	updateBounceCollision();
@@ -144,7 +144,7 @@ void Enemy::updateEnemy(const sf::RenderTarget* target, float deltaTime, unsigne
 	healthBar.updateHealthBarAnimation(weaponDamage, hit, getLocalPosition());
 	updateColorTimer(deltaTime);
 	updateShooting(deltaTime, parentNode);
-	bullets.updateBullets(target);
+	bullets.updateBullets(target, playerNode, playerCollider);
 }
 
 void Enemy::renderHealthBar(sf::RenderTarget* target)
