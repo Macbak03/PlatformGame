@@ -107,9 +107,10 @@ void Game::update()
 	player.updatePlayer(window, deltaTime, level.getPlatforms(), &level);
 	for (auto& element : enemies.getEnemies())
 	{
-		element->updateEnemy(window, deltaTime, player.getWeapon()->damage, &level, &player, player.getCollider());
+		element->updateEnemy(window, deltaTime, player.getWeapon()->damage, &level);
 	}
 	enemies.updateCollisions(player.getWeapon()->getBullets(), player.getWeapon());
+	enemies.update(window, &player, player.getCollider(), deltaTime);
 }
 
 void Game::renderBackground(sf::RenderTarget* target)
@@ -135,13 +136,12 @@ void Game::render()
 	//	element->drawCollider(window);
 	//}
 	//player.getWeapon()->getBullets().renderCollider(window);
-	player.drawCollider(window);
+	//player.drawCollider(window);
+	level.renderLevel(*window);
 	for (auto& element : enemies.getEnemies())
 	{
 		element->renderHealthBar(window);
 	}
-	level.renderLevel(*window);
 	player.renderHealthBar(window);
-	//Draw player
 	window->display();
 }

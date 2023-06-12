@@ -100,18 +100,24 @@ void Enemy::shoot(Node* parentNode)
 	sf::Vector2f spawnPosition = getGlobalPosition();
 	if (enemyFacingRight)
 	{
-		bullets.spawnBullet(enemyFacingLeft, sf::Vector2f(spawnPosition.x, spawnPosition.y + enemySize.y / 2 - 5.f), parentNode);
+		bullets->spawnBullet(enemyFacingLeft, sf::Vector2f(spawnPosition.x, spawnPosition.y + enemySize.y / 2 - 5.f), parentNode);
 	}
 	else if (enemyFacingLeft)
 	{
-		bullets.spawnBullet(enemyFacingLeft, sf::Vector2f(spawnPosition.x, spawnPosition.y + enemySize.y / 2 - 5.f), parentNode);
+		bullets->spawnBullet(enemyFacingLeft, sf::Vector2f(spawnPosition.x, spawnPosition.y + enemySize.y / 2 - 5.f), parentNode);
 	}
 	bulletSpawnTimer = 0.f;
 }
 
+
+void Enemy::setBullets(Bullets* bullets)
+{
+	this->bullets = bullets;
+}
+
 void Enemy::updateShooting(float deltaTime, Node* parentNode)
 {
-	if (bullets.getBullets().size() < bullets.maxBullets)
+	if (bullets->getBullets().size() < bullets->maxBullets)
 	{
 		if (bulletSpawnTimer >= enemyRateOfFire)
 		{
@@ -136,7 +142,7 @@ void Enemy::updateColorTimer(float deltaTime)
 }
 
 
-void Enemy::updateEnemy(const sf::RenderTarget* target, float deltaTime, unsigned int weaponDamage, Node* parentNode, Node* playerNode, Collider playerCollider)
+void Enemy::updateEnemy(const sf::RenderTarget* target, float deltaTime, unsigned int weaponDamage, Node* parentNode)
 {
 	moveEnemy();
 	updateBounceCollision();
@@ -144,7 +150,6 @@ void Enemy::updateEnemy(const sf::RenderTarget* target, float deltaTime, unsigne
 	healthBar.updateHealthBarAnimation(weaponDamage, hit, getLocalPosition());
 	updateColorTimer(deltaTime);
 	updateShooting(deltaTime, parentNode);
-	bullets.updateBullets(target, playerNode, playerCollider);
 }
 
 void Enemy::renderHealthBar(sf::RenderTarget* target)

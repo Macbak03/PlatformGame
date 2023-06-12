@@ -5,7 +5,7 @@
 Bullet::Bullet(bool playerFacingLeft, Node* parentNode) : Node(parentNode)
 {
 	bulletSize = sf::Vector2f(15.f, 5.f);
-	velocity = sf::Vector2f(15.f, 0.f);
+	velocity = sf::Vector2f(700.f, 0.f);
 	initCollider(playerFacingLeft);
 	initTexture(playerFacingLeft);
 }
@@ -57,9 +57,9 @@ Collider& Bullet::getCollider()
 	return collider;
 }
 
-void Bullet::moveBullet()
+void Bullet::moveBullet(float deltaTime)
 {
-	move(velocity.x, velocity.y);
+	move(velocity.x * deltaTime, velocity.y* deltaTime);
 }
 
 void Bullet::drawCollider(sf::RenderTarget* target)

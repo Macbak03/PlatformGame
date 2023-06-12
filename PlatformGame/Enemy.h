@@ -21,7 +21,7 @@ protected:
 	Platform* platform;
 	Collider collider;
 	HealthBar healthBar;
-	Bullets bullets;
+	Bullets* bullets;
 
 
 	float enemySpeed;
@@ -43,7 +43,7 @@ public:
 	void spawnEnemy();
 	void moveEnemy();
 	void updateBounceCollision();
-	void updateEnemy(const sf::RenderTarget* target, float deltaTime, unsigned int weaponDamage, Node* parentNode, Node* playerNode, Collider playerCollider);
+	void updateEnemy(const sf::RenderTarget* target, float deltaTime, unsigned int weaponDamage, Node* parentNode);
 	void drawCollider(sf::RenderTarget* target);
 	void changeColor();
 	void setColorTimer(float value);
@@ -52,6 +52,7 @@ public:
 	void shoot(Node* parentNode);
 	void updateShooting(float deltaTime, Node* parentNode);
 	void renderHealthBar(sf::RenderTarget* target);
+	void setBullets(Bullets* bullets);
 	virtual void onDraw(sf::RenderTarget& target, const sf::Transform& transform) const override;
 };
 

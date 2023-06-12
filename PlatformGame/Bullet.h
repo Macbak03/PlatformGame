@@ -26,7 +26,7 @@ public:
 	void initPosition(sf::Vector2f weaponPosition);
 	const sf::Sprite& getShape() const;
     Collider& getCollider();
-	void moveBullet();
+	void moveBullet(float deltaTime);
 	void drawCollider(sf::RenderTarget* target);
 	virtual void onDraw(sf::RenderTarget& target, const sf::Transform& transform) const override;
 };

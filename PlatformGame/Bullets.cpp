@@ -13,11 +13,11 @@ void Bullets::spawnBullet(bool playerFacingLeft, sf::Vector2f weaponPosition, No
 	bullets.push_back(bullet);
 }
 
-void Bullets::moveBullets()
+void Bullets::moveBullets(float deltaTime)
 {
 	for (auto& element : bullets)
 	{
-		element->moveBullet();
+		element->moveBullet(deltaTime);
 	}
 }
 
@@ -44,9 +44,9 @@ void Bullets::updateCollsion(const sf::RenderTarget* target, Node* playerNode, C
 	}
 }
 
-void Bullets::updateBullets(const sf::RenderTarget* target, Node* playerNode, Collider playerCollider)
+void Bullets::updateBullets(const sf::RenderTarget* target, Node* playerNode, Collider playerCollider, float deltaTime)
 {
-	moveBullets();
+	moveBullets(deltaTime);
 	updateCollsion(target, playerNode, playerCollider);
 	//std::cout << bullets.size() << std::endl;
 

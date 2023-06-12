@@ -9,6 +9,7 @@ Enemies::Enemies()
 void Enemies::addEnemy(Enemy* enemy)
 {
 	enemies.push_back(enemy);
+	enemy->setBullets(&bullets);
 }
 
 std::vector<Enemy*> Enemies::getEnemies()
@@ -66,6 +67,11 @@ void Enemies::updateCollisions(Bullets& bullets, Weapon* weapon)
 	{
 		delete(element);
 	}
+}
+
+void Enemies::update(sf::RenderTarget* target, Node* playerNode, Collider playerCollider, float deltaTime)
+{
+	bullets.updateBullets(target, playerNode, playerCollider, deltaTime);
 }
 
 

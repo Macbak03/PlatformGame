@@ -24,7 +24,6 @@ private:
 
 	Level level;
 	Player player;
-
 	Enemies enemies;
 	void initVariables();
 	void initWindow();
