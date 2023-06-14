@@ -19,6 +19,8 @@ private:
 	void initShape();
 	void loadTextures();
 	sf::Vector2f playerSize;
+	sf::Color playerColor;
+	float hitColorTimer;
 
 	//3 bule
 	bool spaceHold;
@@ -47,20 +49,24 @@ private:
 	float playerMaxHealth;
 	
 public:
+	unsigned int points;
+	unsigned int cash;
 	float playerHealth;
 	Player(Node* parentNode);
 	void spawnPlayer();
 	void movePlayer(float deltaTime);
 	Weapon* getWeapon();
 	Collider& getCollider();
+	Bullets& getBullets();
 	sf::Vector2f getPosition();
+	void changeColor();
+	void updateColor(float deltaTime);
 	void changeWeapon();
 	void updateBounceCollision(sf::RenderTarget* target, std::vector<Platform*> platforms);
-	void updateBulletCollision(Bullets& enemyBullets, float enemyDamage);
-	void updatePlayer(sf::RenderTarget* target, float deltaTime, std::vector<Platform*> platforms, Node* parentNode, Bullets& enemyBullets, float enemyDamage);
+	void updateBulletCollision(Bullets& enemyBullets);
+	void updatePlayer(sf::RenderTarget* target, float deltaTime, std::vector<Platform*> platforms, Node* parentNode, Bullets& enemyBullets);
 	void drawCollider(sf::RenderTarget* target);
 	void renderHealthBar(sf::RenderTarget* target);
 	virtual void onDraw(sf::RenderTarget& target, const sf::Transform& transform) const override;
-
 };
 

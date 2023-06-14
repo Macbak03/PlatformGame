@@ -27,6 +27,7 @@ protected:
 	float enemySpeed;
 	float enemyRateOfFire;
 
+
 	sf::Vector2f enemySize;
 
 	virtual void loadTexture() = 0;
@@ -35,6 +36,7 @@ protected:
 	virtual void initCollider() = 0;
 
 public:
+	unsigned int cashValue;
 	float enemyHealth;
 	float enemyDamage;
 	Enemy(Platform* platform, Node* parentNode);
@@ -43,12 +45,13 @@ public:
 	void spawnEnemy();
 	void moveEnemy();
 	void updateBounceCollision();
-	void updateEnemy(const sf::RenderTarget* target, float deltaTime, float weaponDamage, Node* parentNode);
+	void updateEnemy(const sf::RenderTarget* target, float deltaTime, Node* parentNode);
 	void drawCollider(sf::RenderTarget* target);
 	void changeColor();
 	void setColorTimer(float value);
 	void updateColorTimer(float deltaTime);
 	Collider& getCollider();
+	HealthBar& getHealthBar();
 	void shoot(Node* parentNode);
 	void updateShooting(float deltaTime, Node* parentNode);
 	void renderHealthBar(sf::RenderTarget* target);

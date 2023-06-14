@@ -6,6 +6,7 @@ HealthBar::HealthBar()
 	healthBarSize = sf::Vector2f(60.f, 25.f);
 	initTexture(sf::Vector2u(12, 1));
 	initAnimation();
+	damageGot = 0;
 }
 
 void HealthBar::loadTexture()
@@ -32,10 +33,10 @@ void HealthBar::initAnimation()
 	animation->setCurrentImageX(11);
 }
 
-void HealthBar::updateHealthBarAnimation(float weaponDamage, bool hit, sf::Vector2f position, float maxHealth)
+void HealthBar::updateHealthBarAnimation(bool hit, sf::Vector2f position, float maxHealth)
 {
 	healthBarSprite.setTextureRect(animation->uvRec);
-	animation->updateHealthAnimation(weaponDamage, hit, maxHealth);
+	animation->updateHealthAnimation(damageGot, hit, maxHealth);
 	healthBarSprite.setPosition(sf::Vector2f(position.x - 30.f, position.y - 10.f));
 }
 

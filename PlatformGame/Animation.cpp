@@ -36,12 +36,12 @@ void Animation::updateAnimation(int row, float deltaTime)
 	uvRec.top = currentImage.y * uvRec.height;
 }
 
-void Animation::updateHealthAnimation(float weaponDamage, bool hit, float maxHealth)
+void Animation::updateHealthAnimation(float damage, bool hit, float maxHealth)
 {
 	currentImage.y = 0;
 	if (hit)
 	{
-		imageChangeValue += (weaponDamage) / (10 * (maxHealth / 100));
+		imageChangeValue += (damage) / (10 * (maxHealth / 100));
 		
 		if (imageChangeValue >= 1)
 		{

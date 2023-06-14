@@ -6,9 +6,9 @@ Bullets::Bullets() : maxBullets(1000)
 {
 }
 
-void Bullets::spawnBullet(bool playerFacingLeft, sf::Vector2f weaponPosition, Node* parentNode)
+void Bullets::spawnBullet(bool playerFacingLeft, sf::Vector2f weaponPosition, Node* parentNode, float damage)
 {
-	Bullet* bullet = new Bullet(playerFacingLeft, parentNode);
+	bullet = new Bullet(playerFacingLeft, parentNode, damage);
 	bullet->initPosition(weaponPosition);
 	bullets.push_back(bullet);
 }
@@ -29,12 +29,11 @@ void Bullets::updateCollsion(const sf::RenderTarget* target)
 		bullets.end(),
 		[target, &deletedBullets](Bullet* bullet) {
 			bool windowCollision = bullet->getGlobalPosition().x <= 0 || bullet->getGlobalPosition().x + bullet->getCollider().size.x >= target->getSize().x;
-			//bool playerCollision = bullet->getCollider().intersects(bullet->getGlobalPosition(), playerNode->getGlobalPosition(), playerCollider);
-			if (windowCollision) //|| playerCollision)
+			if (windowCollision)
 			{
 				deletedBullets.push_back(bullet);
 			}
-			return windowCollision; //|| playerCollision;
+			return windowCollision;
 		}),
 		bullets.end()
 			);
@@ -49,7 +48,6 @@ void Bullets::updateBullets(const sf::RenderTarget* target, float deltaTime)
 	moveBullets(deltaTime);
 	updateCollsion(target);
 	//std::cout << bullets.size() << std::endl;
-
 }
 
 void Bullets::renderCollider(sf::RenderTarget* target) {
@@ -63,3 +61,4 @@ std::vector<Bullet*>& Bullets::getBullets()
 {
 	return bullets;
 }
+

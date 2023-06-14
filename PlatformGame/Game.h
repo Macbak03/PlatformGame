@@ -6,6 +6,7 @@
 #include "Level.h"
 #include "Bandit.h"
 #include "Marauder.h"
+#include "Thug.h"
 #include "Enemies.h"
 
 class Game
@@ -15,12 +16,17 @@ private:
 	sf::RenderWindow* window;
 	sf::VideoMode videoMode;
 	sf::Event event;
-	bool endGame;
 	sf::Clock clock;
 	float deltaTime;
 	
 	sf::Texture backgroundTexture;
 	sf::Sprite backgroundSprite;
+
+	sf::Font font;
+	sf::Text pointsText;
+	sf::Text ammoText;
+	sf::Text cashText;
+	sf::Text gameOverText;
 
 	Level level;
 	Player player;
@@ -29,16 +35,17 @@ private:
 	void initWindow();
 
 public:
-	//Constructors / Destructors
 	Game();
 	virtual ~Game();
-	//Accessors
 	const bool getWindowIsOpen();
-	//Functions
+	void loadFont();
 	void loadTexture();
 	void initBackground();
+	void initText();
+	void updateGui();
+	void renderGui(sf::RenderTarget* target);
+	bool endGame();
 	void initLevel();
-	void initEnemies();
 	void pollEvents();
 	void renderBackground(sf::RenderTarget* target);
 	void update();

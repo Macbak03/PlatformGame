@@ -13,7 +13,7 @@ Platform::Platform(sf::Vector2f position, Node* parentNode) : Node(parentNode)
 void Platform::loadTexture()
 {
 	platformTexture = new sf::Texture;
-	if (!platformTexture->loadFromFile("Textures/grass-2.png"))
+	if (!platformTexture->loadFromFile("Textures/platform.png"))
 	{
 		std::cerr << "Could not load texture" << std::endl;
 	}

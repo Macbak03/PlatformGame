@@ -9,6 +9,7 @@ Bandit::Bandit(Platform* platform, Node* parentNode) : Enemy(platform, parentNod
 	enemyRateOfFire = 2.25f;
 	enemyMaxHealth = 100;
 	enemyHealth = enemyMaxHealth;
+	cashValue = 10;
 	initTexture(sf::Vector2u(8, 2));
 	initAnimation();
 	initCollider();

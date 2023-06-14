@@ -36,11 +36,11 @@ void Weapon::shoot(bool playerFacingRight, bool playerFacingLeft, Node* parentNo
 		if (ammo > 0) {
 			if (playerFacingRight)
 			{
-				bullets.spawnBullet(playerFacingLeft, sf::Vector2f(spawnPosition.x + weaponSize.x, spawnPosition.y), parentNode);
+				bullets.spawnBullet(playerFacingLeft, sf::Vector2f(spawnPosition.x + weaponSize.x, spawnPosition.y), parentNode, damage);
 			}
 			else if (playerFacingLeft)
 			{
-				bullets.spawnBullet(playerFacingLeft, sf::Vector2f(spawnPosition.x - weaponSize.x, spawnPosition.y), parentNode);
+				bullets.spawnBullet(playerFacingLeft, sf::Vector2f(spawnPosition.x - weaponSize.x, spawnPosition.y), parentNode, damage);
 			}
 			ammo --;
 			bulletSpawnTimer = 0.f;
@@ -50,14 +50,18 @@ void Weapon::shoot(bool playerFacingRight, bool playerFacingLeft, Node* parentNo
 	
 }
 
-Bullets& Weapon::getBullets()
-{
-	return bullets;
-}
-
 sf::Vector2f& Weapon::getSize()
 {
 	return weaponSize;
+}
+unsigned int Weapon::getAmmo()
+{
+	return ammo;
+}
+
+unsigned int Weapon::getMagazineSize()
+{
+	return magazineSize;
 }
 
 void Weapon::updateShooting(bool playerFacingRight, bool playerFacingLeft, float deltaTime, Node* parentNode)

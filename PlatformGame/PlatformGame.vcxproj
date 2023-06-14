@@ -153,6 +153,7 @@
     <ClCompile Include="Shotgun.cpp" />
     <ClCompile Include="SniperRifle.cpp" />
     <ClCompile Include="Node.cpp" />
+    <ClCompile Include="Thug.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
@@ -176,6 +177,7 @@
     <ClInclude Include="Shotgun.h" />
     <ClInclude Include="SniperRifle.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="Thug.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Weapon.h" />
   </ItemGroup>

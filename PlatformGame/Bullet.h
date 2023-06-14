@@ -22,7 +22,8 @@ private:
 	void initTexture(bool playerFacingLeft);
 	void initCollider(bool playerFacingLeft);
 public:
-	Bullet(bool playerFacingLeft, Node* parentNode);
+	float bulletDamage;
+	Bullet(bool playerFacingLeft, Node* parentNode, float damage);
 	void initPosition(sf::Vector2f weaponPosition);
 	const sf::Sprite& getShape() const;
     Collider& getCollider();

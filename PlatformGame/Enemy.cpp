@@ -80,6 +80,11 @@ Collider& Enemy::getCollider()
 	return collider;
 }
 
+HealthBar& Enemy::getHealthBar()
+{
+	return healthBar;
+}
+
 
 void Enemy::setColorTimer(float value)
 {
@@ -96,16 +101,26 @@ void Enemy::changeColor()
 
 }
 
+void Enemy::updateColorTimer(float deltaTime)
+{
+	hitColorTimer -= deltaTime;
+	hit = false;
+	if (hitColorTimer < 0)
+	{
+		enemySprite.setColor(enemyColor);
+	}
+}
+
 void Enemy::shoot(Node* parentNode)
 {
 	sf::Vector2f spawnPosition = getGlobalPosition();
 	if (enemyFacingRight)
 	{
-		bullets->spawnBullet(enemyFacingLeft, sf::Vector2f(spawnPosition.x, spawnPosition.y + enemySize.y / 2 - 5.f), parentNode);
+		bullets->spawnBullet(enemyFacingLeft, sf::Vector2f(spawnPosition.x, spawnPosition.y + enemySize.y / 2 - 5.f), parentNode, enemyDamage);
 	}
 	else if (enemyFacingLeft)
 	{
-		bullets->spawnBullet(enemyFacingLeft, sf::Vector2f(spawnPosition.x, spawnPosition.y + enemySize.y / 2 - 5.f), parentNode);
+		bullets->spawnBullet(enemyFacingLeft, sf::Vector2f(spawnPosition.x, spawnPosition.y + enemySize.y / 2 - 5.f), parentNode, enemyDamage);
 	}
 	bulletSpawnTimer = 0.f;
 }
@@ -132,23 +147,13 @@ void Enemy::updateShooting(float deltaTime, Node* parentNode)
 	}
 }
 
-void Enemy::updateColorTimer(float deltaTime)
-{
-	hitColorTimer -= deltaTime;
-	hit = false;
-	if (hitColorTimer < 0)
-	{
-		enemySprite.setColor(enemyColor);
-	}
-}
 
-
-void Enemy::updateEnemy(const sf::RenderTarget* target, float deltaTime, float weaponDamage, Node* parentNode)
+void Enemy::updateEnemy(const sf::RenderTarget* target, float deltaTime, Node* parentNode)
 {
 	moveEnemy();
 	updateBounceCollision();
 	updateEnemyAnimation(deltaTime);
-	healthBar.updateHealthBarAnimation(weaponDamage, hit, getLocalPosition(), enemyMaxHealth);
+	healthBar.updateHealthBarAnimation(hit, getLocalPosition(), enemyMaxHealth);
 	updateColorTimer(deltaTime);
 	updateShooting(deltaTime, parentNode);
 }

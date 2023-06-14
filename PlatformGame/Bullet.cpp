@@ -2,12 +2,13 @@
 #include <iostream>
 
 
-Bullet::Bullet(bool playerFacingLeft, Node* parentNode) : Node(parentNode)
+Bullet::Bullet(bool playerFacingLeft, Node* parentNode, float damage) : Node(parentNode)
 {
 	bulletSize = sf::Vector2f(15.f, 5.f);
 	velocity = sf::Vector2f(700.f, 0.f);
 	initCollider(playerFacingLeft);
 	initTexture(playerFacingLeft);
+	bulletDamage = damage;
 }
 
 void Bullet::loadTexture()

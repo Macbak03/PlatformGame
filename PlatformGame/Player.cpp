@@ -11,7 +11,10 @@ Player::Player(Node* parentNode) : Node(parentNode)
 	startJumpTimer = false;
 	jumpTimer = 0.5f;
 	playerMaxHealth = 100;
+	cash = 0;
+	points = 0;
 	playerHealth = playerMaxHealth;
+	playerColor = playerSprite.getColor();
 	healthBar.getSprite().scale(5.f, 3.f);
 	initShape();
 	spawnPlayer();
@@ -65,6 +68,10 @@ Collider& Player::getCollider()
 {
 	return collider;
 }
+Bullets& Player::getBullets()
+{
+	return bullets;
+}
 //END PHYSICS
 
 //WEAPON STUFF
@@ -96,6 +103,7 @@ void Player::changeWeapon()
 		weapon = new Pistol(this, bullets);
 	}
 }
+
 Weapon* Player::getWeapon()
 {
 	return weapon;
@@ -106,7 +114,7 @@ Weapon* Player::getWeapon()
 //PLAYER POSITIONING
 void Player::spawnPlayer()
 {
-	sf::Vector2f playerSpawn = sf::Vector2f(600.f, 0.f);
+	sf::Vector2f playerSpawn = sf::Vector2f(900.f, 730.f);
 	setLocalPosition(playerSpawn);
 }
 
@@ -163,6 +171,21 @@ void Player::movePlayer(float deltaTime)
 sf::Vector2f Player::getPosition()
 {
 	return playerSprite.getPosition();
+}
+void Player::changeColor()
+{
+	if (hitColorTimer > 0)
+	{
+		playerSprite.setColor(sf::Color::Red);
+	}
+}
+void Player::updateColor(float deltaTime)
+{
+	hitColorTimer -= deltaTime;
+	if (hitColorTimer < 0)
+	{
+		playerSprite.setColor(playerColor);
+	}
 }
 //END PLAYER POSITIONING
 
@@ -232,7 +255,7 @@ void Player::updateBounceCollision(sf::RenderTarget* target, std::vector<Platfor
 	}
 	setLocalPosition(playerGlobalPosition);
 }
-void Player::updateBulletCollision(Bullets& enemyBullets, float enemyDamage)
+void Player::updateBulletCollision(Bullets& enemyBullets)
 {
 	hit = false;
 	std::vector<Bullet*> deletedBullets;
@@ -240,12 +263,15 @@ void Player::updateBulletCollision(Bullets& enemyBullets, float enemyDamage)
 	bullets.erase(std::remove_if(
 		bullets.begin(),
 		bullets.end(),
-		[&deletedBullets, this, &enemyDamage](Bullet* bullet) {
+		[&deletedBullets, this](Bullet* bullet) {
 			bool playerCollision = bullet->getCollider().intersects(bullet->getGlobalPosition(), getGlobalPosition(), collider);
 			if (playerCollision)
 			{
 				hit = true;
-				playerHealth -= enemyDamage;
+				hitColorTimer = 0.15f;
+				changeColor();
+				playerHealth -= bullet->bulletDamage;
+				healthBar.damageGot = bullet->bulletDamage;
 				deletedBullets.push_back(bullet);
 			}
 		return playerCollision;
@@ -261,15 +287,16 @@ void Player::updateBulletCollision(Bullets& enemyBullets, float enemyDamage)
 
 
 //UPDATE AND RENDER
-void Player::updatePlayer(sf::RenderTarget* target, float deltaTime, std::vector<Platform*> platforms, Node* parentNode, Bullets& enemyBullets, float enemyDamage)
+void Player::updatePlayer(sf::RenderTarget* target, float deltaTime, std::vector<Platform*> platforms, Node* parentNode, Bullets& enemyBullets)
 {	
 	movePlayer(deltaTime);
 	updateBounceCollision(target, platforms);
 	updatePhysics(deltaTime);
 	changeWeapon();
-	updateBulletCollision(enemyBullets, enemyDamage);
+	updateBulletCollision(enemyBullets);
 	weapon->updateWeapon(target, getPosition(), facingRight, facingLeft, deltaTime, parentNode, this, collider);
-	healthBar.updateHealthBarAnimation(enemyDamage, hit, sf::Vector2f(getGlobalPosition().x, getGlobalPosition().y - 10.f), playerMaxHealth);
+	healthBar.updateHealthBarAnimation(hit, sf::Vector2f(getGlobalPosition().x, getGlobalPosition().y - 10.f), playerMaxHealth);
+	updateColor(deltaTime);
 	std::cout << playerHealth << std::endl;
 }
 

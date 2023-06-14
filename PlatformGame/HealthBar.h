@@ -14,8 +14,8 @@ private:
 	void initAnimation();
 public:
 	HealthBar();
-	//virtual void onDraw(sf::RenderTarget& target, const sf::Transform& transform) const override;
-	void updateHealthBarAnimation(float weaponDamage, bool hit, sf::Vector2f position, float maxHealth);
+	float damageGot;
+	void updateHealthBarAnimation(bool hit, sf::Vector2f position, float maxHealth);
 	void drawHealthBar(sf::RenderTarget* target);
 	sf::Sprite getSprite();
 };

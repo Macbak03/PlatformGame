@@ -38,8 +38,9 @@ public:
 	void initWeaponPosition(sf::Vector2f playerPosition);
 	void shoot(bool playerFacingRight, bool playerFacingLeft, Node* parentNode);
 	void reload(float deltaTime);
-	Bullets& getBullets();
 	sf::Vector2f& getSize();
+	unsigned int getAmmo();
+	unsigned int getMagazineSize();
 	void scale();
 	void updateShooting(bool playerFacingRight, bool playerFacingLeft, float deltaTime,  Node* parentNode);
 	void updateWeapon(const sf::RenderTarget* target, sf::Vector2f playerPosition, bool playerFacingRight, bool playerFacingLeft, float deltaTime, Node* parentNode, Node* playerNode, Collider playerCollider);
