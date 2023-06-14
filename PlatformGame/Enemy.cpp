@@ -6,7 +6,7 @@ Enemy::Enemy(Platform* platform, Node* parentNode) : platform(platform), Node(pa
 {
 	enemyTexture = nullptr;
 	enemySpeed = 0.f;
-	enemyDamage = 0.f;
+	enemyDamage = 0;
 	enemyRateOfFire = 0.f;
 	bulletSpawnTimer = 0.f;
 	enemyHealth = 0;
@@ -80,6 +80,7 @@ Collider& Enemy::getCollider()
 	return collider;
 }
 
+
 void Enemy::setColorTimer(float value)
 {
 	hitColorTimer = value;
@@ -142,12 +143,12 @@ void Enemy::updateColorTimer(float deltaTime)
 }
 
 
-void Enemy::updateEnemy(const sf::RenderTarget* target, float deltaTime, unsigned int weaponDamage, Node* parentNode)
+void Enemy::updateEnemy(const sf::RenderTarget* target, float deltaTime, float weaponDamage, Node* parentNode)
 {
 	moveEnemy();
 	updateBounceCollision();
 	updateEnemyAnimation(deltaTime);
-	healthBar.updateHealthBarAnimation(weaponDamage, hit, getLocalPosition());
+	healthBar.updateHealthBarAnimation(weaponDamage, hit, getLocalPosition(), enemyMaxHealth);
 	updateColorTimer(deltaTime);
 	updateShooting(deltaTime, parentNode);
 }

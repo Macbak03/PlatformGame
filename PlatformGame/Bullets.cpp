@@ -21,20 +21,20 @@ void Bullets::moveBullets(float deltaTime)
 	}
 }
 
-void Bullets::updateCollsion(const sf::RenderTarget* target, Node* playerNode, Collider playerCollider)
+void Bullets::updateCollsion(const sf::RenderTarget* target)
 {
 	std::vector<Bullet*> deletedBullets;
 	bullets.erase(std::remove_if(
 		bullets.begin(),
 		bullets.end(),
-		[target, playerNode, &playerCollider, &deletedBullets](Bullet* bullet) {
+		[target, &deletedBullets](Bullet* bullet) {
 			bool windowCollision = bullet->getGlobalPosition().x <= 0 || bullet->getGlobalPosition().x + bullet->getCollider().size.x >= target->getSize().x;
-			bool playerCollision = bullet->getCollider().intersects(bullet->getGlobalPosition(), playerNode->getGlobalPosition(), playerCollider);
-			if (windowCollision || playerCollision)
+			//bool playerCollision = bullet->getCollider().intersects(bullet->getGlobalPosition(), playerNode->getGlobalPosition(), playerCollider);
+			if (windowCollision) //|| playerCollision)
 			{
 				deletedBullets.push_back(bullet);
 			}
-			return windowCollision || playerCollision;
+			return windowCollision; //|| playerCollision;
 		}),
 		bullets.end()
 			);
@@ -44,10 +44,10 @@ void Bullets::updateCollsion(const sf::RenderTarget* target, Node* playerNode, C
 	}
 }
 
-void Bullets::updateBullets(const sf::RenderTarget* target, Node* playerNode, Collider playerCollider, float deltaTime)
+void Bullets::updateBullets(const sf::RenderTarget* target, float deltaTime)
 {
 	moveBullets(deltaTime);
-	updateCollsion(target, playerNode, playerCollider);
+	updateCollsion(target);
 	//std::cout << bullets.size() << std::endl;
 
 }

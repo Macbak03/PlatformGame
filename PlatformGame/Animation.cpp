@@ -5,6 +5,7 @@ Animation::Animation(sf::Texture* texture, sf::Vector2u imageCount, float switch
 {
 	this->imageCount = imageCount;
 	this->switchTime = switchTime;
+	imageChangeValue = 0;
 	totalTime = 0.0f;
 	currentImage.x = 0;
 
@@ -35,12 +36,18 @@ void Animation::updateAnimation(int row, float deltaTime)
 	uvRec.top = currentImage.y * uvRec.height;
 }
 
-void Animation::updateHealthAnimation(unsigned int weaponDamage, bool hit)
+void Animation::updateHealthAnimation(float weaponDamage, bool hit, float maxHealth)
 {
 	currentImage.y = 0;
 	if (hit)
 	{
-		currentImage.x -=  (weaponDamage) / 10;
+		imageChangeValue += (weaponDamage) / (10 * (maxHealth / 100));
+		
+		if (imageChangeValue >= 1)
+		{
+			currentImage.x -= static_cast<int>(imageChangeValue);
+			imageChangeValue -= static_cast<int>(imageChangeValue);
+		}
 		if (currentImage.x <= 0)
 		{
 			currentImage.x = 0;
@@ -48,6 +55,7 @@ void Animation::updateHealthAnimation(unsigned int weaponDamage, bool hit)
 	}
 	uvRec.left = currentImage.x * uvRec.width;
 	uvRec.top = currentImage.y * uvRec.height;
+	//std::cout << imageChangeValue << std::endl;
 }
 
 void Animation::setCurrentImageX(unsigned int value)

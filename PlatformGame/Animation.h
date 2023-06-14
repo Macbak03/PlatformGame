@@ -8,12 +8,13 @@ private:
 
 	float totalTime;
 	float switchTime;
+	float imageChangeValue;
 public:
 	sf::IntRect uvRec;
 	Animation(sf::Texture* texture, sf::Vector2u imageCount, float switchTime);
 	~Animation();
 	void updateAnimation(int row, float deltaTime);
-	void updateHealthAnimation(unsigned int weaponDamage, bool hit);
+	void updateHealthAnimation(float weaponDamage, bool hit, float maxHealth);
 	void setCurrentImageX(unsigned int value);
 };
 

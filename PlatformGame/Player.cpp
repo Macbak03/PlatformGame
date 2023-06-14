@@ -10,6 +10,8 @@ Player::Player(Node* parentNode) : Node(parentNode)
 	onGround = false;
 	startJumpTimer = false;
 	jumpTimer = 0.5f;
+	playerMaxHealth = 100;
+	playerHealth = playerMaxHealth;
 	healthBar.getSprite().scale(5.f, 3.f);
 	initShape();
 	spawnPlayer();
@@ -230,19 +232,45 @@ void Player::updateBounceCollision(sf::RenderTarget* target, std::vector<Platfor
 	}
 	setLocalPosition(playerGlobalPosition);
 }
+void Player::updateBulletCollision(Bullets& enemyBullets, float enemyDamage)
+{
+	hit = false;
+	std::vector<Bullet*> deletedBullets;
+	std::vector<Bullet*>& bullets = enemyBullets.getBullets();
+	bullets.erase(std::remove_if(
+		bullets.begin(),
+		bullets.end(),
+		[&deletedBullets, this, &enemyDamage](Bullet* bullet) {
+			bool playerCollision = bullet->getCollider().intersects(bullet->getGlobalPosition(), getGlobalPosition(), collider);
+			if (playerCollision)
+			{
+				hit = true;
+				playerHealth -= enemyDamage;
+				deletedBullets.push_back(bullet);
+			}
+		return playerCollision;
+		}),
+		bullets.end()
+	);
+	for (auto& element : deletedBullets)
+	{
+		delete(element);
+	}
+}
 //END PLAYER COLLISION
 
 
 //UPDATE AND RENDER
-void Player::updatePlayer(sf::RenderTarget* target, float deltaTime, std::vector<Platform*> platforms, Node* parentNode)
+void Player::updatePlayer(sf::RenderTarget* target, float deltaTime, std::vector<Platform*> platforms, Node* parentNode, Bullets& enemyBullets, float enemyDamage)
 {	
 	movePlayer(deltaTime);
 	updateBounceCollision(target, platforms);
 	updatePhysics(deltaTime);
 	changeWeapon();
+	updateBulletCollision(enemyBullets, enemyDamage);
 	weapon->updateWeapon(target, getPosition(), facingRight, facingLeft, deltaTime, parentNode, this, collider);
-	healthBar.updateHealthBarAnimation(0, false, sf::Vector2f(getGlobalPosition().x, getGlobalPosition().y - 10.f));
-	//std::cout << getLocalPosition().x << "        " << getLocalPosition().y << std::endl
+	healthBar.updateHealthBarAnimation(enemyDamage, hit, sf::Vector2f(getGlobalPosition().x, getGlobalPosition().y - 10.f), playerMaxHealth);
+	std::cout << playerHealth << std::endl;
 }
 
 void Player::drawCollider(sf::RenderTarget* target)

@@ -104,13 +104,14 @@ void Game::pollEvents()
 void Game::update()
 {
 	pollEvents();
-	player.updatePlayer(window, deltaTime, level.getPlatforms(), &level);
+	
 	for (auto& element : enemies.getEnemies())
 	{
 		element->updateEnemy(window, deltaTime, player.getWeapon()->damage, &level);
+		player.updatePlayer(window, deltaTime, level.getPlatforms(), &level, enemies.getBullets(), enemies.getDamage(element));
 	}
 	enemies.updateCollisions(player.getWeapon()->getBullets(), player.getWeapon());
-	enemies.update(window, &player, player.getCollider(), deltaTime);
+	enemies.update(window, deltaTime);
 }
 
 void Game::renderBackground(sf::RenderTarget* target)

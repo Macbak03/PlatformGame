@@ -23,6 +23,7 @@ private:
 	//3 bule
 	bool spaceHold;
 	bool facingRight, facingLeft;
+	bool hit;
 
 	//Physics
 	Collider collider;
@@ -43,8 +44,10 @@ private:
 	void initWeapon();
 
 	HealthBar healthBar;
+	float playerMaxHealth;
 	
 public:
+	float playerHealth;
 	Player(Node* parentNode);
 	void spawnPlayer();
 	void movePlayer(float deltaTime);
@@ -53,7 +56,8 @@ public:
 	sf::Vector2f getPosition();
 	void changeWeapon();
 	void updateBounceCollision(sf::RenderTarget* target, std::vector<Platform*> platforms);
-	void updatePlayer(sf::RenderTarget* target, float deltaTime, std::vector<Platform*> platforms, Node* parentNode);
+	void updateBulletCollision(Bullets& enemyBullets, float enemyDamage);
+	void updatePlayer(sf::RenderTarget* target, float deltaTime, std::vector<Platform*> platforms, Node* parentNode, Bullets& enemyBullets, float enemyDamage);
 	void drawCollider(sf::RenderTarget* target);
 	void renderHealthBar(sf::RenderTarget* target);
 	virtual void onDraw(sf::RenderTarget& target, const sf::Transform& transform) const override;

@@ -15,6 +15,8 @@ public:
 	void addEnemy(Enemy* enemy);
 	std::vector<Enemy*> getEnemies();
 	void updateCollisions(Bullets& bullets, Weapon* weapon);
-	void update(sf::RenderTarget* target, Node* playerNode, Collider playerCollider, float deltaTime);
+	Bullets& getBullets();
+	float getDamage(Enemy* enemy);
+	void update(sf::RenderTarget* target,  float deltaTime);
 };
 

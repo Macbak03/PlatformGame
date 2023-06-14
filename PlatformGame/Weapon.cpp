@@ -103,7 +103,7 @@ void Weapon::updateWeapon(const sf::RenderTarget* target, sf::Vector2f playerPos
 	//std::cout << magazineSize << "      " << ammo << "      "<<reloadTimer<<std::endl;
 	updateShooting(playerFacingRight, playerFacingLeft, deltaTime, parentNode);
 
-	bullets.updateBullets(target, playerNode, playerCollider, deltaTime);
+	bullets.updateBullets(target, deltaTime);
 }
 
 

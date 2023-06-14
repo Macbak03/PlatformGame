@@ -23,9 +23,8 @@ protected:
 	HealthBar healthBar;
 	Bullets* bullets;
 
-
+	float enemyMaxHealth;
 	float enemySpeed;
-	float enemyDamage;
 	float enemyRateOfFire;
 
 	sf::Vector2f enemySize;
@@ -36,14 +35,15 @@ protected:
 	virtual void initCollider() = 0;
 
 public:
-	int enemyHealth;
+	float enemyHealth;
+	float enemyDamage;
 	Enemy(Platform* platform, Node* parentNode);
 	~Enemy();
 	virtual void updateEnemyAnimation(float& deltaTime) = 0;
 	void spawnEnemy();
 	void moveEnemy();
 	void updateBounceCollision();
-	void updateEnemy(const sf::RenderTarget* target, float deltaTime, unsigned int weaponDamage, Node* parentNode);
+	void updateEnemy(const sf::RenderTarget* target, float deltaTime, float weaponDamage, Node* parentNode);
 	void drawCollider(sf::RenderTarget* target);
 	void changeColor();
 	void setColorTimer(float value);

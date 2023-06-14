@@ -15,7 +15,7 @@ private:
 public:
 	HealthBar();
 	//virtual void onDraw(sf::RenderTarget& target, const sf::Transform& transform) const override;
-	void updateHealthBarAnimation(unsigned int weaponDamage, bool hit, sf::Vector2f enemyPosition);
+	void updateHealthBarAnimation(float weaponDamage, bool hit, sf::Vector2f position, float maxHealth);
 	void drawHealthBar(sf::RenderTarget* target);
 	sf::Sprite getSprite();
 };

@@ -5,9 +5,10 @@ Marauder::Marauder(Platform* platform, Node* parentNode) : Enemy(platform, paren
 {
 	enemySize = sf::Vector2f(100.f, 100.f);
 	enemySpeed = 1.5f;
-	enemyDamage = 5.f;
+	enemyDamage = 10;
 	enemyRateOfFire = 1.5f;
-	enemyHealth = 100;
+	enemyMaxHealth = 200;
+	enemyHealth = enemyMaxHealth;
 	initTexture(sf::Vector2u(8, 2));
 	initAnimation();
 	initCollider();

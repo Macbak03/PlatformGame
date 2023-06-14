@@ -32,11 +32,11 @@ void HealthBar::initAnimation()
 	animation->setCurrentImageX(11);
 }
 
-void HealthBar::updateHealthBarAnimation(unsigned int weaponDamage, bool hit, sf::Vector2f enemyPosition)
+void HealthBar::updateHealthBarAnimation(float weaponDamage, bool hit, sf::Vector2f position, float maxHealth)
 {
 	healthBarSprite.setTextureRect(animation->uvRec);
-	animation->updateHealthAnimation(weaponDamage, hit);
-	healthBarSprite.setPosition(sf::Vector2f(enemyPosition.x - 30.f, enemyPosition.y - 10.f));
+	animation->updateHealthAnimation(weaponDamage, hit, maxHealth);
+	healthBarSprite.setPosition(sf::Vector2f(position.x - 30.f, position.y - 10.f));
 }
 
 void HealthBar::drawHealthBar(sf::RenderTarget* target)

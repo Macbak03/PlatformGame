@@ -33,7 +33,7 @@ protected:
 	virtual void initTexture() = 0;
 
 public:
-	unsigned int damage;
+	float damage;
 	Weapon(Node* parentNode, Bullets& bullets);
 	void initWeaponPosition(sf::Vector2f playerPosition);
 	void shoot(bool playerFacingRight, bool playerFacingLeft, Node* parentNode);

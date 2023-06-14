@@ -3,7 +3,6 @@
 
 Enemies::Enemies()
 {
-	
 }
 
 void Enemies::addEnemy(Enemy* enemy)
@@ -69,10 +68,23 @@ void Enemies::updateCollisions(Bullets& bullets, Weapon* weapon)
 	}
 }
 
-void Enemies::update(sf::RenderTarget* target, Node* playerNode, Collider playerCollider, float deltaTime)
+
+Bullets& Enemies::getBullets()
 {
-	bullets.updateBullets(target, playerNode, playerCollider, deltaTime);
+	return bullets;
 }
+
+float Enemies::getDamage(Enemy* enemy)
+{
+	return enemy->enemyDamage;
+}
+
+void Enemies::update(sf::RenderTarget* target, float deltaTime)
+{
+	bullets.updateBullets(target, deltaTime);
+}
+
+
 
 
 
