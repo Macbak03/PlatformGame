@@ -155,7 +155,7 @@ void Enemy::updateEnemyAnimation(float& deltaTime)
 {
 	setOrigin(enemySize.x / 4.f, 0.f);
 	enemySprite.setTextureRect(animation->uvRec);
-	currentAnimationFrame = animation->updateAnimation(1, deltaTime);
+	currentAnimationFrame = animation->updateAnimation(1, deltaTime, true);
 }
 
 

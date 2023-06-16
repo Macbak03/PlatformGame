@@ -21,7 +21,7 @@ void Weapon::scale()
 
 void Weapon::initWeaponPosition(sf::Vector2f playerPosition)
 {
-	weaponPosition = sf::Vector2f(playerPosition.x + 40.f, playerPosition.y + 37.f);
+	weaponPosition = sf::Vector2f(playerPosition.x + 30.f, playerPosition.y + 80.f);
 	this->setLocalPosition(weaponPosition);
 	fireBlast.initPosition(sf::Vector2f(weaponSize.x, -10.f));
 }
@@ -66,7 +66,7 @@ void Weapon::updateShooting(bool playerFacingRight, bool playerFacingLeft, float
 {
 	if (bullets.getBullets().size() < bullets.maxBullets)
 	{
-		if (bulletSpawnTimer >= rateOfFire)
+		if (bulletSpawnTimer >= rateOfFire && startReloadTimer == false)
 		{
 			shoot(playerFacingRight, playerFacingLeft, parentNode);
 

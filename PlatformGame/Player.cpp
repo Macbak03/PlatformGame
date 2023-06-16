@@ -3,7 +3,7 @@
 
 Player::Player(Node* parentNode) : Node(parentNode)
 {
-	playerSize = sf::Vector2f(85.f, 85.f);
+	playerSize = sf::Vector2f(105.f, 140.f);
 	facingRight = true;
 	facingLeft = false;
 	playerSpeed = 420.f;
@@ -11,15 +11,16 @@ Player::Player(Node* parentNode) : Node(parentNode)
 	startJumpTimer = false;
 	jumpTimer = 0.5f;
 	playerMaxHealth = 100;
-	cash = 1110;
+	cash = 11110;
 	points = 0;
 	playerHealth = playerMaxHealth;
 	playerColor = playerSprite.getColor();
 	healthBar.getSprite().scale(5.f, 3.f);
-	initShape();
+	initShape(sf::Vector2u(6,2));
 	spawnPlayer();
 	initPhysics();
 	initWeapon();
+	initAnimation();
 }
 
 
@@ -27,18 +28,19 @@ Player::Player(Node* parentNode) : Node(parentNode)
 void Player::loadTextures()
 {
 	playerTexture = new sf::Texture;
-	if (!playerTexture->loadFromFile("Textures/player_right.png"))
+	if (!playerTexture->loadFromFile("Textures/animated_player1.png"))
 	{
 		std::cerr << "Could not load player_right texture" << std::endl;
 	}
 }
 
 
-void Player::initShape()
+void Player::initShape(sf::Vector2u imageCount)
 {
 	loadTextures();
 	playerSprite.setTexture(*playerTexture);
-	playerSprite.setScale(sf::Vector2f(playerSize.x/playerTexture->getSize().x, playerSize.y/playerTexture->getSize().y));
+	//playerSprite.setScale(sf::Vector2f(playerSize.x/playerTexture->getSize().x, playerSize.y/playerTexture->getSize().y));
+	playerSprite.setScale(sf::Vector2f((playerSize.x * imageCount.x) / playerTexture->getSize().x, (playerSize.y * imageCount.y) / playerTexture->getSize().y));
 }
  
 //END SHAPE
@@ -51,9 +53,9 @@ void Player::initPhysics()
 	velocity = sf::Vector2f(playerSpeed, 0.f);
 	jumpSpeed = 900.f;
 	//colider
-	collider.size = sf::Vector2f(playerSize.x - 35.f, playerSize.y -15.f);
-	collider.offset.x = - collider.size.x / 2 ;
-	collider.offset.y = 10.f;
+	collider.size = sf::Vector2f(playerSize.x - 55.f, playerSize.y -65.f);
+	collider.offset.x = - collider.size.x / 2;
+	collider.offset.y = 50.f;
 }
 
 void Player::updatePhysics(float deltaTime)
@@ -79,6 +81,11 @@ void Player::initWeapon()
 {
 	weapon = new Pistol(this, bullets);
 	currentWeapon = "Current weapon: Pistol";
+}
+
+void Player::initAnimation()
+{
+	animation = new Animation(playerTexture, sf::Vector2u(6, 2), 0.3f);
 }
 
 
@@ -110,6 +117,25 @@ void Player::changeToSniperRifle()
 	currentWeapon = "Current weapon: Snper rifle";
 }
 
+void Player::updatePlayerAnimation(float deltaTime)
+{
+	setOrigin(playerSize.x / 4.f, 0.f);
+	playerSprite.setTextureRect(animation->uvRec);
+	currentAnimationFrame = animation->updateAnimation(1, deltaTime, isMoving);
+	if (!isMoving)
+	{
+		animation->setCurrentImageX(0);
+	}
+	if (onGround)
+	{
+		if (currentAnimationFrame >= 3)
+		{
+			animation->setCurrentImageX(0);
+		}
+	}
+	std::cout << currentAnimationFrame << std::endl;
+}
+
 Weapon* Player::getWeapon()
 {
 	return weapon;
@@ -120,19 +146,20 @@ Weapon* Player::getWeapon()
 //PLAYER POSITIONING
 void Player::spawnPlayer()
 {
-	sf::Vector2f playerSpawn = sf::Vector2f(900.f, 730.f);
+	sf::Vector2f playerSpawn = sf::Vector2f(900.f,300.f);
 	setLocalPosition(playerSpawn);
 }
 
 void Player::movePlayer(float deltaTime)
 {
-	
+	isMoving = false;
 	//move left
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
 		velocity.x = -playerSpeed;
 		auto horizontalVelocity = sf::Vector2f(velocity.x, 0.f);
 		move(horizontalVelocity.x * deltaTime, 0.f);
+		isMoving = true;
 		if (facingRight)
 		{
 			facingRight = false;
@@ -146,6 +173,7 @@ void Player::movePlayer(float deltaTime)
 		velocity.x = playerSpeed;
 		auto horizontalVelocity = sf::Vector2f(velocity.x, 0.f);
 		move(horizontalVelocity.x * deltaTime, 0.f);
+		isMoving = true;
 		if (facingLeft)
 		{
 			facingRight = true;
@@ -158,6 +186,7 @@ void Player::movePlayer(float deltaTime)
 	jumpTimer += deltaTime;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && onGround)
 	{
+		isMoving = true;
 		if (jumpTimer >= jumpDeload)
 		{
 			onGround = false;
@@ -171,6 +200,8 @@ void Player::movePlayer(float deltaTime)
 	{
 		auto verticalVelocity = sf::Vector2f(0.f, velocity.y);
 		move(0.f, verticalVelocity.y * deltaTime);
+		animation->setCurrentImageX(4);
+		isMoving = true;
 	}
 }
 
@@ -222,7 +253,7 @@ void Player::updateBounceCollision(sf::RenderTarget* target, std::vector<Platfor
 	
 	if (playerBottom + floorHeight >= target->getSize().y)
 	{
-		playerGlobalPosition.y = target->getSize().y - collider.size.y -floorHeight;
+		playerGlobalPosition.y = target->getSize().y - collider.size.y - collider.offset.y -floorHeight;
 		onGround = true;
 	}
 	else 
@@ -299,8 +330,9 @@ void Player::updatePlayer(sf::RenderTarget* target, float deltaTime, std::vector
 	updatePhysics(deltaTime);
 	updateBulletCollision(enemyBullets);
 	weapon->updateWeapon(target, getPosition(), facingRight, facingLeft, deltaTime, parentNode);
-	healthBar.updateHealthBarAnimation(sf::Vector2f(getGlobalPosition().x, getGlobalPosition().y - 10.f), playerMaxHealth, playerHealth);
+	healthBar.updateHealthBarAnimation(sf::Vector2f(getGlobalPosition().x, getGlobalPosition().y + 20.f), playerMaxHealth, playerHealth);
 	updateColor(deltaTime);
+	updatePlayerAnimation(deltaTime);
 	//std::cout << playerHealth << std::endl;
 }
 

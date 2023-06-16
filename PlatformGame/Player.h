@@ -9,6 +9,7 @@
 #include "Collider.h"
 #include "Utils.h"
 #include "HealthBar.h"
+#include "Animation.h"
 class Player : public Node
 {
 private:
@@ -16,7 +17,7 @@ private:
 	sf::Texture* playerTexture;
 	sf::Texture* playerTextureLeft;
 	sf::Sprite playerSprite;
-	void initShape();
+	void initShape(sf::Vector2u imageCount);
 	void loadTextures();
 	sf::Vector2f playerSize;
 	sf::Color playerColor;
@@ -26,6 +27,7 @@ private:
 	bool spaceHold;
 	bool facingRight, facingLeft;
 	bool hit;
+	bool isMoving;
 
 	//Physics
 	Collider collider;
@@ -44,6 +46,10 @@ private:
 	Bullets bullets;
 	Weapon* weapon;
 	void initWeapon();
+
+	Animation* animation;
+	void initAnimation();
+	int currentAnimationFrame;
 
 
 	HealthBar healthBar;
@@ -68,6 +74,7 @@ public:
 	void changeToRifle();
 	void changeToShotgun();
 	void changeToSniperRifle();
+	void updatePlayerAnimation(float deltaTime);
 	void updateBounceCollision(sf::RenderTarget* target, std::vector<Platform*> platforms, float deltaTime);
 	void updateBulletCollision(Bullets& enemyBullets);
 	void updatePlayer(sf::RenderTarget* target, float deltaTime, std::vector<Platform*> platforms, Node* parentNode, Bullets& enemyBullets);

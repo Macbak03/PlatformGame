@@ -151,7 +151,7 @@ void Game::renderGui(sf::RenderTarget* target)
 
 bool Game::endGame()
 {
-	if (player.playerHealth < 0) {
+	if (player.playerHealth <= 0) {
 		return true;
 	}
 	else

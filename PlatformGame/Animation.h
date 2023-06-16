@@ -13,6 +13,7 @@ public:
 	sf::IntRect uvRec;
 	Animation(sf::Texture* texture, sf::Vector2u imageCount, float switchTime);
 	~Animation();
-	int updateAnimation(int row, float deltaTime);
+	int updateAnimation(int row, float deltaTime, bool isMoving);
+	void setCurrentImageX(unsigned int value);
 };
 

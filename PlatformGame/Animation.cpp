@@ -17,12 +17,12 @@ Animation::~Animation()
 {
 }
 
-int Animation::updateAnimation(int row, float deltaTime)
+int Animation::updateAnimation(int row, float deltaTime, bool isMoving)
 {
 	currentImage.y = row;
 	totalTime += deltaTime;
 
-	if (totalTime >= switchTime)
+	if (totalTime >= switchTime && isMoving)
 	{
 		totalTime -= switchTime;
 		currentImage.x++;
@@ -35,6 +35,11 @@ int Animation::updateAnimation(int row, float deltaTime)
 	uvRec.left = currentImage.x * uvRec.width;
 	uvRec.top = currentImage.y * uvRec.height;
 	return currentImage.x;
+}
+
+void Animation::setCurrentImageX(unsigned int value)
+{
+	currentImage.x = value;
 }
 
 
