@@ -32,8 +32,7 @@ private:
 	sf::Text winText;
 	sf::Text reloadText;
 
-	float* bossHealth;
-
+	Enemy* boss;
 	Level level;
 	Player player;
 	Enemies enemies;

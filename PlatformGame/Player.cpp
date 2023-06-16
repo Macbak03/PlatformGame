@@ -11,7 +11,7 @@ Player::Player(Node* parentNode) : Node(parentNode)
 	startJumpTimer = false;
 	jumpTimer = 0.5f;
 	playerMaxHealth = 100;
-	cash = 0;
+	cash = 1110;
 	points = 0;
 	playerHealth = playerMaxHealth;
 	playerColor = playerSprite.getColor();

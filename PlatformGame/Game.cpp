@@ -84,15 +84,15 @@ void Game::initText()
 	gameOverText.setOutlineColor(sf::Color::Black);
 	gameOverText.setOutlineThickness(2);
 	gameOverText.setString("GAME OVER.");
-	gameOverText.setPosition(sf::Vector2f(550.f, 400.f));
+	gameOverText.setPosition(sf::Vector2f(580.f, 400.f));
 	//End game
 	winText.setFont(font);
 	winText.setCharacterSize(100);
 	winText.setFillColor(sf::Color::Green);
 	winText.setOutlineColor(sf::Color::Black);
 	winText.setOutlineThickness(2);
-	winText.setString("YOU WIN.");
-	winText.setPosition(sf::Vector2f(550.f, 400.f));
+	winText.setString("YOU WIN!");
+	winText.setPosition(sf::Vector2f(580.f, 400.f));
 	//Reload
 	reloadText.setFont(font);
 	reloadText.setCharacterSize(15);
@@ -142,6 +142,10 @@ void Game::renderGui(sf::RenderTarget* target)
 	if (player.getWeapon()->getAmmo() == 0 || player.getWeapon()->getWeaponReloadTimer() == true)
 	{
 		target->draw(reloadText);
+	}
+	if (boss->enemyHealth <= 0)
+	{
+		target->draw(winText);
 	}
 }
 
@@ -197,10 +201,9 @@ void Game::initLevel()
 	Enemy* marauder3 = new Marauder(platform9, &level);
 	marauder3->spawnEnemy();
 	enemies.addEnemy(marauder3);
-	Enemy* boss = new Thug(platform13, &level);
+	boss = new Thug(platform13, &level);
 	boss->spawnEnemy();
 	enemies.addEnemy(boss);
-	bossHealth = &boss->enemyHealth;
 }
 
 
@@ -271,7 +274,6 @@ void Game::update()
 		enemies.update(window, deltaTime);
 		updateGui();
 	}
-	std::cout << bossHealth << std::endl;
 }
 
 void Game::renderBackground(sf::RenderTarget* target)
