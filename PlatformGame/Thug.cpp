@@ -6,7 +6,7 @@ Thug::Thug(Platform* platform, Node* parentNode) : Enemy(platform, parentNode)
 	enemySize = sf::Vector2f(85.f, 85.f);
 	enemySpeed = 2.f;
 	enemyDamage = 20;
-	enemyRateOfFire = 1.5f;
+	animationSwitchTime = 0.2f;
 	enemyMaxHealth = 500;
 	enemyHealth = enemyMaxHealth;
 	cashValue = 1000;
@@ -40,16 +40,3 @@ void Thug::initCollider()
 	collider.offset.y = 10.f;
 }
 
-void Thug::initAnimation()
-{
-	animation = new Animation(enemyTexture, sf::Vector2u(8, 2), 0.2f);
-}
-
-
-
-void Thug::updateEnemyAnimation(float& deltaTime)
-{
-	setOrigin(enemySize.x / 4.f, 0.f);
-	enemySprite.setTextureRect(animation->uvRec);
-	animation->updateAnimation(1, deltaTime);
-}

@@ -7,8 +7,6 @@ Enemy::Enemy(Platform* platform, Node* parentNode) : platform(platform), Node(pa
 	enemyTexture = nullptr;
 	enemySpeed = 0.f;
 	enemyDamage = 0;
-	enemyRateOfFire = 0.f;
-	bulletSpawnTimer = 0.f;
 	enemyHealth = 0;
 	enemySize = sf::Vector2f(0.f, 0.f);
 	hitColorTimer = 0.f;
@@ -122,7 +120,6 @@ void Enemy::shoot(Node* parentNode)
 	{
 		bullets->spawnBullet(enemyFacingLeft, sf::Vector2f(spawnPosition.x, spawnPosition.y + enemySize.y / 2 - 5.f), parentNode, enemyDamage);
 	}
-	bulletSpawnTimer = 0.f;
 }
 
 
@@ -135,16 +132,30 @@ void Enemy::updateShooting(float deltaTime, Node* parentNode)
 {
 	if (bullets->getBullets().size() < bullets->maxBullets)
 	{
-		if (bulletSpawnTimer >= enemyRateOfFire)
+		if (currentAnimationFrame == 5 && bulletSpawnTimer <= 0)
 		{
 			shoot(parentNode);
-
+			bulletSpawnTimer = 0.5f;
 		}
 		else
 		{
-			bulletSpawnTimer += deltaTime;
+			bulletSpawnTimer -= deltaTime;
 		}
 	}
+}
+
+void Enemy::initAnimation()
+{
+	animation = new Animation(enemyTexture, sf::Vector2u(8, 2), animationSwitchTime);
+}
+
+
+
+void Enemy::updateEnemyAnimation(float& deltaTime)
+{
+	setOrigin(enemySize.x / 4.f, 0.f);
+	enemySprite.setTextureRect(animation->uvRec);
+	currentAnimationFrame = animation->updateAnimation(1, deltaTime);
 }
 
 
@@ -153,7 +164,7 @@ void Enemy::updateEnemy(const sf::RenderTarget* target, float deltaTime, Node* p
 	moveEnemy();
 	updateBounceCollision();
 	updateEnemyAnimation(deltaTime);
-	healthBar.updateHealthBarAnimation(hit, getLocalPosition(), enemyMaxHealth);
+	healthBar.updateHealthBarAnimation(getLocalPosition(), enemyMaxHealth, enemyHealth);
 	updateColorTimer(deltaTime);
 	updateShooting(deltaTime, parentNode);
 }

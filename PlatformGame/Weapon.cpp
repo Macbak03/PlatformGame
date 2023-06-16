@@ -12,8 +12,6 @@ Weapon::Weapon(Node* parentNode, Bullets& bullets) : Node(parentNode), bullets(b
 	bulletSpawnTimer = 0.f;
 	ammo = 0;
 	startReloadTimer = false;
-	keyHold = false;
-	
 }
 
 void Weapon::scale()
@@ -100,13 +98,16 @@ void Weapon::reload(float deltaTime)
 	}
 }
 
+bool& Weapon::getWeaponReloadTimer()
+{
+	return startReloadTimer;
+}
 
-void Weapon::updateWeapon(const sf::RenderTarget* target, sf::Vector2f playerPosition, bool playerFacingRight, bool playerFacingLeft, float deltaTime, Node* parentNode, Node* playerNode, Collider playerCollider)
+void Weapon::updateWeapon(const sf::RenderTarget* target, sf::Vector2f playerPosition, bool playerFacingRight, bool playerFacingLeft, float deltaTime, Node* parentNode)
 {
 	initWeaponPosition(playerPosition);
 	//std::cout << magazineSize << "      " << ammo << "      "<<reloadTimer<<std::endl;
 	updateShooting(playerFacingRight, playerFacingLeft, deltaTime, parentNode);
-
 	bullets.updateBullets(target, deltaTime);
 }
 

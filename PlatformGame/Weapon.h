@@ -18,7 +18,6 @@ protected:
 	unsigned int ammo;
 
 	bool startReloadTimer;
-	bool keyHold;
 
 	sf::Vector2f weaponPosition;
 	sf::Vector2f weaponSize;
@@ -41,9 +40,10 @@ public:
 	sf::Vector2f& getSize();
 	unsigned int getAmmo();
 	unsigned int getMagazineSize();
+	bool& getWeaponReloadTimer();
 	void scale();
 	void updateShooting(bool playerFacingRight, bool playerFacingLeft, float deltaTime,  Node* parentNode);
-	void updateWeapon(const sf::RenderTarget* target, sf::Vector2f playerPosition, bool playerFacingRight, bool playerFacingLeft, float deltaTime, Node* parentNode, Node* playerNode, Collider playerCollider);
+	void updateWeapon(const sf::RenderTarget* target, sf::Vector2f playerPosition, bool playerFacingRight, bool playerFacingLeft, float deltaTime, Node* parentNode);
 	virtual void onDraw(sf::RenderTarget& target, const sf::Transform& transform) const override;
 };
 

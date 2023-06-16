@@ -8,6 +8,7 @@
 #include "Marauder.h"
 #include "Thug.h"
 #include "Enemies.h"
+#include "Menu.h"
 
 class Game
 {
@@ -15,24 +16,30 @@ private:
 
 	sf::RenderWindow* window;
 	sf::VideoMode videoMode;
-	sf::Event event;
+	std::vector<sf::Event> events;
 	sf::Clock clock;
 	float deltaTime;
+	Menu* menu;
 	
-	sf::Texture backgroundTexture;
-	sf::Sprite backgroundSprite;
+	sf::Texture menuTexture;
+	sf::Sprite menuSprite;
 
 	sf::Font font;
 	sf::Text pointsText;
 	sf::Text ammoText;
 	sf::Text cashText;
 	sf::Text gameOverText;
+	sf::Text winText;
+	sf::Text reloadText;
+
+	float* bossHealth;
 
 	Level level;
 	Player player;
 	Enemies enemies;
 	void initVariables();
 	void initWindow();
+	bool pauseGame;
 
 public:
 	Game();
@@ -50,5 +57,6 @@ public:
 	void renderBackground(sf::RenderTarget* target);
 	void update();
 	void render();
+	void handleMenu();
 };
 

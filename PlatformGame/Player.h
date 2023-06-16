@@ -45,13 +45,16 @@ private:
 	Weapon* weapon;
 	void initWeapon();
 
+
 	HealthBar healthBar;
-	float playerMaxHealth;
+	
 	
 public:
 	unsigned int points;
 	unsigned int cash;
 	float playerHealth;
+	float playerMaxHealth;
+	std::string currentWeapon;
 	Player(Node* parentNode);
 	void spawnPlayer();
 	void movePlayer(float deltaTime);
@@ -61,8 +64,11 @@ public:
 	sf::Vector2f getPosition();
 	void changeColor();
 	void updateColor(float deltaTime);
-	void changeWeapon();
-	void updateBounceCollision(sf::RenderTarget* target, std::vector<Platform*> platforms);
+	void changeToPistol();
+	void changeToRifle();
+	void changeToShotgun();
+	void changeToSniperRifle();
+	void updateBounceCollision(sf::RenderTarget* target, std::vector<Platform*> platforms, float deltaTime);
 	void updateBulletCollision(Bullets& enemyBullets);
 	void updatePlayer(sf::RenderTarget* target, float deltaTime, std::vector<Platform*> platforms, Node* parentNode, Bullets& enemyBullets);
 	void drawCollider(sf::RenderTarget* target);

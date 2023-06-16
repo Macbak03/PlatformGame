@@ -42,7 +42,6 @@ void Enemies::updateCollisions(Bullets& bullets, Weapon* weapon, unsigned int& c
 			if (enemyCollison)
 			{
 				enemy->enemyHealth -= bullet->bulletDamage;
-				enemy->getHealthBar().damageGot = bullet->bulletDamage;
 				enemy->setColorTimer(0.15f);
 				enemy->changeColor();
 			}

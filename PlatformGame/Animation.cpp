@@ -17,7 +17,7 @@ Animation::~Animation()
 {
 }
 
-void Animation::updateAnimation(int row, float deltaTime)
+int Animation::updateAnimation(int row, float deltaTime)
 {
 	currentImage.y = row;
 	totalTime += deltaTime;
@@ -34,31 +34,7 @@ void Animation::updateAnimation(int row, float deltaTime)
 	}
 	uvRec.left = currentImage.x * uvRec.width;
 	uvRec.top = currentImage.y * uvRec.height;
+	return currentImage.x;
 }
 
-void Animation::updateHealthAnimation(float damage, bool hit, float maxHealth)
-{
-	currentImage.y = 0;
-	if (hit)
-	{
-		imageChangeValue += (damage) / (10 * (maxHealth / 100));
-		
-		if (imageChangeValue >= 1)
-		{
-			currentImage.x -= static_cast<int>(imageChangeValue);
-			imageChangeValue -= static_cast<int>(imageChangeValue);
-		}
-		if (currentImage.x <= 0)
-		{
-			currentImage.x = 0;
-		}
-	}
-	uvRec.left = currentImage.x * uvRec.width;
-	uvRec.top = currentImage.y * uvRec.height;
-	//std::cout << imageChangeValue << std::endl;
-}
 
-void Animation::setCurrentImageX(unsigned int value)
-{
-	currentImage.x = value;
-}

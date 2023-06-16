@@ -13,8 +13,6 @@ public:
 	sf::IntRect uvRec;
 	Animation(sf::Texture* texture, sf::Vector2u imageCount, float switchTime);
 	~Animation();
-	void updateAnimation(int row, float deltaTime);
-	void updateHealthAnimation(float weaponDamage, bool hit, float maxHealth);
-	void setCurrentImageX(unsigned int value);
+	int updateAnimation(int row, float deltaTime);
 };
 

@@ -9,11 +9,13 @@ class Enemy : public Node
 private:
 	void flip();
 	float hitColorTimer;
-	bool hit;
+	
 	bool enemyFacingRight;
 	bool enemyFacingLeft;
 	sf::Color enemyColor;
 	float bulletSpawnTimer;
+	int currentAnimationFrame;
+	Animation* animation;
 	
 protected:
 	sf::Texture* enemyTexture;
@@ -25,23 +27,22 @@ protected:
 
 	float enemyMaxHealth;
 	float enemySpeed;
-	float enemyRateOfFire;
+	float animationSwitchTime;
 
 
 	sf::Vector2f enemySize;
 
 	virtual void loadTexture() = 0;
 	virtual void initTexture(sf::Vector2u imageCount) = 0;
-	virtual void initAnimation() = 0;
 	virtual void initCollider() = 0;
-
+	void initAnimation();
 public:
+	bool hit;
 	unsigned int cashValue;
 	float enemyHealth;
 	float enemyDamage;
 	Enemy(Platform* platform, Node* parentNode);
 	~Enemy();
-	virtual void updateEnemyAnimation(float& deltaTime) = 0;
 	void spawnEnemy();
 	void moveEnemy();
 	void updateBounceCollision();
@@ -49,6 +50,7 @@ public:
 	void drawCollider(sf::RenderTarget* target);
 	void changeColor();
 	void setColorTimer(float value);
+	void updateEnemyAnimation(float& deltaTime);
 	void updateColorTimer(float deltaTime);
 	Collider& getCollider();
 	HealthBar& getHealthBar();

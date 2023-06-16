@@ -9,13 +9,15 @@ private:
 	sf::Sprite healthBarSprite;
 	sf::Vector2f healthBarSize;
 
+	sf::RectangleShape healthBar;
+	sf::RectangleShape healthBarOutline;
+
 	void initTexture(sf::Vector2u imageCount);
 	void loadTexture();
 	void initAnimation();
 public:
 	HealthBar();
-	float damageGot;
-	void updateHealthBarAnimation(bool hit, sf::Vector2f position, float maxHealth);
+	void updateHealthBarAnimation(sf::Vector2f position, float maxHealth, float health);
 	void drawHealthBar(sf::RenderTarget* target);
 	sf::Sprite getSprite();
 };

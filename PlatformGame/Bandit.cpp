@@ -4,9 +4,9 @@
 Bandit::Bandit(Platform* platform, Node* parentNode) : Enemy(platform, parentNode)
 {
 	enemySize = sf::Vector2f(85.f, 85.f);
+	animationSwitchTime = 0.3f;
 	enemySpeed = 1.f;
 	enemyDamage = 5;
-	enemyRateOfFire = 2.25f;
 	enemyMaxHealth = 100;
 	enemyHealth = enemyMaxHealth;
 	cashValue = 10;
@@ -40,17 +40,5 @@ void Bandit::initCollider()
 	collider.offset.y = 10.f;
 }
 
-void Bandit::initAnimation()
-{
-	animation = new Animation(enemyTexture, sf::Vector2u(8, 2), 0.3f);
-}
 
-
-
-void Bandit::updateEnemyAnimation(float& deltaTime)
-{
-	setOrigin(enemySize.x /4.f , 0.f);
-	enemySprite.setTextureRect(animation->uvRec);
-	animation->updateAnimation(1, deltaTime);
-}
 

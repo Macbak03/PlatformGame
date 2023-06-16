@@ -6,7 +6,7 @@ Marauder::Marauder(Platform* platform, Node* parentNode) : Enemy(platform, paren
 	enemySize = sf::Vector2f(100.f, 100.f);
 	enemySpeed = 1.5f;
 	enemyDamage = 10;
-	enemyRateOfFire = 1.5f;
+	animationSwitchTime = 0.2f;
 	enemyMaxHealth = 200;
 	enemyHealth = enemyMaxHealth;
 	cashValue = 50;
@@ -40,16 +40,3 @@ void Marauder::initCollider()
 	collider.offset.y = 25.f;
 }
 
-void Marauder::initAnimation()
-{
-	animation = new Animation(enemyTexture, sf::Vector2u(8, 2), 0.2f);
-}
-
-
-
-void Marauder::updateEnemyAnimation(float& deltaTime)
-{
-	setOrigin(enemySize.x / 4.f, 0.f);
-	enemySprite.setTextureRect(animation->uvRec);
-	animation->updateAnimation(1, deltaTime);
-}

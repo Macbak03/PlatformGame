@@ -2,6 +2,18 @@
 #include <iostream>
 #include <sstream>
 
+Game::Game() : player(&level)
+{
+	initVariables();
+	initWindow();
+	loadTexture();
+	initBackground();
+	initLevel();
+	initText();
+	menu = new Menu(videoMode, player);
+}
+
+
 void Game::initVariables()
 {
 	window = nullptr;
@@ -16,9 +28,10 @@ void Game::initWindow()
 	window->setFramerateLimit(60);
 }
 
+
 void Game::loadTexture()
 {
-	if (!backgroundTexture.loadFromFile("Textures/desert_BG.png"))
+	if (!menuTexture.loadFromFile("Textures/desert_BG.png"))
 	{
 		std::cerr << "Could not load texture" << std::endl;
 	}
@@ -26,7 +39,7 @@ void Game::loadTexture()
 
 void Game::loadFont()
 {
-	if (!font.loadFromFile("Fonts/DomBold BT.ttf"))
+	if (!font.loadFromFile("Fonts/DomBold_BT.ttf"))
 	{
 		std::cout << "Error loading font" << std::endl;
 	}
@@ -34,10 +47,10 @@ void Game::loadFont()
 
 void Game::initBackground()
 {
-	backgroundSprite.setTexture(backgroundTexture);
-	float scaleX = static_cast<float>(videoMode.width) / backgroundTexture.getSize().x;
-	float scaleY = static_cast<float>(videoMode.height) / backgroundTexture.getSize().y;
-	backgroundSprite.setScale(sf::Vector2f(scaleX, scaleY));
+	menuSprite.setTexture(menuTexture);
+	float scaleX = static_cast<float>(videoMode.width) / menuTexture.getSize().x;
+	float scaleY = static_cast<float>(videoMode.height) / menuTexture.getSize().y;
+	menuSprite.setScale(sf::Vector2f(scaleX, scaleY));
 }
 
 void Game::initText()
@@ -70,8 +83,22 @@ void Game::initText()
 	gameOverText.setFillColor(sf::Color::Red);
 	gameOverText.setOutlineColor(sf::Color::Black);
 	gameOverText.setOutlineThickness(2);
-	gameOverText.setString("GAME OVER. PRESS ESC");
-	gameOverText.setPosition(sf::Vector2f(300.f, 400.f));
+	gameOverText.setString("GAME OVER.");
+	gameOverText.setPosition(sf::Vector2f(550.f, 400.f));
+	//End game
+	winText.setFont(font);
+	winText.setCharacterSize(100);
+	winText.setFillColor(sf::Color::Green);
+	winText.setOutlineColor(sf::Color::Black);
+	winText.setOutlineThickness(2);
+	winText.setString("YOU WIN.");
+	winText.setPosition(sf::Vector2f(550.f, 400.f));
+	//Reload
+	reloadText.setFont(font);
+	reloadText.setCharacterSize(15);
+	reloadText.setFillColor(sf::Color::Red);
+	reloadText.setOutlineColor(sf::Color::Black);
+	reloadText.setOutlineThickness(2);
 }
 
 void Game::updateGui()
@@ -79,15 +106,28 @@ void Game::updateGui()
 	std::stringstream points_ss;
 	std::stringstream cash_ss;
 	std::stringstream ammo_ss;
+	std::stringstream reload_ss;
 
 	points_ss << "Points: " << player.points;
 	pointsText.setString(points_ss.str());
 
-	cash_ss << "Cash: " << player.cash;
+	cash_ss << "Cash: " << player.cash << "$";
 	cashText.setString(cash_ss.str());
 
 	ammo_ss << "Ammo: " << player.getWeapon()->getAmmo() << "/" << player.getWeapon()->getMagazineSize();
 	ammoText.setString(ammo_ss.str());
+
+	sf::Vector2f reloadTextPosition = player.getGlobalPosition();
+	reloadText.setPosition(reloadTextPosition.x - 60.f, reloadTextPosition.y - 35.f);
+	if (player.getWeapon()->getWeaponReloadTimer() == true)
+	{
+		reloadText.setString("RELOADING...");
+		reloadText.setPosition(reloadTextPosition.x - 35.f, reloadTextPosition.y - 35.f);
+	}
+	else
+	{
+		reloadText.setString("PRESS R TO RELOAD.");
+	}
 }
 
 void Game::renderGui(sf::RenderTarget* target)
@@ -98,6 +138,10 @@ void Game::renderGui(sf::RenderTarget* target)
 	if (endGame())
 	{
 		target->draw(gameOverText);
+	}
+	if (player.getWeapon()->getAmmo() == 0 || player.getWeapon()->getWeaponReloadTimer() == true)
+	{
+		target->draw(reloadText);
 	}
 }
 
@@ -131,6 +175,7 @@ void Game::initLevel()
 	Platform* platform13 = level.addPlatform(sf::Vector2f(1300.f, 100.f), &level);
 	Platform* platform14 = level.addPlatform(sf::Vector2f(1450.f, 470.f), &level);
 	
+	//spawn enemies
 	Enemy* bandit1 = new Bandit(platform2, &level);
 	bandit1->spawnEnemy();
 	enemies.addEnemy(bandit1);
@@ -155,19 +200,11 @@ void Game::initLevel()
 	Enemy* boss = new Thug(platform13, &level);
 	boss->spawnEnemy();
 	enemies.addEnemy(boss);
+	bossHealth = &boss->enemyHealth;
 }
 
 
 
-Game::Game() : player(&level)
-{
-	initVariables();
-	initWindow();
-	loadTexture();
-	initBackground();
-	initLevel();
-	initText();
-}
 
 Game::~Game()
 {
@@ -183,21 +220,37 @@ const bool Game::getWindowIsOpen()
 
 void Game::pollEvents()
 {
+	sf::Event event;
+	events.clear();
 	deltaTime = clock.restart().asSeconds();
-	//Event polling
 	while (window->pollEvent(event))
 	{
-		switch (event.type)
+		events.push_back(event);
+		if(event.type == sf::Event::Closed)
 		{
-		case sf::Event::Closed:
 			window->close();
-			break;
-		case sf::Event::KeyPressed:
-			if (event.key.code == sf::Keyboard::Escape)
+		}	
+	}
+}
+
+void Game::handleMenu()
+{
+	for (auto& element : events)
+	{
+		if (element.type == sf::Event::KeyReleased && element.key.code == sf::Keyboard::Escape)
+		{
+			if (pauseGame)
 			{
-				window->close();
-				break;
+				pauseGame = false;
 			}
+			else
+			{
+				pauseGame = true;
+			}
+		}
+		if (pauseGame)
+		{
+			menu->updateMenu(window, pauseGame, element);
 		}
 	}
 }
@@ -206,7 +259,8 @@ void Game::pollEvents()
 void Game::update()
 {
 	pollEvents();
-	if (!endGame())
+	handleMenu();
+	if (!endGame() && !pauseGame)
 	{
 		player.updatePlayer(window, deltaTime, level.getPlatforms(), &level, enemies.getBullets());
 		for (auto& element : enemies.getEnemies())
@@ -217,11 +271,12 @@ void Game::update()
 		enemies.update(window, deltaTime);
 		updateGui();
 	}
+	std::cout << bossHealth << std::endl;
 }
 
 void Game::renderBackground(sf::RenderTarget* target)
 {
-	target->draw(backgroundSprite);
+	target->draw(menuSprite);
 }
 
 void Game::render()
@@ -243,5 +298,11 @@ void Game::render()
 	}
 	player.renderHealthBar(window);
 	renderGui(window);
+	if (pauseGame)
+	{
+		menu->drawMenu(window);
+	}
 	window->display();
 }
+
+
